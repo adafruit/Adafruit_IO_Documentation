@@ -1,0 +1,36 @@
+# Authentication
+
+Your Adafruit IO Key is used to restrict or grant access to your data. The key is unique and covers every use of the Adafruit IO API for your account. You can access your key any dashboard by clicking on the golden key icon:
+
+<%= image_tag "images/authentication/aio-key-dashboard-link.png" %>
+
+Or by clicking on the "View AIO Key" link in the sidebar while you're visiting Adafruit IO.
+
+<%= image_tag "images/authentication/aio-key-sidebar-link.png" %>
+
+Now you can copy the key directly from the information form that pops up, or copy one of the code samples that includes your key and username together.
+
+<%= image_tag "images/authentication/aio-key-modal.png" %>
+
+## Including the Adafruit IO Key in requests
+
+```shell
+curl -H "X-AIO-Key: b780002b85d6411ca0ad9f9c60195f72" \
+    https://io.adafruit.com/api/v2/test_username/feeds
+
+# or
+
+curl "https://io.adafruit.com/api/v2/test_username/feeds?x-aio-key=b780002b85d6411ca0ad9f9c60195f72"
+```
+
+```ruby
+require 'adafruit/io'
+
+username = "test_username"
+api_key = "b780002b85d6411ca0ad9f9c60195f72"
+api = Adafruit::IO::Client.new key: api_key, username: username
+```
+
+When making HTTP requests to Adafruit IO, you can include the API key as a query parameter named `x-aio-key` or as a request header named `X-AIO-Key`. In both cases, "X-AIO-Key" is case insensitive.
+
+**NOTE**: if you regenerate your AIO key, your old key will be immediately invalidated, so you'll have to replace it in any scripts or sketches where it is in use.
