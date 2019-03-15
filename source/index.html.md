@@ -3,9 +3,9 @@ title: Adafruit IO API Reference
 
 language_tabs:
   - shell: cURL
-  - arduino: cpp
-  - python: Python
-  - CircuitPython: CircuitPython
+  - cpp: Arduino
+  - python: python
+  - python: circuitpython
   - ruby: Ruby
   - javascript: Node.js
   - go: Go
