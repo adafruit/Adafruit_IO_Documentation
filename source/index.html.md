@@ -19,6 +19,7 @@ toc_footers:
 
 includes:
   - introduction
+  - client_libraries
   - authentication
   - feeds
   - data
