@@ -236,6 +236,14 @@
             <a href="#client-libraries" class="toc-h1 toc-link" data-title="Client Libraries">Client Libraries</a>
           </li>
           <li>
+            <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#including-the-adafruit-io-key-in-requests" class="toc-h2 toc-link" data-title="Including the Adafruit IO Key in requests">Including the Adafruit IO Key in requests</a>
+                  </li>
+              </ul>
+          </li>
+          <li>
             <a href="#feeds" class="toc-h1 toc-link" data-title="Feeds">Feeds</a>
               <ul class="toc-list-h2">
                   <li>
@@ -281,6 +289,33 @@
 </ul>
 
 <p>They&#39;re all open source, so if they don&#39;t already do what you want, you can fork them and add any feature you&#39;d like.</p>
+<h1 id='authentication'>Authentication</h1>
+<p>Your Adafruit IO Key is used to restrict or grant access to your data. The key is unique and covers every use of the Adafruit IO API for your account. You can access your key any dashboard by clicking on the golden key icon:</p>
+
+<p><img src="images/authentication/aio-key-dashboard-link.png" alt="Aio key dashboard link" /></p>
+
+<p>Or by clicking on the &quot;View AIO Key&quot; link in the sidebar while you&#39;re visiting Adafruit IO.</p>
+
+<p><img src="images/authentication/aio-key-sidebar-link.png" alt="Aio key sidebar link" /></p>
+
+<p>Now you can copy the key directly from the information form that pops up, or copy one of the code samples that includes your key and username together.</p>
+
+<p><img src="images/authentication/aio-key-modal.png" alt="Aio key modal" /></p>
+<h2 id='including-the-adafruit-io-key-in-requests'>Including the Adafruit IO Key in requests</h2><pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: b780002b85d6411ca0ad9f9c60195f72"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/test_username/feeds
+
+<span class="c"># or</span>
+
+curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-key=b780002b85d6411ca0ad9f9c60195f72"</span>
+</code></pre><pre class="highlight ruby tab-ruby"><code><span class="nb">require</span> <span class="s1">'adafruit/io'</span>
+
+<span class="n">username</span> <span class="o">=</span> <span class="s2">"test_username"</span>
+<span class="n">api_key</span> <span class="o">=</span> <span class="s2">"b780002b85d6411ca0ad9f9c60195f72"</span>
+<span class="n">api</span> <span class="o">=</span> <span class="no">Adafruit</span><span class="o">::</span><span class="no">IO</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">new</span> <span class="ss">key: </span><span class="n">api_key</span><span class="p">,</span> <span class="ss">username: </span><span class="n">username</span>
+</code></pre>
+<p>When making HTTP requests to Adafruit IO, you can include the API key as a query parameter named <code>x-aio-key</code> or as a request header named <code>X-AIO-Key</code>. In both cases, &quot;X-AIO-Key&quot; is case insensitive.</p>
+
+<p><strong>NOTE</strong>: if you regenerate your AIO key, your old key will be immediately invalidated, so you&#39;ll have to replace it in any scripts or sketches where it is in use.</p>
 <h1 id='feeds'>Feeds</h1>
 <p>The feeds endpoint allows you to view and interact with 
 Adafruit IO Feeds.</p>
