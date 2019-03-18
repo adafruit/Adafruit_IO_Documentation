@@ -946,3 +946,649 @@ Parameter |   Type  |  Required | Description
 --------- | ------- | --------- | -----------
 username  | string  |   Yes     | a valid username string
 feed_key  | string  |   Yes     | a valid feed key
+
+## Delete an existing Feed
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
+```
+
+```python
+# Adafruit IO Python
+io.delete_feed(feed_name.key)
+
+# Adafruit IO CircuitPython
+io.delete_feed(feed_name['key'])
+```
+
+Deletes the record of an existing feed.
+
+### HTTP Request
+
+`DELETE /{username}/feeds/{feed_key}`
+
+### Path Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+username  | string  |     Yes   | a valid username string
+feed_key  | string  |     Yes   | a valid feed key
+
+## Add an existing feed to a group
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/add
+```
+
+```cpp
+// Not implemented in Adafruit IO Arduino
+```
+
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
+```
+
+> Response Sample:
+
+```json
+[
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "property1": {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        },
+        "property2": {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": [
+          {}
+        ],
+        "data": {
+          "first": {
+            "property1": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "property2": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            }
+          },
+          "last": {
+            "property1": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "property2": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            }
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "private",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
+    }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
+}
+]
+```
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/add`
+
+### Path Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+username  | string  |   Yes     | a valid username string
+group_key | string  |   Yes     | a valid group key
+
+### Query Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+feed_key  | string  |   Yes     | a valid feed key
+
+## Remove a feed from a group
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/remove
+```
+
+```cpp
+// Not implemented in Adafruit IO Arduino
+```
+
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
+```
+
+> Response Sample:
+
+```json
+[
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "property1": {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        },
+        "property2": {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": [
+          {}
+        ],
+        "data": {
+          "first": {
+            "property1": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "property2": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            }
+          },
+          "last": {
+            "property1": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "property2": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            }
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "private",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
+    }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
+}
+]
+```
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/remove`
+
+### Path Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+username  | string  |   Yes     | a valid username string
+group_key | string  |   Yes     | a valid group key
+
+### Query Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+feed_key  | string  |   Yes     | a valid feed key
+
+## All feeds for current user in a given group
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
+```
+
+```cpp
+// Not implemented in Adafruit IO Arduino
+```
+
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 0,
+    "name": "string",
+    "key": "string",
+    "group": {
+      "property1": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "property2": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    },
+    "groups": [
+      {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    ],
+    "description": "string",
+    "details": {
+      "shared_with": [
+        {}
+      ],
+      "data": {
+        "first": {
+          "property1": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "property2": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          }
+        },
+        "last": {
+          "property1": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "property2": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          }
+        },
+        "count": 0
+      }
+    },
+    "unit_type": "string",
+    "unit_symbol": "string",
+    "history": true,
+    "visibility": "private",
+    "license": "string",
+    "enabled": true,
+    "last_value": "string",
+    "status": "string",
+    "status_notify": true,
+    "status_timeout": 0,
+    "created_at": "string",
+    "updated_at": "string"
+  }
+]
+```
+
+### HTTP Request
+
+`GET /{username}/groups/{group_key}/feeds`
+
+### Path Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+username  | string  |   Yes     | a valid username string
+group_key | string  |   Yes     | a valid group key
+
+## Create a new feed in a group
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
+```
+
+```cpp
+// Not implemented in Adafruit IO Arduino
+```
+
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
+```
+
+> Response Sample:
+
+```json
+[
+{
+  "id": 0,
+  "name": "string",
+  "key": "string",
+  "group": {
+    "property1": {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "created_at": "string",
+      "updated_at": "string"
+    },
+    "property2": {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "created_at": "string",
+      "updated_at": "string"
+    }
+  },
+  "groups": [
+    {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "created_at": "string",
+      "updated_at": "string"
+    }
+  ],
+  "description": "string",
+  "details": {
+    "shared_with": [
+      {}
+    ],
+    "data": {
+      "first": {
+        "property1": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        },
+        "property2": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        }
+      },
+      "last": {
+        "property1": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        },
+        "property2": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        }
+      },
+      "count": 0
+    }
+  },
+  "unit_type": "string",
+  "unit_symbol": "string",
+  "history": true,
+  "visibility": "private",
+  "license": "string",
+  "enabled": true,
+  "last_value": "string",
+  "status": "string",
+  "status_notify": true,
+  "status_timeout": 0,
+  "created_at": "string",
+  "updated_at": "string"
+}
+]
+```
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/feeds`
+
+### Path Parameters
+
+Parameter |   Type  |  Required | Description
+--------- | ------- | --------- | -----------
+username  | string  |   Yes     | a valid username string
+group_key | string  |   Yes     | a valid group key
+
+### Request Body
+
+Parameter   |   Type  
+---------   | ------- 
+name        |  string
+key         |  string
+description |  string
+license     |  string
