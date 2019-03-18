@@ -62,31 +62,44 @@ include     |       string        | List of Data record fields to include in res
 ## Create new Data
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+# Send new data with a value of 42
+$ curl -F 'value=42' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+
+# Send new data with a value of 42 and include optional location metadata
+curl -H "Content-Type: application/json" -d '{"value": 42, "lat": 23.1, "lon": "-73.3"}'  -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
 ```
 
 ```cpp
-// Create new data record on feed `feedName` with value 42
+// Send data to Feed `feedName` with value of 42
 feedName->save(42);
 
-// Create new data record on feed `feedName with value 42, and location metadata
+// Send data to Feed `feedName` with value 42 and include optional location metadata
 feedName->save(42, latValue, lonValue, eleValue);
 ```
 
 ```python
 # Adafruit IO Python
+
+# Send data to feed feed_name with a value of 42
+io.send_data(location_feed.key, '42')
+
+# Send data to feed `feed_name` with a value of 42 and include optional location metadata
 metadata = {'lat': 40.726190,
             'lon': -74.005334,
             'ele': -6,
             'created_at': None}
-io.send_data(location_feed.key, data_value, metadata)
+io.send_data(feed_name.key, data_value, metadata)
 
 # Adafruit IO CircuitPython
+# Send data to feed feed_name with a value of 42
+io.send_data(location_feed['key'], '42')
+
+# Send data to feed `feed_name` with a value of 42 and include optional location metadata
 metadata = {'lat': 40.726190,
             'lon': -74.005334,
             'ele': -6,
             'created_at': None}
-io.send_data(location_feed['key'], data_value, metadata)
+io.send_data(feed_name['key'], data_value, metadata)
 ```
 
 > Response Sample:
