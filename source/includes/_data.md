@@ -153,7 +153,8 @@ epoch       | number
 ## Chart data for current feed
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/chart
+# Query the chart API for the previous hour.
+$ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/chart?hours=1'
 ```
 
 > Response Sample:
@@ -205,7 +206,9 @@ hours     |    integer <int32>     | The number of hours the chart should cover.
 ## Create multiple new Data records
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/batch
+$ curl -H "Content-Type: application/json" -d @batch.json -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/batch
+
+
 ```
 
 ```cpp

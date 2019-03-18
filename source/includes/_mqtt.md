@@ -1,0 +1,28 @@
+# Adafruit IO MQTT API
+
+## Client Libraries
+
+* Arduino: [Adafruit MQTT](https://github.com/adafruit/Adafruit_MQTT_Library)
+* Python: [Adafruit IO Python](https://github.com/adafruit/Adafruit_IO_Python) includes a MQTT Client.
+* CircuitPython: Accessing the Adafruit IO MQTT API is not currently supported on this platform. 
+* MicroPython: MicroPython devices can connect to Adafruit IO using [`uMQTT`](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple)
+
+
+## Connection Details
+
+We strongly recommend connecting using SSL (Port 8883) if your client allows it.
+
+TODO: Make this a nice table!
+
+
+Host: io.adafruit.com
+
+Port: 1883
+
+Secure (SSL) Port: 8883
+
+Username: Your Adafruit IO Username
+
+Password: Your Adafruit IO Key
+
+_Need to manually set a Client ID?_ Use a unique value such as a (random GUID)[https://www.guidgenerator.com/online-guid-generator.aspx].
