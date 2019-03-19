@@ -1,5 +1,128 @@
 # Dashboards
 
+## All dashboards for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Dashboard"
+  }
+}
+```
+
+An array of dashboards
+
+
+### HTTP Request
+
+`GET /{username}/dashboards`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+
+
+
+## Create a new Dashboard
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "blocks": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Block"
+      }
+    }
+  }
+}
+```
+
+New Dashboard
+
+
+### HTTP Request
+
+`POST /{username}/dashboards`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+dashboard | object | true | 
+
+
+
+
+
+
 ## Returns Dashboard based on ID
 
 ```shell
@@ -52,7 +175,10 @@ Dashboard response
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -115,7 +241,10 @@ Updated dashboard
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -128,6 +257,8 @@ username | string | true | a valid username stringid | string | true |
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 dashboard | object | true | 
+
+
 
 
 
@@ -166,7 +297,10 @@ Deleted Dashboard successfully
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 

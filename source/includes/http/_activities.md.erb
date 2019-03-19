@@ -1,5 +1,110 @@
 # Activities
 
+## All activities for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Activity"
+  }
+}
+```
+
+An array of activities
+
+
+### HTTP Request
+
+`GET /{username}/activities`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+### Query Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+start_time | string | false | Start time for filtering, returns records created after given time.
+end_time | string | false | End time for filtering, returns records created before give time.
+limit | integer | false | Limit the number of records returned.
+
+
+
+
+
+
+
+
+
+## All activities for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+
+```
+
+Deleted activities successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/activities`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+
+
+
 ## Get activities by type for current user
 
 ```shell
@@ -37,7 +142,10 @@ An array of activities
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringtype | string | true | 
+username | string | true | a valid username string
+type | string | true | 
+
+
 
 
 
@@ -46,7 +154,11 @@ username | string | true | a valid username stringtype | string | true |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-start_time | string | false | Start time for filtering, returns records created after given time.end_time | string | false | End time for filtering, returns records created before give time.limit | integer | false | Limit the number of records returned.
+start_time | string | false | Start time for filtering, returns records created after given time.
+end_time | string | false | End time for filtering, returns records created before give time.
+limit | integer | false | Limit the number of records returned.
+
+
 
 
 

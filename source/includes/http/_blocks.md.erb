@@ -1,5 +1,145 @@
 # Blocks
 
+## All blocks for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Block"
+  }
+}
+```
+
+An array of blocks
+
+
+### HTTP Request
+
+`GET /{username}/dashboards/{dashboard_id}/blocks`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+dashboard_id | string | true | 
+
+
+
+
+
+
+
+
+
+
+
+
+## Create a new Block
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "visual_type": {
+      "type": "string"
+    },
+    "column": {
+      "type": "number"
+    },
+    "row": {
+      "type": "number"
+    },
+    "size_x": {
+      "type": "number"
+    },
+    "size_y": {
+      "type": "number"
+    },
+    "block_feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/BlockFeed"
+      }
+    }
+  }
+}
+```
+
+New Block
+
+
+### HTTP Request
+
+`POST /{username}/dashboards/{dashboard_id}/blocks`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+dashboard_id | string | true | 
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+block | object | true | 
+
+
+
+
+
+
 ## Returns Block based on ID
 
 ```shell
@@ -67,7 +207,11 @@ Block response
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+username | string | true | a valid username string
+dashboard_id | string | true | 
+id | string | true | 
+
+
 
 
 
@@ -145,7 +289,11 @@ Updated block
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+username | string | true | a valid username string
+dashboard_id | string | true | 
+id | string | true | 
+
+
 
 
 
@@ -158,6 +306,8 @@ username | string | true | a valid username stringdashboard_id | string | true |
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 block | object | true | 
+
+
 
 
 
@@ -196,7 +346,11 @@ Deleted Block successfully
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+username | string | true | a valid username string
+dashboard_id | string | true | 
+id | string | true | 
+
+
 
 
 

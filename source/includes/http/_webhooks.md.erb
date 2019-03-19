@@ -1,5 +1,88 @@
 # Webhooks
 
+## Send data to a feed via webhook URL.
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "string",
+      "readOnly": true
+    },
+    "value": {
+      "type": "string"
+    },
+    "feed_id": {
+      "type": "number"
+    },
+    "group_id": {
+      "readOnly": true,
+      "type": "number"
+    },
+    "expiration": {
+      "type": "string"
+    },
+    "lat": {
+      "type": "number"
+    },
+    "lon": {
+      "type": "number"
+    },
+    "ele": {
+      "type": "number"
+    },
+    "completed_at": {
+      "readOnly": true,
+      "type": "string"
+    },
+    "created_at": {
+      "readOnly": true,
+      "type": "string"
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    },
+    "created_epoch": {
+      "readOnly": true,
+      "type": "number"
+    }
+  }
+}
+```
+
+New feed data record
+
+
+### HTTP Request
+
+`POST /webhooks/feed/:token`
+
+
+
+
+
+
+
+
+
+
+
 ## Send arbitrary data to a feed via webhook URL.
 
 ```shell

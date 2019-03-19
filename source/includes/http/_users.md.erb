@@ -1,5 +1,76 @@
 # Users
 
+## Get information about the current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string",
+      "readOnly": true
+    },
+    "color": {
+      "type": "string",
+      "readOnly": true
+    },
+    "username": {
+      "type": "string",
+      "readOnly": true
+    },
+    "time_zone": {
+      "type": "string",
+      "readOnly": true
+    },
+    "created_at": {
+      "type": "string",
+      "format": "dateTime",
+      "readOnly": true
+    },
+    "updated_at": {
+      "type": "string",
+      "format": "dateTime",
+      "readOnly": true
+    }
+  }
+}
+```
+
+A User record
+
+
+### HTTP Request
+
+`GET /user`
+
+
+
+
+
+
+
+
+
+
+
 ## Get the user's data rate limit and current activity level.
 
 ```shell
@@ -45,6 +116,8 @@ Data rate limit and current actions.
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
+
+
 
 
 

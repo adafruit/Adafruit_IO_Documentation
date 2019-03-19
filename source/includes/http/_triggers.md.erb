@@ -1,5 +1,115 @@
 # Triggers
 
+## All triggers for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Trigger"
+  }
+}
+```
+
+An array of triggers
+
+
+### HTTP Request
+
+`GET /{username}/triggers`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+
+
+
+## Create a new Trigger
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  }
+}
+```
+
+New Trigger
+
+
+### HTTP Request
+
+`POST /{username}/triggers`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+trigger | object | true | 
+
+
+
+
+
+
 ## Returns Trigger based on ID
 
 ```shell
@@ -39,7 +149,10 @@ Trigger response
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -89,7 +202,10 @@ Updated trigger
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -102,6 +218,8 @@ username | string | true | a valid username stringid | string | true |
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 trigger | object | true | 
+
+
 
 
 
@@ -140,7 +258,10 @@ Deleted Trigger successfully
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 

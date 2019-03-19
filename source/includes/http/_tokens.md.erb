@@ -1,5 +1,115 @@
 # Tokens
 
+## All tokens for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Token"
+  }
+}
+```
+
+An array of tokens
+
+
+### HTTP Request
+
+`GET /{username}/tokens`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+
+
+
+## Create a new Token
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    }
+  }
+}
+```
+
+New Token
+
+
+### HTTP Request
+
+`POST /{username}/tokens`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+token | object | true | 
+
+
+
+
+
+
 ## Returns Token based on ID
 
 ```shell
@@ -39,7 +149,10 @@ Token response
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -89,7 +202,10 @@ Updated token
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 
@@ -102,6 +218,8 @@ username | string | true | a valid username stringid | string | true |
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 token | object | true | 
+
+
 
 
 
@@ -140,7 +258,10 @@ Deleted Token successfully
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username stringid | string | true | 
+username | string | true | a valid username string
+id | string | true | 
+
+
 
 
 

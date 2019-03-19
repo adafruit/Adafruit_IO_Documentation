@@ -1,5 +1,509 @@
 # Groups
 
+## All groups for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Group"
+  }
+}
+```
+
+An array of groups
+
+
+### HTTP Request
+
+`GET /{username}/groups`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+
+
+
+## Create a new Group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Feed"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+New Group
+
+
+### HTTP Request
+
+`POST /{username}/groups`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+group | object | true | 
+
+
+
+
+
+
+## Returns Group based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Feed"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Group response
+
+
+### HTTP Request
+
+`GET /{username}/groups/{group_key}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+
+
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Feed"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated group
+
+
+### HTTP Request
+
+`PUT /{username}/groups/{group_key}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+
+
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+group | object | true | 
+
+
+
+
+
+
+## Delete an existing Group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Group successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/groups/{group_key}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+
+
+
+
+
+
+
+
+
+
+
+
+## Add an existing Feed to a Group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Feed"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated group
+
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/add`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+group_key | string | true | 
+username | string | true | a valid username string
+
+
+
+
+
+
+### Query Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+feed_key | string | false | 
+
+
+
+
+
+
+
+
+
+## Remove a Feed from a Group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Feed"
+      }
+    },
+    "created_at": {
+      "type": "string",
+      "readOnly": true
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated group
+
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/remove`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+group_key | string | true | 
+username | string | true | a valid username string
+
+
+
+
+
+
+### Query Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+feed_key | string | false | 
+
+
+
+
+
+
+
+
+
 ## All feeds for current user in a given group
 
 ```shell
@@ -37,7 +541,10 @@ An array of feeds
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | username | string | true | a valid username string
+group_key | string | true | 
+username | string | true | a valid username string
+
+
 
 
 
