@@ -9,6 +9,8 @@ We have lots of client libraries to help you get started with your project:
 
 * [Ruby](https://github.com/adafruit/io-client-ruby)
 
+Note: The following two libraries use V1 of the Adafruit API which have been [depreciated](https://io.adafruit.com/api/docs/). 
+
 * [Node.js](https://github.com/adafruit/adafruit-io-node-client)
 
 * [Go](https://github.com/adafruit/io-client-go)
