@@ -1,0 +1,56 @@
+# Users
+
+## Get the user's data rate limit and current activity level.
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "data_rate_limit": {
+      "type": "integer",
+      "description": "Max possible actions inside the time window (usually 1 minute)."
+    },
+    "active_data_rate": {
+      "type": "integer",
+      "description": "Actions taken inside the time window."
+    }
+  }
+}
+```
+
+Data rate limit and current actions.
+
+
+### HTTP Request
+
+`GET /{username}/throttle`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,208 @@
+# Blocks
+
+## Returns Block based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "visual_type": {
+      "type": "string"
+    },
+    "column": {
+      "type": "number"
+    },
+    "row": {
+      "type": "number"
+    },
+    "size_x": {
+      "type": "number"
+    },
+    "size_y": {
+      "type": "number"
+    },
+    "block_feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/BlockFeed"
+      }
+    }
+  }
+}
+```
+
+Block response
+
+
+### HTTP Request
+
+`GET /{username}/dashboards/{dashboard_id}/blocks/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Block
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "visual_type": {
+      "type": "string"
+    },
+    "column": {
+      "type": "number"
+    },
+    "row": {
+      "type": "number"
+    },
+    "size_x": {
+      "type": "number"
+    },
+    "size_y": {
+      "type": "number"
+    },
+    "block_feeds": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/BlockFeed"
+      }
+    }
+  }
+}
+```
+
+Updated block
+
+
+### HTTP Request
+
+`PUT /{username}/dashboards/{dashboard_id}/blocks/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+block | object | true | 
+
+
+
+
+## Delete an existing Block
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Block successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/dashboards/{dashboard_id}/blocks/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringdashboard_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+
+

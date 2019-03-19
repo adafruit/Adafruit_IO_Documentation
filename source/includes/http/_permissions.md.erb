@@ -1,0 +1,228 @@
+# Permissions
+
+## Returns Permission based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "user_id": {
+      "readOnly": true,
+      "type": "number"
+    },
+    "scope": {
+      "type": "string",
+      "default": "public",
+      "enum": [
+        "secret",
+        "public",
+        "user",
+        "organization"
+      ]
+    },
+    "scope_value": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string",
+      "default": "feed",
+      "enum": [
+        "feed",
+        "group",
+        "dashboard"
+      ]
+    },
+    "object_id": {
+      "type": "number"
+    },
+    "created_at": {
+      "readOnly": true,
+      "type": "string"
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Permission response
+
+
+### HTTP Request
+
+`GET /{username}/{type}/{type_id}/acl/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringtype | string | true | type_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Permission
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "number",
+      "readOnly": true
+    },
+    "user_id": {
+      "readOnly": true,
+      "type": "number"
+    },
+    "scope": {
+      "type": "string",
+      "default": "public",
+      "enum": [
+        "secret",
+        "public",
+        "user",
+        "organization"
+      ]
+    },
+    "scope_value": {
+      "type": "string"
+    },
+    "model": {
+      "type": "string",
+      "default": "feed",
+      "enum": [
+        "feed",
+        "group",
+        "dashboard"
+      ]
+    },
+    "object_id": {
+      "type": "number"
+    },
+    "created_at": {
+      "readOnly": true,
+      "type": "string"
+    },
+    "updated_at": {
+      "readOnly": true,
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated permission
+
+
+### HTTP Request
+
+`PUT /{username}/{type}/{type_id}/acl/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringtype | string | true | type_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+permission | object | true | 
+
+
+
+
+## Delete an existing Permission
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Permission successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/{type}/{type_id}/acl/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringtype | string | true | type_id | string | true | id | string | true | 
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,152 @@
+# Tokens
+
+## Returns Token based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Token response
+
+
+### HTTP Request
+
+`GET /{username}/tokens/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Token
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "token": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated token
+
+
+### HTTP Request
+
+`PUT /{username}/tokens/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+token | object | true | 
+
+
+
+
+## Delete an existing Token
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Token successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/tokens/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+

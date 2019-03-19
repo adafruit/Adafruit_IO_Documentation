@@ -1,0 +1,55 @@
+# Activities
+
+## Get activities by type for current user
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "array",
+  "items": {
+    "$ref": "#/definitions/Activity"
+  }
+}
+```
+
+An array of activities
+
+
+### HTTP Request
+
+`GET /{username}/activities/{type}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringtype | string | true | 
+
+
+
+
+### Query Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+start_time | string | false | Start time for filtering, returns records created after given time.end_time | string | false | End time for filtering, returns records created before give time.limit | integer | false | Limit the number of records returned.
+
+
+
+
+
+

@@ -1,0 +1,178 @@
+# Dashboards
+
+## Returns Dashboard based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "blocks": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Block"
+      }
+    }
+  }
+}
+```
+
+Dashboard response
+
+
+### HTTP Request
+
+`GET /{username}/dashboards/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Dashboard
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    },
+    "description": {
+      "type": "string"
+    },
+    "key": {
+      "type": "string"
+    },
+    "blocks": {
+      "type": "array",
+      "readOnly": true,
+      "items": {
+        "$ref": "#/definitions/Block"
+      }
+    }
+  }
+}
+```
+
+Updated dashboard
+
+
+### HTTP Request
+
+`PUT /{username}/dashboards/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+dashboard | object | true | 
+
+
+
+
+## Delete an existing Dashboard
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Dashboard successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/dashboards/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+

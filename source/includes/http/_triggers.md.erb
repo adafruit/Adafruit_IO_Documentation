@@ -1,0 +1,152 @@
+# Triggers
+
+## Returns Trigger based on ID
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Trigger response
+
+
+### HTTP Request
+
+`GET /{username}/triggers/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+
+
+## Replace an existing Trigger
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "object",
+  "properties": {
+    "name": {
+      "type": "string"
+    }
+  }
+}
+```
+
+Updated trigger
+
+
+### HTTP Request
+
+`PUT /{username}/triggers/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+trigger | object | true | 
+
+
+
+
+## Delete an existing Trigger
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "type": "string"
+}
+```
+
+Deleted Trigger successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/triggers/{id}`
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username stringid | string | true | 
+
+
+
+
+
+
+
+
+
