@@ -1,0 +1,8 @@
+# MQTT API QoS
+One feature of MQTT is the ability to specify a QoS, or quality of service, level when publishing feed data.  This allows an application to confirm that its data has been sucessfully published.
+
+If you aren't familiar with MQTT QoS levels [be sure to read this great blog post](http://www.hivemq.com/mqtt-essentials-part-6-mqtt-quality-of-service-levels/) explaining their meaning.
+
+For publishing feed values **the Adafruit IO MQTT API supports QoS level 0 (at most once) and 1 (at least once) only**.  
+
+QoS level 2 (exactly once) is _not_ currently supported.
