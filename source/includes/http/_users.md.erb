@@ -18,39 +18,13 @@
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string",
-      "readOnly": true
-    },
-    "color": {
-      "type": "string",
-      "readOnly": true
-    },
-    "username": {
-      "type": "string",
-      "readOnly": true
-    },
-    "time_zone": {
-      "type": "string",
-      "readOnly": true
-    },
-    "created_at": {
-      "type": "string",
-      "format": "dateTime",
-      "readOnly": true
-    },
-    "updated_at": {
-      "type": "string",
-      "format": "dateTime",
-      "readOnly": true
-    }
-  }
+  "id": 0,
+  "name": "string",
+  "color": "string",
+  "username": "string",
+  "time_zone": "string",
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -89,17 +63,8 @@ A User record
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "data_rate_limit": {
-      "type": "integer",
-      "description": "Max possible actions inside the time window (usually 1 minute)."
-    },
-    "active_data_rate": {
-      "type": "integer",
-      "description": "Actions taken inside the time window."
-    }
-  }
+  "data_rate_limit": 0,
+  "active_data_rate": 0
 }
 ```
 
@@ -113,10 +78,10 @@ Data rate limit and current actions.
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 

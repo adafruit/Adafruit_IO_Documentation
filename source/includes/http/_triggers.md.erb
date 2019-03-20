@@ -17,12 +17,11 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Trigger"
+[
+  {
+    "name": "string"
   }
-}
+]
 ```
 
 An array of triggers
@@ -35,10 +34,10 @@ An array of triggers
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -68,12 +67,7 @@ username | string | true | a valid username string
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    }
-  }
+  "name": "string"
 }
 ```
 
@@ -87,6 +81,7 @@ New Trigger
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -98,13 +93,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 trigger | object | true | 
-
 
 
 
@@ -128,12 +122,7 @@ trigger | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    }
-  }
+  "name": "string"
 }
 ```
 
@@ -147,11 +136,11 @@ Trigger response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 
@@ -181,12 +170,7 @@ id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    }
-  }
+  "name": "string"
 }
 ```
 
@@ -200,6 +184,7 @@ Updated trigger
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -212,13 +197,12 @@ id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 trigger | object | true | 
-
 
 
 
@@ -241,9 +225,7 @@ trigger | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Trigger successfully
@@ -256,11 +238,11 @@ Deleted Trigger successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 

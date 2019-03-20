@@ -17,12 +17,25 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Block"
+[
+  {
+    "name": "string",
+    "description": "string",
+    "key": "string",
+    "visual_type": "string",
+    "column": 0,
+    "row": 0,
+    "size_x": 0,
+    "size_y": 0,
+    "block_feeds": [
+      {
+        "id": "string",
+        "feed": null,
+        "group": null
+      }
+    ]
   }
-}
+]
 ```
 
 An array of blocks
@@ -35,11 +48,11 @@ An array of blocks
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 dashboard_id | string | true | 
-
 
 
 
@@ -69,40 +82,21 @@ dashboard_id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "visual_type": {
-      "type": "string"
-    },
-    "column": {
-      "type": "number"
-    },
-    "row": {
-      "type": "number"
-    },
-    "size_x": {
-      "type": "number"
-    },
-    "size_y": {
-      "type": "number"
-    },
-    "block_feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/BlockFeed"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "visual_type": "string",
+  "column": 0,
+  "row": 0,
+  "size_x": 0,
+  "size_y": 0,
+  "block_feeds": [
+    {
+      "id": "string",
+      "feed": null,
+      "group": null
     }
-  }
+  ]
 }
 ```
 
@@ -116,6 +110,7 @@ New Block
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -128,13 +123,12 @@ dashboard_id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 block | object | true | 
-
 
 
 
@@ -158,40 +152,21 @@ block | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "visual_type": {
-      "type": "string"
-    },
-    "column": {
-      "type": "number"
-    },
-    "row": {
-      "type": "number"
-    },
-    "size_x": {
-      "type": "number"
-    },
-    "size_y": {
-      "type": "number"
-    },
-    "block_feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/BlockFeed"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "visual_type": "string",
+  "column": 0,
+  "row": 0,
+  "size_x": 0,
+  "size_y": 0,
+  "block_feeds": [
+    {
+      "id": "string",
+      "feed": null,
+      "group": null
     }
-  }
+  ]
 }
 ```
 
@@ -205,12 +180,12 @@ Block response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 dashboard_id | string | true | 
 id | string | true | 
-
 
 
 
@@ -240,40 +215,21 @@ id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "visual_type": {
-      "type": "string"
-    },
-    "column": {
-      "type": "number"
-    },
-    "row": {
-      "type": "number"
-    },
-    "size_x": {
-      "type": "number"
-    },
-    "size_y": {
-      "type": "number"
-    },
-    "block_feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/BlockFeed"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "visual_type": "string",
+  "column": 0,
+  "row": 0,
+  "size_x": 0,
+  "size_y": 0,
+  "block_feeds": [
+    {
+      "id": "string",
+      "feed": null,
+      "group": null
     }
-  }
+  ]
 }
 ```
 
@@ -286,6 +242,7 @@ Updated block
 
 
 ### Path Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -300,13 +257,12 @@ id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 block | object | true | 
-
 
 
 
@@ -329,9 +285,7 @@ block | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Block successfully
@@ -344,12 +298,12 @@ Deleted Block successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 dashboard_id | string | true | 
 id | string | true | 
-
 
 
 

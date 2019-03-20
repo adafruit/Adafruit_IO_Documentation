@@ -17,12 +17,18 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Activity"
+[
+  {
+    "id": 0,
+    "action": "string",
+    "model": "string",
+    "data": {
+    },
+    "user_id": 0,
+    "created_at": "string",
+    "updated_at": "string"
   }
-}
+]
 ```
 
 An array of activities
@@ -35,6 +41,7 @@ An array of activities
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -43,15 +50,14 @@ username | string | true | a valid username string
 
 
 
-
 ### Query Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 start_time | string | false | Start time for filtering, returns records created after given time.
 end_time | string | false | End time for filtering, returns records created before give time.
 limit | integer | false | Limit the number of records returned.
-
 
 
 
@@ -90,10 +96,10 @@ Deleted activities successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -122,12 +128,18 @@ username | string | true | a valid username string
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Activity"
+[
+  {
+    "id": 0,
+    "action": "string",
+    "model": "string",
+    "data": {
+    },
+    "user_id": 0,
+    "created_at": "string",
+    "updated_at": "string"
   }
-}
+]
 ```
 
 An array of activities
@@ -140,6 +152,7 @@ An array of activities
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -149,15 +162,14 @@ type | string | true |
 
 
 
-
 ### Query Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 start_time | string | false | Start time for filtering, returns records created after given time.
 end_time | string | false | End time for filtering, returns records created before give time.
 limit | integer | false | Limit the number of records returned.
-
 
 
 

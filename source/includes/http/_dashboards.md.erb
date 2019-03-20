@@ -17,12 +17,32 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Dashboard"
+[
+  {
+    "name": "string",
+    "description": "string",
+    "key": "string",
+    "blocks": [
+      {
+        "name": "string",
+        "description": "string",
+        "key": "string",
+        "visual_type": "string",
+        "column": 0,
+        "row": 0,
+        "size_x": 0,
+        "size_y": 0,
+        "block_feeds": [
+          {
+            "id": "string",
+            "feed": null,
+            "group": null
+          }
+        ]
+      }
+    ]
   }
-}
+]
 ```
 
 An array of dashboards
@@ -35,10 +55,10 @@ An array of dashboards
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -68,25 +88,28 @@ username | string | true | a valid username string
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "blocks": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Block"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "blocks": [
+    {
+      "name": "string",
+      "description": "string",
+      "key": "string",
+      "visual_type": "string",
+      "column": 0,
+      "row": 0,
+      "size_x": 0,
+      "size_y": 0,
+      "block_feeds": [
+        {
+          "id": "string",
+          "feed": null,
+          "group": null
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
@@ -100,6 +123,7 @@ New Dashboard
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -111,13 +135,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 dashboard | object | true | 
-
 
 
 
@@ -141,25 +164,28 @@ dashboard | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "blocks": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Block"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "blocks": [
+    {
+      "name": "string",
+      "description": "string",
+      "key": "string",
+      "visual_type": "string",
+      "column": 0,
+      "row": 0,
+      "size_x": 0,
+      "size_y": 0,
+      "block_feeds": [
+        {
+          "id": "string",
+          "feed": null,
+          "group": null
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
@@ -173,11 +199,11 @@ Dashboard response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 
@@ -207,25 +233,28 @@ id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "key": {
-      "type": "string"
-    },
-    "blocks": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Block"
-      }
+  "name": "string",
+  "description": "string",
+  "key": "string",
+  "blocks": [
+    {
+      "name": "string",
+      "description": "string",
+      "key": "string",
+      "visual_type": "string",
+      "column": 0,
+      "row": 0,
+      "size_x": 0,
+      "size_y": 0,
+      "block_feeds": [
+        {
+          "id": "string",
+          "feed": null,
+          "group": null
+        }
+      ]
     }
-  }
+  ]
 }
 ```
 
@@ -239,6 +268,7 @@ Updated dashboard
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -251,13 +281,12 @@ id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 dashboard | object | true | 
-
 
 
 
@@ -280,9 +309,7 @@ dashboard | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Dashboard successfully
@@ -295,11 +322,11 @@ Deleted Dashboard successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 

@@ -1,0 +1,1140 @@
+# Data
+
+## Get all data for the given feed
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": "string",
+    "value": "string",
+    "feed_id": 0,
+    "group_id": 0,
+    "expiration": "string",
+    "lat": 0,
+    "lon": 0,
+    "ele": 0,
+    "completed_at": "string",
+    "created_at": "string",
+    "updated_at": "string",
+    "created_epoch": 0
+  }
+]
+```
+
+An array of data
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+start_time | string | false | Start time for filtering, returns records created after given time.
+end_time | string | false | End time for filtering, returns records created before give time.
+limit | integer | false | Limit the number of records returned.
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## Create new Data
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+New data
+
+
+### HTTP Request
+
+`POST /{username}/feeds/{feed_key}/data`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+
+
+## Chart data for current feed
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "feed": {
+    "id": 0,
+    "key": "string",
+    "name": "string"
+  },
+  "parameters": {
+  },
+  "columns": null,
+  "data": null
+}
+```
+
+A JSON record containing chart data and the parameters used to generate it.
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/chart`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+start_time | string | false | Start time for filtering, returns records created after given time.
+end_time | string | false | End time for filtering, returns records created before give time.
+
+
+
+
+
+
+
+
+## Create multiple new Data records
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": "string",
+    "value": "string",
+    "feed_id": 0,
+    "group_id": 0,
+    "expiration": "string",
+    "lat": 0,
+    "lon": 0,
+    "ele": 0,
+    "completed_at": "string",
+    "created_at": "string",
+    "updated_at": "string",
+    "created_epoch": 0
+  }
+]
+```
+
+New data
+
+
+### HTTP Request
+
+`POST /{username}/feeds/{feed_key}/data/batch`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+
+
+## Previous Data in Queue
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Data response
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/previous`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## Next Data in Queue
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Data response
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/next`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## Last Data in Queue
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Data response
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/last`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## First Data in Queue
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Data response
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/first`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## Last Data in MQTT CSV format
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+"string"
+```
+
+CSV string in `value,lat,lon,ele` format. The lat, lon, and ele values are left blank if they are not set.
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/retain`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+
+
+
+## Returns data based on feed key
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Data response
+
+
+### HTTP Request
+
+`GET /{username}/feeds/{feed_key}/data/{id}`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+id | string | true | 
+
+
+
+
+
+### Query Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+
+
+
+
+
+
+
+
+## Replace existing Data
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+Updated Data
+
+
+### HTTP Request
+
+`PUT /{username}/feeds/{feed_key}/data/{id}`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+id | string | true | 
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+
+
+## Delete existing Data
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+"string"
+```
+
+Deleted Group successfully
+
+
+### HTTP Request
+
+`DELETE /{username}/feeds/{feed_key}/data/{id}`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+feed_key | string | true | a valid feed key
+id | string | true | 
+
+
+
+
+
+
+
+
+
+
+
+## Create new data for multiple feeds in a group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": "string",
+    "value": "string",
+    "feed_id": 0,
+    "group_id": 0,
+    "expiration": "string",
+    "lat": 0,
+    "lon": 0,
+    "ele": 0,
+    "completed_at": "string",
+    "created_at": "string",
+    "updated_at": "string",
+    "created_epoch": 0
+  }
+]
+```
+
+New data
+
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/data`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+group_feed_data | object | true | 
+
+
+
+
+
+## All data for current feed in a specific group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": "string",
+    "value": "string",
+    "feed_id": 0,
+    "group_id": 0,
+    "expiration": "string",
+    "lat": 0,
+    "lon": 0,
+    "ele": 0,
+    "completed_at": "string",
+    "created_at": "string",
+    "updated_at": "string",
+    "created_epoch": 0
+  }
+]
+```
+
+An array of data
+
+
+### HTTP Request
+
+`GET /{username}/groups/{group_key}/feeds/{feed_key}/data`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+
+
+
+## Create new Data in a feed belonging to a particular group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+New data
+
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/feeds/{feed_key}/data`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+
+
+## Create multiple new Data records in a feed belonging to a particular group
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": "string",
+    "value": "string",
+    "feed_id": 0,
+    "group_id": 0,
+    "expiration": "string",
+    "lat": 0,
+    "lon": 0,
+    "ele": 0,
+    "completed_at": "string",
+    "created_at": "string",
+    "updated_at": "string",
+    "created_epoch": 0
+  }
+]
+```
+
+New data
+
+
+### HTTP Request
+
+`POST /{username}/groups/{group_key}/feeds/{feed_key}/data/batch`
+
+
+### Path Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+group_key | string | true | 
+feed_key | string | true | a valid feed key
+
+
+
+
+
+
+
+
+### Body Parameters
+
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+
+
+## Send data to a feed via webhook URL.
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+New feed data record
+
+
+### HTTP Request
+
+`POST /webhooks/feed/:token`
+
+
+
+
+
+
+
+
+
+
+
+## Send arbitrary data to a feed via webhook URL.
+
+```shell
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "string",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+New feed data record
+
+
+### HTTP Request
+
+`POST /webhooks/feed/:token/raw`
+
+
+
+
+
+
+
+
+
+

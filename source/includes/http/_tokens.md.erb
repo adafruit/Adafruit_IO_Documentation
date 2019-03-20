@@ -17,12 +17,11 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Token"
+[
+  {
+    "token": "string"
   }
-}
+]
 ```
 
 An array of tokens
@@ -35,10 +34,10 @@ An array of tokens
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -68,12 +67,7 @@ username | string | true | a valid username string
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "token": {
-      "type": "string"
-    }
-  }
+  "token": "string"
 }
 ```
 
@@ -87,6 +81,7 @@ New Token
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -98,13 +93,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 token | object | true | 
-
 
 
 
@@ -128,12 +122,7 @@ token | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "token": {
-      "type": "string"
-    }
-  }
+  "token": "string"
 }
 ```
 
@@ -147,11 +136,11 @@ Token response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 
@@ -181,12 +170,7 @@ id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "token": {
-      "type": "string"
-    }
-  }
+  "token": "string"
 }
 ```
 
@@ -200,6 +184,7 @@ Updated token
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -212,13 +197,12 @@ id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 token | object | true | 
-
 
 
 
@@ -241,9 +225,7 @@ token | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Token successfully
@@ -256,11 +238,11 @@ Deleted Token successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true | 
-
 
 
 

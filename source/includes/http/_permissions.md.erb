@@ -17,12 +17,18 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Permission"
+[
+  {
+    "id": 0,
+    "user_id": 0,
+    "scope": "string",
+    "scope_value": "string",
+    "model": "string",
+    "object_id": 0,
+    "created_at": "string",
+    "updated_at": "string"
   }
-}
+]
 ```
 
 An array of permissions
@@ -35,12 +41,12 @@ An array of permissions
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 type | string | true | 
 type_id | string | true | 
-
 
 
 
@@ -70,50 +76,14 @@ type_id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "user_id": {
-      "readOnly": true,
-      "type": "number"
-    },
-    "scope": {
-      "type": "string",
-      "default": "public",
-      "enum": [
-        "secret",
-        "public",
-        "user",
-        "organization"
-      ]
-    },
-    "scope_value": {
-      "type": "string"
-    },
-    "model": {
-      "type": "string",
-      "default": "feed",
-      "enum": [
-        "feed",
-        "group",
-        "dashboard"
-      ]
-    },
-    "object_id": {
-      "type": "number"
-    },
-    "created_at": {
-      "readOnly": true,
-      "type": "string"
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
-    }
-  }
+  "id": 0,
+  "user_id": 0,
+  "scope": "string",
+  "scope_value": "string",
+  "model": "string",
+  "object_id": 0,
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -126,6 +96,7 @@ New Permission
 
 
 ### Path Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -140,13 +111,12 @@ type_id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 permission | object | true | 
-
 
 
 
@@ -170,50 +140,14 @@ permission | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "user_id": {
-      "readOnly": true,
-      "type": "number"
-    },
-    "scope": {
-      "type": "string",
-      "default": "public",
-      "enum": [
-        "secret",
-        "public",
-        "user",
-        "organization"
-      ]
-    },
-    "scope_value": {
-      "type": "string"
-    },
-    "model": {
-      "type": "string",
-      "default": "feed",
-      "enum": [
-        "feed",
-        "group",
-        "dashboard"
-      ]
-    },
-    "object_id": {
-      "type": "number"
-    },
-    "created_at": {
-      "readOnly": true,
-      "type": "string"
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
-    }
-  }
+  "id": 0,
+  "user_id": 0,
+  "scope": "string",
+  "scope_value": "string",
+  "model": "string",
+  "object_id": 0,
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -227,13 +161,13 @@ Permission response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 type | string | true | 
 type_id | string | true | 
 id | string | true | 
-
 
 
 
@@ -263,50 +197,14 @@ id | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "user_id": {
-      "readOnly": true,
-      "type": "number"
-    },
-    "scope": {
-      "type": "string",
-      "default": "public",
-      "enum": [
-        "secret",
-        "public",
-        "user",
-        "organization"
-      ]
-    },
-    "scope_value": {
-      "type": "string"
-    },
-    "model": {
-      "type": "string",
-      "default": "feed",
-      "enum": [
-        "feed",
-        "group",
-        "dashboard"
-      ]
-    },
-    "object_id": {
-      "type": "number"
-    },
-    "created_at": {
-      "readOnly": true,
-      "type": "string"
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
-    }
-  }
+  "id": 0,
+  "user_id": 0,
+  "scope": "string",
+  "scope_value": "string",
+  "model": "string",
+  "object_id": 0,
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -319,6 +217,7 @@ Updated permission
 
 
 ### Path Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -334,13 +233,12 @@ id | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 permission | object | true | 
-
 
 
 
@@ -363,9 +261,7 @@ permission | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Permission successfully
@@ -378,13 +274,13 @@ Deleted Permission successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 type | string | true | 
 type_id | string | true | 
 id | string | true | 
-
 
 
 

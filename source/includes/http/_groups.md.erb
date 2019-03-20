@@ -17,12 +17,85 @@
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Group"
+[
+  {
+    "id": 0,
+    "name": "string",
+    "description": "string",
+    "feeds": [
+      {
+        "id": 0,
+        "name": "string",
+        "key": "string",
+        "group": {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        },
+        "groups": [
+          {
+            "id": 0,
+            "name": "string",
+            "description": "string",
+            "created_at": "string",
+            "updated_at": "string"
+          }
+        ],
+        "description": "string",
+        "details": {
+          "shared_with": null,
+          "data": {
+            "first": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "last": {
+              "id": "string",
+              "value": "string",
+              "feed_id": 0,
+              "group_id": 0,
+              "expiration": "string",
+              "lat": 0,
+              "lon": 0,
+              "ele": 0,
+              "completed_at": "string",
+              "created_at": "string",
+              "updated_at": "string",
+              "created_epoch": 0
+            },
+            "count": 0
+          }
+        },
+        "unit_type": "string",
+        "unit_symbol": "string",
+        "history": true,
+        "visibility": "string",
+        "license": "string",
+        "enabled": true,
+        "last_value": "string",
+        "status": "string",
+        "status_notify": true,
+        "status_timeout": 0,
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    ],
+    "created_at": "string",
+    "updated_at": "string"
   }
-}
+]
 ```
 
 An array of groups
@@ -35,10 +108,10 @@ An array of groups
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -68,34 +141,81 @@ username | string | true | a valid username string
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Feed"
-      }
-    },
-    "created_at": {
-      "type": "string",
-      "readOnly": true
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": null,
+        "data": {
+          "first": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "last": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
     }
-  }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -109,6 +229,7 @@ New Group
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -120,13 +241,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group | object | true | 
-
 
 
 
@@ -150,34 +270,81 @@ group | object | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Feed"
-      }
-    },
-    "created_at": {
-      "type": "string",
-      "readOnly": true
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": null,
+        "data": {
+          "first": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "last": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
     }
-  }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -191,11 +358,11 @@ Group response
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 group_key | string | true | 
-
 
 
 
@@ -225,34 +392,81 @@ group_key | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Feed"
-      }
-    },
-    "created_at": {
-      "type": "string",
-      "readOnly": true
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": null,
+        "data": {
+          "first": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "last": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
     }
-  }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -266,6 +480,7 @@ Updated group
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
@@ -278,13 +493,12 @@ group_key | string | true |
 
 
 
-
 ### Body Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group | object | true | 
-
 
 
 
@@ -307,9 +521,7 @@ group | object | true |
 > Response Sample:
 
 ```json
-{
-  "type": "string"
-}
+"string"
 ```
 
 Deleted Group successfully
@@ -322,11 +534,11 @@ Deleted Group successfully
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 group_key | string | true | 
-
 
 
 
@@ -356,34 +568,81 @@ group_key | string | true |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Feed"
-      }
-    },
-    "created_at": {
-      "type": "string",
-      "readOnly": true
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": null,
+        "data": {
+          "first": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "last": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
     }
-  }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -397,6 +656,7 @@ Updated group
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group_key | string | true | 
@@ -406,13 +666,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Query Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 feed_key | string | false | 
-
 
 
 
@@ -439,34 +698,81 @@ feed_key | string | false |
 
 ```json
 {
-  "type": "object",
-  "properties": {
-    "id": {
-      "type": "number",
-      "readOnly": true
-    },
-    "name": {
-      "type": "string"
-    },
-    "description": {
-      "type": "string"
-    },
-    "feeds": {
-      "type": "array",
-      "readOnly": true,
-      "items": {
-        "$ref": "#/definitions/Feed"
-      }
-    },
-    "created_at": {
-      "type": "string",
-      "readOnly": true
-    },
-    "updated_at": {
-      "readOnly": true,
-      "type": "string"
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "details": {
+        "shared_with": null,
+        "data": {
+          "first": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "last": {
+            "id": "string",
+            "value": "string",
+            "feed_id": 0,
+            "group_id": 0,
+            "expiration": "string",
+            "lat": 0,
+            "lon": 0,
+            "ele": 0,
+            "completed_at": "string",
+            "created_at": "string",
+            "updated_at": "string",
+            "created_epoch": 0
+          },
+          "count": 0
+        }
+      },
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
     }
-  }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
 }
 ```
 
@@ -480,6 +786,7 @@ Updated group
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group_key | string | true | 
@@ -489,13 +796,12 @@ username | string | true | a valid username string
 
 
 
-
 ### Query Parameters
+
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 feed_key | string | false | 
-
 
 
 
@@ -521,12 +827,76 @@ feed_key | string | false |
 > Response Sample:
 
 ```json
-{
-  "type": "array",
-  "items": {
-    "$ref": "#/definitions/Feed"
+[
+  {
+    "id": 0,
+    "name": "string",
+    "key": "string",
+    "group": {
+      "id": 0,
+      "name": "string",
+      "description": "string",
+      "created_at": "string",
+      "updated_at": "string"
+    },
+    "groups": [
+      {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      }
+    ],
+    "description": "string",
+    "details": {
+      "shared_with": null,
+      "data": {
+        "first": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        },
+        "last": {
+          "id": "string",
+          "value": "string",
+          "feed_id": 0,
+          "group_id": 0,
+          "expiration": "string",
+          "lat": 0,
+          "lon": 0,
+          "ele": 0,
+          "completed_at": "string",
+          "created_at": "string",
+          "updated_at": "string",
+          "created_epoch": 0
+        },
+        "count": 0
+      }
+    },
+    "unit_type": "string",
+    "unit_symbol": "string",
+    "history": true,
+    "visibility": "string",
+    "license": "string",
+    "enabled": true,
+    "last_value": "string",
+    "status": "string",
+    "status_notify": true,
+    "status_timeout": 0,
+    "created_at": "string",
+    "updated_at": "string"
   }
-}
+]
 ```
 
 An array of feeds
@@ -539,11 +909,11 @@ An array of feeds
 
 ### Path Parameters
 
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group_key | string | true | 
 username | string | true | a valid username string
-
 
 
 
