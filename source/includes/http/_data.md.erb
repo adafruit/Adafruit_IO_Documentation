@@ -3,15 +3,17 @@
 ## Get all data for the given feed
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
@@ -75,12 +77,44 @@ include | string | false | List of Data record fields to include in response as 
 ## Create new Data
 
 ```shell
+# Send new data with a value of 42
+$ curl -F 'value=42' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+
+# Send new data with a value of 42 and include optional location metadata
+curl -H "Content-Type: application/json" -d '{"value": 42, "lat": 23.1, "lon": "-73.3"}'  -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
 ```
 
 ```python
+# Adafruit IO Python
+
+# Send data to feed feed_name with a value of 42
+io.send_data(location_feed.key, '42')
+
+# Send data to feed `feed_name` with a value of 42 and include optional location metadata
+metadata = {'lat': 40.726190,
+            'lon': -74.005334,
+            'ele': -6,
+            'created_at': None}
+io.send_data(feed_name.key, data_value, metadata)
+
+# Adafruit IO CircuitPython
+# Send data to feed feed_name with a value of 42
+io.send_data(location_feed['key'], '42')
+
+# Send data to feed `feed_name` with a value of 42 and include optional location metadata
+metadata = {'lat': 40.726190,
+            'lon': -74.005334,
+            'ele': -6,
+            'created_at': None}
+io.send_data(feed_name['key'], data_value, metadata)
 ```
 
 ```cpp
+// Send data to Feed `feedName` with value of 42
+feedName->save(42);
+
+// Send data to Feed `feedName` with value 42 and include optional location metadata
+feedName->save(42, latValue, lonValue, eleValue);
 ```
 
 ```ruby
@@ -142,6 +176,8 @@ datum | object | true | Data record including a `value` field (required) and opt
 ## Chart data for current feed
 
 ```shell
+# Query the chart API for the previous hour.
+$ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/chart?hours=1'
 ```
 
 ```python
@@ -207,9 +243,15 @@ end_time | string | false | End time for filtering, returns records created befo
 ## Create multiple new Data records
 
 ```shell
+$ curl -H "Content-Type: application/json" -d @batch.json -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/batch
 ```
 
 ```python
+# Adafruit IO Python
+data_list = [Data(value=50), Data(value=33)]
+aio.send_batch_data(feed_name.key, data_list)
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 ```cpp
@@ -279,6 +321,8 @@ data | array | true | A collection of data records including `value` (required) 
 ```
 
 ```python
+# Adafruit IO Python
+data = aio.receive_previous(feed.key)
 ```
 
 ```cpp
@@ -346,6 +390,8 @@ include | string | false | List of Data record fields to include in response as 
 ```
 
 ```python
+# Adafruit IO Python
+data = aio.receive_next(feed.key)
 ```
 
 ```cpp
@@ -480,6 +526,8 @@ include | string | false | List of Data record fields to include in response as 
 ```
 
 ```python
+# Adafruit IO Python
+data = aio.receive(feed.key)
 ```
 
 ```cpp
@@ -593,6 +641,11 @@ feed_key | string | true | a valid feed key
 ```
 
 ```python
+# Adafruit IO Python
+data = aio.receive(feed_name.key)
+
+# Adafruit IO CircuitPython
+data = aio.receive(feed_name['key'])
 ```
 
 ```cpp
@@ -729,6 +782,11 @@ datum | object | true | Data record including a `value` field (required) and opt
 ```
 
 ```python
+# Adafruit IO Python
+aio.delete(feed_name.key, data_id)
+
+# Adafruit IO CircuitPython
+aio.delete_data(feed_name['key'], data_id)
 ```
 
 ```cpp
