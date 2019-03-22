@@ -3,6 +3,7 @@
 ## All dashboards for current user
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
 ```
 
 ```python
@@ -73,6 +74,7 @@ username | string | true | a valid username string
 ## Create a new Dashboard
 
 ```shell
+$ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
 ```
 
 ```python
@@ -149,6 +151,7 @@ dashboard | object | true |
 ## Returns Dashboard based on ID
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
 ```
 
 ```python
@@ -218,6 +221,7 @@ id | string | true |
 ## Replace an existing Dashboard
 
 ```shell
+$ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
 ```
 
 ```python
@@ -295,6 +299,7 @@ dashboard | object | true |
 ## Delete an existing Dashboard
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
 ```
 
 ```python
