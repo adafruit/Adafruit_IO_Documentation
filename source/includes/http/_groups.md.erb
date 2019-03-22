@@ -3,6 +3,7 @@
 ## All groups for current user
 
 ```shell
+$ curl -H "X-AIO-Key: {your_aio_key}" http://io.adafruit.com/api/v2/{your_username}/groups
 ```
 
 ```python
@@ -126,6 +127,7 @@ username | string | true | a valid username string
 ## Create a new Group
 
 ```shell
+$ curl -F 'name=New Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/
 ```
 
 ```python
@@ -255,6 +257,7 @@ group | object | true |
 ## Returns Group based on ID
 
 ```shell
+curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
 ```
 
 ```python
@@ -377,6 +380,7 @@ group_key | string | true |
 ## Replace an existing Group
 
 ```shell
+$ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
 ```
 
 ```python
@@ -507,6 +511,7 @@ group | object | true |
 ## Delete an existing Group
 
 ```shell
+$ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
 ```
 
 ```python
@@ -553,6 +558,7 @@ group_key | string | true |
 ## Add an existing Feed to a Group
 
 ```shell
+$ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/add
 ```
 
 ```python
@@ -683,6 +689,7 @@ feed_key | string | false |
 ## Remove a Feed from a Group
 
 ```shell
+$ curl -F 'feed_key=FeedName' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/remove
 ```
 
 ```python
@@ -813,6 +820,7 @@ feed_key | string | false |
 ## All feeds for current user in a given group
 
 ```shell
+$ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
 ```
 
 ```python
