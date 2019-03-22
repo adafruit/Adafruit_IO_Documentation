@@ -5,4 +5,10 @@ The Adafruit IO HTTP API provides access to your Adafruit IO data from any progr
 
 ## About the Adafruit IO API Documentation
 
-This API documentation is hosted on GitHub Pages and is available at https://github.com/adafruit/io-api. For questions or comments visit the Adafruit IO Forums or the #help-with-adafruit-io channel on the Adafruit Discord server.
+This API documentation is hosted on GitHub Pages and is available [on GitHub](https://github.com/adafruit/Adafruit_IO_Documentation).
+
+
+**Spotted something incorrect or broken?** [Click here to file an issue on the repository](https://github.com/adafruit/Adafruit_IO_Documentation/issues/new)
+
+
+For questions or comments [visit the Adafruit IO Forums](https://forums.adafruit.com/viewforum.php?f=56) or the [#help-with-adafruit-io channel on the Adafruit Discord server](https://discord.gg/adafruit).
