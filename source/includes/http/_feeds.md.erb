@@ -125,6 +125,11 @@ aio.create_feed(new_feed)
 new_feed = io.create_new_feed('newfeed')
 ```
 
+```ruby
+puts "create"
+Feed = api.create_feed(name: "Feed #{SecureRandom.hex(4)}")
+```
+
 > Response Sample:
 
 ```json
@@ -245,16 +250,27 @@ feed | object | true |
 $ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_key}
 ```
 
-```cpp
-AdafruitIO_Feed *newFeed = io.feed("FEED_KEY");
-```
-
 ```python
 # Adafruit IO Python
 new_feed = aio.feeds('feedkey')
 
 # Adafruit IO CircuitPython
 new_feed = io.get_feed('feedkey')
+```
+
+```ruby
+puts "read?"
+# ... get 404
+begin
+  api.feed(feedname['key'])
+rescue => ex
+  if ex.response.status === 404
+    puts "expected error #{ex.response.status}: #{ex.message}"
+  else
+    puts "unexpected error! #{ex.message}"
+  end
+end
+
 ```
 
 > Response Sample:
@@ -495,6 +511,11 @@ io.delete_feed(feed_name.key)
 io.delete_feed(feed_name['key'])
 ```
 
+```ruby
+puts "delete"
+api.delete_feed(feed)
+```
+
 > Response Sample:
 
 ```json
@@ -541,6 +562,11 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 # Not implemented in Adafruit IO Python
 
 # Not implemented in Adafruit IO CircuitPython
+```
+
+```ruby
+puts "read"
+puts JSON.pretty_generate(api.feed_details(feed))
 ```
 
 > Response Sample:
@@ -656,6 +682,13 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups
 # Not implemented in Adafruit IO Python
 
 # Not implemented in Adafruit IO CircuitPython
+```
+
+```ruby
+puts "add feed"
+added = api.group_add_feed(group, feed)
+puts JSON.pretty_generate(added)
+puts "-" * 80
 ```
 
 > Response Sample:
@@ -788,6 +821,13 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups
 # Not implemented in Adafruit IO Python
 
 # Not implemented in Adafruit IO CircuitPython
+```
+
+```ruby
+puts "remove feed"
+removed = api.group_remove_feed(group, feed)
+puts JSON.pretty_generate(removed)
+puts "-" * 80
 ```
 
 > Response Sample:
