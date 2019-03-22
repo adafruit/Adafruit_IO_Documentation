@@ -3,6 +3,7 @@
 ## Send data to a feed via webhook URL.
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token
 ```
 
 ```python
@@ -53,6 +54,7 @@ New feed data record
 ## Send arbitrary data to a feed via webhook URL.
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
 ```
 
 ```python

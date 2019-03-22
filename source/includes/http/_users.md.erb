@@ -3,6 +3,7 @@
 ## Get information about the current user
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/user
 ```
 
 ```python
@@ -48,6 +49,7 @@ A User record
 ## Get the user's data rate limit and current activity level.
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/throttle
 ```
 
 ```python

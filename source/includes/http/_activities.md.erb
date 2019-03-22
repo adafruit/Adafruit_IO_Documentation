@@ -3,6 +3,7 @@
 ## All activities for current user
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities
 ```
 
 ```python
@@ -69,6 +70,7 @@ limit | integer | false | Limit the number of records returned.
 ## All activities for current user
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities
 ```
 
 ```python
@@ -114,6 +116,8 @@ username | string | true | a valid username string
 ## Get activities by type for current user
 
 ```shell
+# Returns two records
+$ curl -F 'limit=2' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities/{type}
 ```
 
 ```python
