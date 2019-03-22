@@ -2,17 +2,18 @@
 
 ## All feeds for current user
 
+
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 ```
 
 ```python
+# Adafruit IO Python
+feeds = aio.feeds()
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
-```cpp
-```
-
-```ruby
-```
 
 > Response Sample:
 
@@ -105,27 +106,23 @@ Parameter |   Type  |  Required |       Description
 username | string | true | a valid username string
 
 
-
-
-
-
-
-
-
-
-
 ## Create a new Feed
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_name}
 ```
 
 ```cpp
+AdafruitIO_Feed *newFeed = io.feed("newfeed");
 ```
 
-```ruby
+```python
+# Adafruit IO Python
+new_feed = Feed(name="newfeed")
+aio.create_feed(new_feed)
+
+# Adafruit IO CircuitPython
+new_feed = io.create_new_feed('newfeed')
 ```
 
 > Response Sample:
@@ -245,15 +242,19 @@ feed | object | true |
 ## Get feed by feed key
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_key}
 ```
 
 ```cpp
+AdafruitIO_Feed *newFeed = io.feed("FEED_KEY");
 ```
 
-```ruby
+```python
+# Adafruit IO Python
+new_feed = aio.feeds('feedkey')
+
+# Adafruit IO CircuitPython
+new_feed = io.get_feed('feedkey')
 ```
 
 > Response Sample:
@@ -357,17 +358,21 @@ feed_key | string | true | a valid feed key
 
 ## Replace an existing Feed
 
-```shell
-```
 
-```python
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
+
 
 > Response Sample:
 
@@ -479,15 +484,15 @@ feed | object | true |
 ## Delete an existing Feed
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
 ```
 
 ```python
-```
+# Adafruit IO Python
+io.delete_feed(feed_name.key)
 
-```cpp
-```
-
-```ruby
+# Adafruit IO CircuitPython
+io.delete_feed(feed_name['key'])
 ```
 
 > Response Sample:
@@ -525,15 +530,17 @@ feed_key | string | true | a valid feed key
 ## Get detailed feed by feed key
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/details
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
@@ -638,15 +645,17 @@ feed_key | string | true | a valid feed key
 ## Add an existing Feed to a Group
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/add
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
@@ -768,15 +777,17 @@ feed_key | string | false |
 ## Remove a Feed from a Group
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/remove
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
@@ -898,15 +909,17 @@ feed_key | string | false |
 ## All feeds for current user in a given group
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
@@ -1013,15 +1026,17 @@ username | string | true | a valid username string
 ## Create a new Feed in a Group
 
 ```shell
-```
-
-```python
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
 ```
 
 ```cpp
+// Not implemented in Adafruit IO Arduino
 ```
 
-```ruby
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
 ```
 
 > Response Sample:
