@@ -3,6 +3,7 @@
 ## All permissions for current user and type
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl
 ```
 
 ```python
@@ -61,6 +62,7 @@ type_id | string | true |
 ## Create a new Permission
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl
 ```
 
 ```python
@@ -125,6 +127,7 @@ permission | object | true |
 ## Returns Permission based on ID
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
 ```
 
 ```python
@@ -182,6 +185,7 @@ id | string | true |
 ## Replace an existing Permission
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
 ```
 
 ```python
@@ -247,6 +251,7 @@ permission | object | true |
 ## Delete an existing Permission
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
 ```
 
 ```python
