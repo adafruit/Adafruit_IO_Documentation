@@ -1,18 +1,31 @@
+
 # Cookbook
 
-This page contains a number of recipes related to Adafruit IO, which have been found useful in the past.
+This page contains a number of recipes related to Adafruit  IO, which have been found useful in the past. You can add and contribute to this file by filing an `issue` on the GitHub repository, or by editing this file and submitting a pull request. 
 
-## Sending image data to Adafruit IO
+
+## Sending and Sending image data with Adafruit IO
+
+Using an *Image Block*, you can automatically display a Base64 image data string on your dashboard by sending a Base64 image data string to an Adafruit IO feed.
+
+*Design Considerations:*
+There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data. Image conversion from binary to Base64 happens inside the browser, with no image pre-compression,  _and_  more importantly, conversion from binary to Base64 expands the size of the image data.
+
+You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  [the .png image used for testing](https://io.adafruit.com/blog/images/2016-12-14-power-switch.png)  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.
+
+![base64imagepreview](https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png)
+  
 
 ## Feed Identifiers
 
+  
 Names are for humans.
-  
+
 Keys are for computers.
-  
+
 You tell the computer the name, and it will tell you the key.
-  
-When using  Adafruit  IO, you'll want to tell the client (the computer) the feed's **key** instead of the feed name. 
+
+**When  using  Adafruit  IO, you'll want to tell the client (the computer) the feed's **key** instead of the feed name.**
 
 For more information about this topic:
 
@@ -20,4 +33,8 @@ https://learn.adafruit.com/naming-things-in-adafruit-io/introduction
 
 https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds
 
-## Sending floats to Adafruit IO
+  
+
+## Sending floating point data to Adafruit IO
+
+If you're sending `3.1415` and only want to send `3.14` - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. 
