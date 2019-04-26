@@ -13,12 +13,16 @@ WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 License for the specific language governing permissions and limitations
 under the License.
 %>
-<% language_tabs = current_page.data.language_tabs || [] %>
-<% page_content = yield %>
+
+<%
+  language_tabs = current_page.data.language_tabs || []
+  page_content = yield
+%>
+
 <%
   if current_page.data.includes
-    current_page.data.includes.each do |include|
-      page_content += partial("includes/#{include}")
+    current_page.data.includes.each do |incl|
+      page_content += partial("includes/#{incl}")
     end
   end
 %>
@@ -52,6 +56,7 @@ under the License.
     </a>
     <div class="toc-wrapper">
       <%= image_tag "logo.png", class: 'logo' %>
+
       <% if language_tabs.any? %>
         <div class="lang-selector">
           <% language_tabs.each do |lang| %>
@@ -63,13 +68,23 @@ under the License.
           <% end %>
         </div>
       <% end %>
+
       <% if current_page.data.search %>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
         <ul class="search-results"></ul>
       <% end %>
+
       <ul id="toc" class="toc-list-h1">
+        <% if current_page.data.toc_prepend %>
+          <% current_page.data.toc_prepend.each do |link| %>
+            <li>
+              <a class="toc-h1 toc-link" href="<%= link.href %>"><%= link.text %></a>
+            </li>
+          <% end %>
+        <% end %>
+
         <% toc_data(page_content).each do |h1| %>
           <li>
             <a href="#<%= h1[:id] %>" class="toc-h1 toc-link" data-title="<%= h1[:title] %>"><%= h1[:content] %></a>
@@ -84,6 +99,15 @@ under the License.
             <% end %>
           </li>
         <% end %>
+
+        <% if current_page.data.toc_append %>
+          <% current_page.data.toc_append.each do |link| %>
+            <li>
+              <a class="toc-h1 toc-link" href="<%= link.href %>"><%= link.text %></a>
+            </li>
+          <% end %>
+        <% end %>
+
       </ul>
       <% if current_page.data.toc_footers %>
         <ul class="toc-footer">
@@ -95,9 +119,11 @@ under the License.
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
+
       <div class="content">
         <%= page_content %>
       </div>
+
       <div class="dark-box">
         <% if language_tabs.any? %>
           <div class="lang-selector">
