@@ -38,6 +38,8 @@ end
 activate :relative_assets
 set :relative_links, true
 
+set :http_prefix, ''
+
 # Build Configuration
 configure :build do
   # If you're having trouble with Middleman hanging, commenting
@@ -47,6 +49,7 @@ configure :build do
   # activate :relative_assets
   # activate :asset_hash
   # activate :gzip
+  set :http_prefix, '/Adafruit_IO_Documentation/'
 end
 
 # Deploy Configuration
