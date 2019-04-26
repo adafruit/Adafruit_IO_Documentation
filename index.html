@@ -538,6 +538,9 @@
                     <a href="#feed-identifiers" class="toc-h2 toc-link" data-title="Feed Identifiers">Feed Identifiers</a>
                   </li>
                   <li>
+                    <a href="#webhook-receivers" class="toc-h2 toc-link" data-title="Webhook Receivers">Webhook Receivers</a>
+                  </li>
+                  <li>
                     <a href="#sending-floating-point-data-to-adafruit-io" class="toc-h2 toc-link" data-title="Sending floating point data to Adafruit IO">Sending floating point data to Adafruit IO</a>
                   </li>
                   <li>
@@ -558,13 +561,13 @@
       <div class="dark-box"></div>
       <div class="content">
         <h1 id='adafruit-io'>Adafruit IO</h1>
-<p>The Adafruit IO HTTP API provides access to your Adafruit IO data from any programming language or hardware environment that can speak HTTP. The easiest way to get started is with an <a href="https://learn.adafruit.com/series/adafruit-io-basics">Adafruit IO learn guide</a> and a simple Internet of Things capable device like the <a href="https://www.adafruit.com/product/2821">Feather Huzzah</a>.</p>
+<p>The Adafruit IO HTTP API provides access to your Adafruit IO data from any programming language or hardware environment that can speak HTTP. The easiest way to get started is with an <a href="https://learn.adafruit.com/series/adafruit-io-basics">Adafruit IO learn guide</a> and a simple Internet of Things capable device like the <a href="https://www.adafruit.com/product/2821">Feather Huzzah</a> or a more complicated one like the <a href="https://www.adafruit.com/product/4116">PyPortal</a>.</p>
 <h2 id='about-the-adafruit-io-api-documentation'>About the Adafruit IO API Documentation</h2>
 <p>This API documentation is hosted on GitHub Pages and is available <a href="https://github.com/adafruit/Adafruit_IO_Documentation">on GitHub</a>.</p>
 
 <p><strong>Spotted something incorrect or broken?</strong> <a href="https://github.com/adafruit/Adafruit_IO_Documentation/issues/new">Click here to file an issue on the repository</a></p>
 
-<p>For questions or comments <a href="https://forums.adafruit.com/viewforum.php?f=56">visit the Adafruit IO Forums</a> or the <a href="https://discord.gg/adafruit">#help-with-adafruit-io channel on the Adafruit Discord server</a>.</p>
+<p>For questions or comments <a href="https://io.adafruit.com/feedback">visit the Adafruit IO Feedback page</a> or the <a href="https://discord.gg/adafruit">#help-with-adafruit-io channel on the Adafruit Discord server</a>.</p>
 <h1 id='authentication'>Authentication</h1>
 <p>Your Adafruit IO Key is used to restrict or grant access to your data. The key is unique and covers every use of the Adafruit IO API for your account. You can access your key any dashboard by clicking on the golden key icon:</p>
 
@@ -5109,6 +5112,14 @@ There are some important things to keep in mind when using this feature. Normal 
 <p>https://learn.adafruit.com/naming-things-in-adafruit-io/introduction</p>
 
 <p>https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds</p>
+<h2 id='webhook-receivers'>Webhook Receivers</h2>
+<p>Webhook receiver URLs give you a limited use, unique API address that you can send data to and have it appear in your Adafruit IO feed. Webhook URLs can be shared with anyone and used from anywhere on the web.</p>
+
+<p>You can access a webhook by navigating to your feed and clicking the <em>Webhooks</em> button on the right-hand sidebar.</p>
+<h3 id='raw-webhooks'>Raw Webhooks</h3>
+<p>If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don&#39;t have control over the payload the service is sending--add <code>/raw</code> to the end of the Adafruit IO webhook URL that you share with the service.</p>
+<h3 id='notify-webhooks'>Notify Webhooks</h3>
+<p>If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add <code>/notify</code> to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message &quot;ping&quot;.</p>
 <h2 id='sending-floating-point-data-to-adafruit-io'>Sending floating point data to Adafruit IO</h2>
 <p>If you&#39;re sending <code>3.1415</code> and only want to send <code>3.14</code> - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. </p>
 <h2 id='mqtt-retrieving-the-last-published-value'>MQTT, Retrieving the Last Published Value:</h2>
