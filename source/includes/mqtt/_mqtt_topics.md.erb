@@ -3,25 +3,25 @@
 Adafruit IO's MQTT API exposes feed data using special topics.  You can publish a new value for a feed to its topic, or you can subscribe to a feed's topic to be notified when the feed has a new value.
 
 ## MQTT Feed Topic Format
-`Your-Adafruit-IO-Username`/**feeds**/`Feed-Key`
+`Your_Adafruit_IO_Username`/**feeds**/`Feed-Key`
 
 ## MQTT Group Topic Format
-`Your-Adafruit-IO-Username`/**groups**/`Feed-Key`
+`Your_Adafruit_IO_Username`/**groups**/`Feed-Key`
 
 ## Small Feed Names
 _Using an embedded system and need to conserve space?_ Use the `/f/` or `/g/` topic formats:
 
-* `Your-Adafruit-IO-Username`/**g**/`Feed-Key`
+* `Your-AdafruitIO_Username`/**g**/`Feed-Key`
 
-* `Your-Adafruit-IO-Username`/**f**/`Feed-Key`
+* `Your_Adafruit_IO_Username`/**f**/`Feed-Key`
 
 ## Using a MQTT Wildcard
 You can also subscribe to the parent 'feeds' path to be notified when any owned feed changes using MQTT's `#` wildcard character.  For example, the user could subscribe to either:
 
-* `Your-Adafruit-IO-Username`/**feeds**/`#`
-* `Your-Adafruit-IO-Username`/**f**/`#`
+* `Your_Adafruit_IO_Username`/**feeds**/`#`
+* `Your_Adafruit_IO_Username`/**f**/`#`
 
-Once subscribed to the path above any change to a feed owned by `Your-Adafruit-IO-Username` will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.
+Once subscribed to the path above any change to a feed owned by `Your_Adafruit_IO_Username` will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.
 
 *Be aware the MQTT server sends feed updates on all possible paths for a specific feed*. For example, subscribing to `IO-Username/f/#` and publishing to `IO-Username/f/photocell-one` would produce messages from: `IO-Username/f/photocell-one`, `IO-Username/f/photocell-one/json`, and `IO-Username/f/photocell-one/csv`; each referring to the same updated value.  To reduce noise,_ make sure to grab the specific topic of the feed_ `/` format you're interested in and change your subscription to that.
 
