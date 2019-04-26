@@ -266,16 +266,16 @@
                     <a href="#create-multiple-new-data-records" class="toc-h2 toc-link" data-title="Create multiple new Data records">Create multiple new Data records</a>
                   </li>
                   <li>
-                    <a href="#previous-data-in-queue" class="toc-h2 toc-link" data-title="Previous Data in Queue">Previous Data in Queue</a>
+                    <a href="#previous-data-in-feed" class="toc-h2 toc-link" data-title="Previous Data in Feed">Previous Data in Feed</a>
                   </li>
                   <li>
-                    <a href="#next-data-in-queue" class="toc-h2 toc-link" data-title="Next Data in Queue">Next Data in Queue</a>
+                    <a href="#next-data-in-feed" class="toc-h2 toc-link" data-title="Next Data in Feed">Next Data in Feed</a>
                   </li>
                   <li>
-                    <a href="#last-data-in-queue" class="toc-h2 toc-link" data-title="Last Data in Queue">Last Data in Queue</a>
+                    <a href="#last-data-in-feed" class="toc-h2 toc-link" data-title="Last Data in Feed">Last Data in Feed</a>
                   </li>
                   <li>
-                    <a href="#first-data-in-queue" class="toc-h2 toc-link" data-title="First Data in Queue">First Data in Queue</a>
+                    <a href="#first-data-record-in-feed" class="toc-h2 toc-link" data-title="First Data Record in Feed">First Data Record in Feed</a>
                   </li>
                   <li>
                     <a href="#last-data-in-mqtt-csv-format" class="toc-h2 toc-link" data-title="Last Data in MQTT CSV format">Last Data in MQTT CSV format</a>
@@ -471,10 +471,10 @@
             <a href="#users" class="toc-h1 toc-link" data-title="Users">Users</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-information-about-the-current-user" class="toc-h2 toc-link" data-title="Get information about the current user">Get information about the current user</a>
+                    <a href="#get-information-about-yourself" class="toc-h2 toc-link" data-title="Get information about yourself">Get information about yourself</a>
                   </li>
                   <li>
-                    <a href="#get-the-user-39-s-data-rate-limit-and-current-activity-level" class="toc-h2 toc-link" data-title="Get the user's data rate limit and current activity level.">Get the user's data rate limit and current activity level.</a>
+                    <a href="#get-your-data-rate-limit-and-current-activity-level" class="toc-h2 toc-link" data-title="Get your data rate limit and current activity level.">Get your data rate limit and current activity level.</a>
                   </li>
               </ul>
           </li>
@@ -486,6 +486,9 @@
                   </li>
                   <li>
                     <a href="#send-arbitrary-data-to-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Send arbitrary data to a feed via webhook URL.">Send arbitrary data to a feed via webhook URL.</a>
+                  </li>
+                  <li>
+                    <a href="#trigger-a-quot-ping-quot-message-on-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Trigger a "ping" message on a feed via webhook URL.">Trigger a "ping" message on a feed via webhook URL.</a>
                   </li>
               </ul>
           </li>
@@ -613,7 +616,18 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <p>If you have <a href="https://io.adafruit.com/plus">upgraded to an Adafruit IO Plus account</a>, the base rate limit is  <strong>60 data points per minute</strong>.</p>
 
 <p>If you exceed this limit, a notice will be sent to the <code>{username}/throttle</code> MQTT topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account. This limit applies to all actions over the HTTP and MQTT APIs, so if you have multiple devices or clients publishing data, be sure to delay their updates enough that the total rate is below your account limit.</p>
-<h1 id='data'>Data</h1><h2 id='get-all-data-for-the-given-feed'>Get all data for the given feed</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
+<h1 id='data'>Data</h1>
+<p>Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on Adafruit IO.</p>
+
+<p>You can create, read, update, or delete data records. Every <strong>CREATE</strong>, <strong>UPDATE</strong>, or <strong>DELETE</strong> action on a data record counts against your rate limit.</p>
+
+<p>Data points belong to feeds, so every Data API call starts with a Feed URL.</p>
+<h2 id='get-all-data-for-the-given-feed'>Get all data for the given feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -640,8 +654,6 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of data</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -698,7 +710,12 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='create-new-data'>Create new Data</h2><pre class="highlight shell tab-shell"><code><span class="c"># Send new data with a value of 42</span>
+<h2 id='create-new-data'>Create new Data</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c"># Send new data with a value of 42</span>
 <span class="gp">$ </span>curl -F <span class="s1">'value=42'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
 
 <span class="c"># Send new data with a value of 42 and include optional location metadata</span>
@@ -750,8 +767,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New data</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/feeds/{feed_key}/data</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -790,7 +805,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='chart-data-for-current-feed'>Chart data for current feed</h2><pre class="highlight shell tab-shell"><code><span class="c"># Query the chart API for the previous hour.</span>
+<h2 id='chart-data-for-current-feed'>Chart data for current feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/chart</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c"># Query the chart API for the previous hour.</span>
 <span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="s1">'https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/chart?hours=1'</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -809,8 +829,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>A JSON record containing chart data and the parameters used to generate it.</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/chart</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -855,7 +873,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>End time for filtering, returns records created before give time.</td>
 </tr>
 </tbody></table>
-<h2 id='create-multiple-new-data-records'>Create multiple new Data records</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"Content-Type: application/json"</span> -d @batch.json -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data/batch
+<h2 id='create-multiple-new-data-records'>Create multiple new Data records</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/batch</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"Content-Type: application/json"</span> -d @batch.json -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data/batch
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">data_list</span> <span class="o">=</span> <span class="p">[</span><span class="n">Data</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">50</span><span class="p">),</span> <span class="n">Data</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">33</span><span class="p">)]</span>
 <span class="n">aio</span><span class="o">.</span><span class="n">send_batch_data</span><span class="p">(</span><span class="n">feed_name</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">data_list</span><span class="p">)</span>
@@ -883,8 +906,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>New data</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>POST /{username}/feeds/{feed_key}/data/batch</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -923,7 +944,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>A collection of data records including <code>value</code> (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='previous-data-in-queue'>Previous Data in Queue</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
+<h2 id='previous-data-in-feed'>Previous Data in Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/previous</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">receive_previous</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -945,8 +971,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data response</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/previous</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -985,7 +1009,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='next-data-in-queue'>Next Data in Queue</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
+<h2 id='next-data-in-feed'>Next Data in Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/next</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">receive_next</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -1007,8 +1036,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data response</p>
-<h3 id='http-request-6'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/next</code></p>
 <h3 id='path-parameters-6'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1047,7 +1074,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='last-data-in-queue'>Last Data in Queue</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='last-data-in-feed'>Last Data in Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/last</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1067,8 +1099,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data response</p>
-<h3 id='http-request-7'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/last</code></p>
 <h3 id='path-parameters-7'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1107,7 +1137,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='first-data-in-queue'>First Data in Queue</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
+<h2 id='first-data-record-in-feed'>First Data Record in Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/first</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">receive</span><span class="p">(</span><span class="n">feed</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -1129,8 +1164,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data response</p>
-<h3 id='http-request-8'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/first</code></p>
 <h3 id='path-parameters-8'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1169,15 +1202,18 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='last-data-in-mqtt-csv-format'>Last Data in MQTT CSV format</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='last-data-in-mqtt-csv-format'>Last Data in MQTT CSV format</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/retain</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>CSV string in <code>value,lat,lon,ele</code> format. The lat, lon, and ele values are left blank if they are not set.</p>
-<h3 id='http-request-9'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/retain</code></p>
 <h3 id='path-parameters-9'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1200,7 +1236,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='returns-data-based-on-feed-key'>Returns data based on feed key</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
+<h2 id='returns-data-based-on-feed-key'>Returns data based on feed key</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">data</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">receive</span><span class="p">(</span><span class="n">feed_name</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 
 <span class="c"># Adafruit IO CircuitPython</span>
@@ -1225,8 +1266,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data response</p>
-<h3 id='http-request-10'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/data/{id}</code></p>
 <h3 id='path-parameters-10'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1271,7 +1310,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
 </tr>
 </tbody></table>
-<h2 id='replace-existing-data'>Replace existing Data</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='replace-existing-data'>Replace existing Data</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1291,8 +1335,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated Data</p>
-<h3 id='http-request-11'>HTTP Request</h3>
-<p><code>PUT /{username}/feeds/{feed_key}/data/{id}</code></p>
 <h3 id='path-parameters-11'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1337,7 +1379,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='delete-existing-data'>Delete existing Data</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
+<h2 id='delete-existing-data'>Delete existing Data</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">aio</span><span class="o">.</span><span class="n">delete</span><span class="p">(</span><span class="n">feed_name</span><span class="o">.</span><span class="n">key</span><span class="p">,</span> <span class="n">data_id</span><span class="p">)</span>
 
 <span class="c"># Adafruit IO CircuitPython</span>
@@ -1346,11 +1393,8 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
-</span></code></pre>
+<pre class="highlight json tab-json"><code></code></pre>
 <p>Deleted Group successfully</p>
-<h3 id='http-request-12'>HTTP Request</h3>
-<p><code>DELETE /{username}/feeds/{feed_key}/data/{id}</code></p>
 <h3 id='path-parameters-12'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1379,7 +1423,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='create-new-data-for-multiple-feeds-in-a-group'>Create new data for multiple feeds in a group</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='create-new-data-for-multiple-feeds-in-a-group'>Create new data for multiple feeds in a group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/data</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1401,8 +1450,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>New data</p>
-<h3 id='http-request-13'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/data</code></p>
 <h3 id='path-parameters-13'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1441,7 +1488,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='all-data-for-current-feed-in-a-specific-group'>All data for current feed in a specific group</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='all-data-for-current-feed-in-a-specific-group'>All data for current feed in a specific group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1463,8 +1515,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of data</p>
-<h3 id='http-request-14'>HTTP Request</h3>
-<p><code>GET /{username}/groups/{group_key}/feeds/{feed_key}/data</code></p>
 <h3 id='path-parameters-14'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1493,7 +1543,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='create-new-data-in-a-feed-belonging-to-a-particular-group'>Create new Data in a feed belonging to a particular group</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='create-new-data-in-a-feed-belonging-to-a-particular-group'>Create new Data in a feed belonging to a particular group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1513,8 +1568,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New data</p>
-<h3 id='http-request-15'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/feeds/{feed_key}/data</code></p>
 <h3 id='path-parameters-15'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1559,7 +1612,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='create-multiple-new-data-records-in-a-feed-belonging-to-a-particular-group'>Create multiple new Data records in a feed belonging to a particular group</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='create-multiple-new-data-records-in-a-feed-belonging-to-a-particular-group'>Create multiple new Data records in a feed belonging to a particular group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1581,8 +1639,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>New data</p>
-<h3 id='http-request-16'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></p>
 <h3 id='path-parameters-16'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1627,7 +1683,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>A collection of data records including <code>value</code> (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='send-data-to-a-feed-via-webhook-url'>Send data to a feed via webhook URL.</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='send-data-to-a-feed-via-webhook-url'>Send data to a feed via webhook URL.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1647,9 +1708,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record</p>
-<h3 id='http-request-17'>HTTP Request</h3>
-<p><code>POST /webhooks/feed/:token</code></p>
-<h2 id='send-arbitrary-data-to-a-feed-via-webhook-url'>Send arbitrary data to a feed via webhook URL.</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='send-arbitrary-data-to-a-feed-via-webhook-url'>Send arbitrary data to a feed via webhook URL.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -1668,10 +1732,15 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
   </span><span class="s2">"created_epoch"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
-<p>New feed data record</p>
-<h3 id='http-request-18'>HTTP Request</h3>
-<p><code>POST /webhooks/feed/:token/raw</code></p>
-<h1 id='feeds'>Feeds</h1><h2 id='all-feeds-for-current-user'>All feeds for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/
+<p>Returns a new feed data record.</p>
+
+<p><strong>NOTE:</strong> This method <strong>does not require authentication</strong>.</p>
+<h1 id='feeds'>Feeds</h1><h2 id='all-feeds-for-current-user'>All feeds for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">feeds</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">feeds</span><span class="p">()</span>
 
@@ -1752,8 +1821,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of feeds</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/feeds</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1770,7 +1837,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-feed'>Create a new Feed</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> /<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_name<span class="o">}</span>
+<h2 id='create-a-new-feed'>Create a new Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> /<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_name<span class="o">}</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">newFeed</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"newfeed"</span><span class="p">);</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">new_feed</span> <span class="o">=</span> <span class="n">Feed</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"newfeed"</span><span class="p">)</span>
@@ -1854,8 +1926,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/feeds</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -1904,7 +1974,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='get-feed-by-feed-key'>Get feed by feed key</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> /<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
+<h2 id='get-feed-by-feed-key'>Get feed by feed key</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> /<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">new_feed</span> <span class="o">=</span> <span class="n">aio</span><span class="o">.</span><span class="n">feeds</span><span class="p">(</span><span class="s">'feedkey'</span><span class="p">)</span>
 
@@ -1996,8 +2071,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Feed response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2020,7 +2093,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-feed'>Replace an existing Feed</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
+<h2 id='replace-an-existing-feed'>Replace an existing Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2099,8 +2177,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated feed</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/feeds/{feed_key}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2139,7 +2215,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-feed'>Delete an existing Feed</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
+<h2 id='delete-an-existing-feed'>Delete an existing Feed</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">io</span><span class="o">.</span><span class="n">delete_feed</span><span class="p">(</span><span class="n">feed_name</span><span class="o">.</span><span class="n">key</span><span class="p">)</span>
 
@@ -2154,8 +2235,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <pre class="highlight json tab-json"><code><span class="w">
 </span></code></pre>
 <p>Deleted feed successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/feeds/{feed_key}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2178,7 +2257,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='get-detailed-feed-by-feed-key'>Get detailed feed by feed key</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/details
+<h2 id='get-detailed-feed-by-feed-key'>Get detailed feed by feed key</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/details</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/details
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2259,8 +2343,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Feed response</p>
-<h3 id='http-request-6'>HTTP Request</h3>
-<p><code>GET /{username}/feeds/{feed_key}/details</code></p>
 <h3 id='path-parameters-6'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2283,7 +2365,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='add-an-existing-feed-to-a-group'>Add an existing Feed to a Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/add
+<h2 id='add-an-existing-feed-to-a-group'>Add an existing Feed to a Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/add
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2375,8 +2462,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated group</p>
-<h3 id='http-request-7'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/add</code></p>
 <h3 id='path-parameters-7'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2415,7 +2500,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='remove-a-feed-from-a-group'>Remove a Feed from a Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/remove
+<h2 id='remove-a-feed-from-a-group'>Remove a Feed from a Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/remove</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/remove
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2507,8 +2597,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated group</p>
-<h3 id='http-request-8'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/remove</code></p>
 <h3 id='path-parameters-8'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2547,7 +2635,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='all-feeds-for-current-user-in-a-given-group'>All feeds for current user in a given group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
+<h2 id='all-feeds-for-current-user-in-a-given-group'>All feeds for current user in a given group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2628,8 +2721,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of feeds</p>
-<h3 id='http-request-9'>HTTP Request</h3>
-<p><code>GET /{username}/groups/{group_key}/feeds</code></p>
 <h3 id='path-parameters-9'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2652,7 +2743,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-feed-in-a-group'>Create a new Feed in a Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
+<h2 id='create-a-new-feed-in-a-group'>Create a new Feed in a Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -2731,8 +2827,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed</p>
-<h3 id='http-request-10'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/feeds</code></p>
 <h3 id='path-parameters-10'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2771,7 +2865,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='groups'>Groups</h1><h2 id='all-groups-for-current-user'>All groups for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> http://io.adafruit.com/api/v2/<span class="o">{</span>your_username<span class="o">}</span>/groups
+<h1 id='groups'>Groups</h1><h2 id='all-groups-for-current-user'>All groups for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> http://io.adafruit.com/api/v2/<span class="o">{</span>your_username<span class="o">}</span>/groups
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -2856,9 +2955,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
-<p>An array of groups</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/groups</code></p>
+<p>An array of groups with their respective feeds .</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2875,7 +2972,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-group'>Create a new Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=New Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/
+<h2 id='create-a-new-group'>Create a new Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=New Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code><span class="n">AdafruitIO_Group</span> <span class="o">*</span><span class="n">group</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">group</span><span class="p">(</span><span class="s">"example"</span><span class="p">);</span>
 </code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -2960,8 +3062,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New Group</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/groups</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -2994,7 +3094,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='returns-group-based-on-id'>Returns Group based on ID</h2><pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
+<h2 id='returns-group-based-on-id'>Returns Group based on ID</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3078,8 +3183,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Group response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/groups/{group_key}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3102,7 +3205,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-group'>Replace an existing Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
+<h2 id='replace-an-existing-group'>Replace an existing Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3186,8 +3294,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated group</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/groups/{group_key}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3226,7 +3332,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-group'>Delete an existing Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
+<h2 id='delete-an-existing-group'>Delete an existing Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3234,8 +3345,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>Deleted Group successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/groups/{group_key}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3258,7 +3367,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='add-an-existing-feed-to-a-group'>Add an existing Feed to a Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/add
+<h2 id='add-an-existing-feed-to-a-group'>Add an existing Feed to a Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=Group'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/add
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3342,8 +3456,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated group</p>
-<h3 id='http-request-6'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/add</code></p>
 <h3 id='path-parameters-6'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3382,7 +3494,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='remove-a-feed-from-a-group'>Remove a Feed from a Group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'feed_key=FeedName'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/remove
+<h2 id='remove-a-feed-from-a-group'>Remove a Feed from a Group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/remove</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'feed_key=FeedName'</span> -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/remove
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3466,8 +3583,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated group</p>
-<h3 id='http-request-7'>HTTP Request</h3>
-<p><code>POST /{username}/groups/{group_key}/remove</code></p>
 <h3 id='path-parameters-7'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3506,7 +3621,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='all-feeds-for-current-user-in-a-given-group'>All feeds for current user in a given group</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
+<h2 id='all-feeds-for-current-user-in-a-given-group'>All feeds for current user in a given group</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {your_aio_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -3583,8 +3703,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of feeds</p>
-<h3 id='http-request-8'>HTTP Request</h3>
-<p><code>GET /{username}/groups/{group_key}/feeds</code></p>
 <h3 id='path-parameters-8'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3688,7 +3806,7 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <h2 id='all-activities-for-current-user-2'>All activities for current user</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div>&gt;</p>
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div></p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
@@ -4074,7 +4192,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='dashboards'>Dashboards</h1><h2 id='all-dashboards-for-current-user'>All dashboards for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
+<h1 id='dashboards'>Dashboards</h1><h2 id='all-dashboards-for-current-user'>All dashboards for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4107,8 +4230,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of dashboards</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/dashboards</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4125,7 +4246,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-dashboard'>Create a new Dashboard</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=newdash'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
+<h2 id='create-a-new-dashboard'>Create a new Dashboard</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=newdash'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4156,8 +4282,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New Dashboard</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/dashboards</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4190,7 +4314,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='returns-dashboard-based-on-id'>Returns Dashboard based on ID</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='returns-dashboard-based-on-id'>Returns Dashboard based on ID</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4221,8 +4350,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Dashboard response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/dashboards/{id}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4245,7 +4372,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-dashboard'>Replace an existing Dashboard</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=newdash'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='replace-an-existing-dashboard'>Replace an existing Dashboard</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -F <span class="s1">'name=newdash'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4276,8 +4408,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated dashboard</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/dashboards/{id}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4316,7 +4446,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-dashboard'>Delete an existing Dashboard</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='delete-an-existing-dashboard'>Delete an existing Dashboard</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4324,8 +4459,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>Deleted Dashboard successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/dashboards/{id}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4348,7 +4481,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='permissions'>Permissions</h1><h2 id='all-permissions-for-current-user-and-type'>All permissions for current user and type</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl
+<h1 id='permissions'>Permissions</h1><h2 id='all-permissions-for-current-user-and-type'>All permissions for current user and type</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4367,8 +4505,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of permissions</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/{type}/{type_id}/acl</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4397,7 +4533,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-permission'>Create a new Permission</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl
+<h2 id='create-a-new-permission'>Create a new Permission</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4414,8 +4555,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New Permission</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/{type}/{type_id}/acl</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4460,7 +4599,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='returns-permission-based-on-id'>Returns Permission based on ID</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
+<h2 id='returns-permission-based-on-id'>Returns Permission based on ID</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4477,8 +4621,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Permission response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/{type}/{type_id}/acl/{id}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4513,7 +4655,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-permission'>Replace an existing Permission</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
+<h2 id='replace-an-existing-permission'>Replace an existing Permission</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4530,8 +4677,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated permission</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/{type}/{type_id}/acl/{id}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4582,7 +4727,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-permission'>Delete an existing Permission</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
+<h2 id='delete-an-existing-permission'>Delete an existing Permission</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>/<span class="o">{</span>type_id<span class="o">}</span>/acl<span class="o">{</span>id<span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4590,8 +4740,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>Deleted Permission successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/{type}/{type_id}/acl/{id}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4626,7 +4774,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='triggers'>Triggers</h1><h2 id='all-triggers-for-current-user'>All triggers for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
+<h1 id='triggers'>Triggers</h1><h2 id='all-triggers-for-current-user'>All triggers for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4638,8 +4791,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of triggers</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/triggers</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4656,7 +4807,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-trigger'>Create a new Trigger</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
+<h2 id='create-a-new-trigger'>Create a new Trigger</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/triggers</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4666,8 +4822,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New Trigger</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/triggers</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4700,7 +4854,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='returns-trigger-based-on-id'>Returns Trigger based on ID</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='returns-trigger-based-on-id'>Returns Trigger based on ID</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4710,8 +4869,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Trigger response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/triggers/{id}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4734,7 +4891,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-trigger'>Replace an existing Trigger</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='replace-an-existing-trigger'>Replace an existing Trigger</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4744,8 +4906,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated trigger</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/triggers/{id}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4784,7 +4944,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-trigger'>Delete an existing Trigger</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
+<h2 id='delete-an-existing-trigger'>Delete an existing Trigger</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span>id<span class="o">}</span>
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4792,8 +4957,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>Deleted Trigger successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/triggers/{id}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4816,7 +4979,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='users'>Users</h1><h2 id='get-information-about-the-current-user'>Get information about the current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/user
+<h1 id='users'>Users</h1><h2 id='get-information-about-yourself'>Get information about yourself</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/user</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/user
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4832,9 +5000,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>A User record</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /user</code></p>
-<h2 id='get-the-user-39-s-data-rate-limit-and-current-activity-level'>Get the user&#39;s data rate limit and current activity level.</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/throttle
+<h2 id='get-your-data-rate-limit-and-current-activity-level'>Get your data rate limit and current activity level.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/throttle</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/throttle
 </code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4845,8 +5016,6 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Data rate limit and current actions.</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>GET /{username}/throttle</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4863,7 +5032,20 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h1 id='webhooks'>Webhooks</h1><h2 id='send-data-to-a-feed-via-webhook-url'>Send data to a feed via webhook URL.</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token
+<h1 id='webhooks'>Webhooks</h1>
+<aside class="notice">
+These data publishing webhook methods <strong>do not require authentication</strong>. That
+means you can freely use the URL from a public form without leaking your
+authentication data.
+</aside>
+
+<p>You can create new feed webhook receivers by visiting a feed page and using the &quot;Webhooks&quot; link.</p>
+<h2 id='send-data-to-a-feed-via-webhook-url'>Send data to a feed via webhook URL.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4884,9 +5066,12 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>POST /webhooks/feed/:token</code></p>
-<h2 id='send-arbitrary-data-to-a-feed-via-webhook-url'>Send arbitrary data to a feed via webhook URL.</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
+<h2 id='send-arbitrary-data-to-a-feed-via-webhook-url'>Send arbitrary data to a feed via webhook URL.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -4907,8 +5092,32 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /webhooks/feed/:token/raw</code></p>
+<h2 id='trigger-a-quot-ping-quot-message-on-a-feed-via-webhook-url'>Trigger a &quot;ping&quot; message on a feed via webhook URL.</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/ping</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token/ping
+</code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<blockquote>
+<p>Response Sample:</p>
+</blockquote>
+<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="s2">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"value"</span><span class="p">:</span><span class="w"> </span><span class="s2">"ping"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"feed_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"group_id"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"expiration"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"lon"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"ele"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"completed_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="s2">"created_epoch"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+<p>New feed data record.</p>
 <h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1><h2 id='client-libraries'>Client Libraries</h2>
 <ul>
 <li><p><em>Arduino</em>: <a href="https://github.com/adafruit/Adafruit_MQTT_Library">Adafruit MQTT</a></p></li>
