@@ -4932,25 +4932,25 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <h1 id='mqtt-topics'>MQTT Topics</h1>
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics.  You can publish a new value for a feed to its topic, or you can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
 <h2 id='mqtt-feed-topic-format'>MQTT Feed Topic Format</h2>
-<p><code>Your-Adafruit-IO-Username</code>/<strong>feeds</strong>/<code>Feed-Key</code></p>
+<p><code>Your_Adafruit_IO_Username</code>/<strong>feeds</strong>/<code>Feed-Key</code></p>
 <h2 id='mqtt-group-topic-format'>MQTT Group Topic Format</h2>
-<p><code>Your-Adafruit-IO-Username</code>/<strong>groups</strong>/<code>Feed-Key</code></p>
+<p><code>Your_Adafruit_IO_Username</code>/<strong>groups</strong>/<code>Feed-Key</code></p>
 <h2 id='small-feed-names'>Small Feed Names</h2>
 <p><em>Using an embedded system and need to conserve space?</em> Use the <code>/f/</code> or <code>/g/</code> topic formats:</p>
 
 <ul>
-<li><p><code>Your-Adafruit-IO-Username</code>/<strong>g</strong>/<code>Feed-Key</code></p></li>
-<li><p><code>Your-Adafruit-IO-Username</code>/<strong>f</strong>/<code>Feed-Key</code></p></li>
+<li><p><code>Your-AdafruitIO_Username</code>/<strong>g</strong>/<code>Feed-Key</code></p></li>
+<li><p><code>Your_Adafruit_IO_Username</code>/<strong>f</strong>/<code>Feed-Key</code></p></li>
 </ul>
 <h2 id='using-a-mqtt-wildcard'>Using a MQTT Wildcard</h2>
 <p>You can also subscribe to the parent &#39;feeds&#39; path to be notified when any owned feed changes using MQTT&#39;s <code>#</code> wildcard character.  For example, the user could subscribe to either:</p>
 
 <ul>
-<li><code>Your-Adafruit-IO-Username</code>/<strong>feeds</strong>/<code>#</code></li>
-<li><code>Your-Adafruit-IO-Username</code>/<strong>f</strong>/<code>#</code></li>
+<li><code>Your_Adafruit_IO_Username</code>/<strong>feeds</strong>/<code>#</code></li>
+<li><code>Your_Adafruit_IO_Username</code>/<strong>f</strong>/<code>#</code></li>
 </ul>
 
-<p>Once subscribed to the path above any change to a feed owned by <code>Your-Adafruit-IO-Username</code> will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.</p>
+<p>Once subscribed to the path above any change to a feed owned by <code>Your_Adafruit_IO_Username</code> will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.</p>
 
 <p><em>Be aware the MQTT server sends feed updates on all possible paths for a specific feed</em>. For example, subscribing to <code>IO-Username/f/#</code> and publishing to <code>IO-Username/f/photocell-one</code> would produce messages from: <code>IO-Username/f/photocell-one</code>, <code>IO-Username/f/photocell-one/json</code>, and <code>IO-Username/f/photocell-one/csv</code>; each referring to the same updated value.  To reduce noise,_ make sure to grab the specific topic of the feed_ <code>/</code> format you&#39;re interested in and change your subscription to that.</p>
 
