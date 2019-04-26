@@ -1,3 +1,8 @@
+$io-green: #68ac3b;
+$io-blue: darken(#00ACEC, 10%); // 0, 172, 236
+$io-gold: #ffd700;
+$io-red: #AC3B3B;
+
 
 blockquote {
   .http {
@@ -5,15 +10,20 @@ blockquote {
     padding: 8px;
     background: rgba(255, 255, 255, 0.1);
 
-    .method-get {
+
+    .method-get, .method-post, .method-put, .method-delete {
       color: white;
-      background: green;
       font-size: 14px;
       font-weight: bold;
       display: inline-block;
       padding: 4px 8px;
       text-transform: uppercase;
     }
+
+    .method-get { background: $io-green; }
+    .method-post { background: $io-blue; }
+    .method-put { background: $io-gold; }
+    .method-delete { background: $io-red; }
 
     .path {
       display: inline-block;
@@ -22,3 +32,5 @@ blockquote {
     }
   }
 }
+
+

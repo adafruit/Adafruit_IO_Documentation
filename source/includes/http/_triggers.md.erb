@@ -2,6 +2,9 @@
 
 ## All triggers for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers</code></div>
+
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/triggers
 ```
@@ -19,13 +22,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/trigge
 An array of triggers
 
 
-### HTTP Request
-
-`GET /{username}/triggers`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -33,15 +30,10 @@ username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
-
 ## Create a new Trigger
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/triggers</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/triggers
@@ -58,37 +50,25 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/trigge
 New Trigger
 
 
-### HTTP Request
-
-`POST /{username}/triggers`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-trigger | object | true | 
-
-
+trigger | object | true |
 
 
 
 ## Returns Trigger based on ID
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/triggers/{id}
@@ -105,30 +85,19 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/trigge
 Trigger response
 
 
-### HTTP Request
-
-`GET /{username}/triggers/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
-
-
+id | string | true |
 
 
 
 ## Replace an existing Trigger
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/triggers/{id}
@@ -145,38 +114,26 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/trigge
 Updated trigger
 
 
-### HTTP Request
-
-`PUT /{username}/triggers/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
+id | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-trigger | object | true | 
-
-
+trigger | object | true |
 
 
 
 ## Delete an existing Trigger
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/triggers/{id}
@@ -191,25 +148,11 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/trigge
 Deleted Trigger successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/triggers/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
-
-
+id | string | true |
 
 

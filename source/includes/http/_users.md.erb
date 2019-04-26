@@ -1,6 +1,9 @@
 # Users
 
-## Get information about the current user
+## Get information about yourself
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/user</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/user
@@ -23,21 +26,11 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/user
 A User record
 
 
-### HTTP Request
 
-`GET /user`
+## Get your data rate limit and current activity level.
 
-
-
-
-
-
-
-
-
-
-
-## Get the user's data rate limit and current activity level.
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/throttle</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/throttle
@@ -55,13 +48,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/thrott
 Data rate limit and current actions.
 
 
-### HTTP Request
-
-`GET /{username}/throttle`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------

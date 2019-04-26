@@ -1,6 +1,15 @@
 # Data
 
+Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on Adafruit IO.
+
+You can create, read, update, or delete data records. Every **CREATE**, **UPDATE**, or **DELETE** action on a data record counts against your rate limit.
+
+Data points belong to feeds, so every Data API call starts with a Feed URL.
+
 ## Get all data for the given feed
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
@@ -40,13 +49,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 An array of data
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -54,27 +57,21 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 start_time | string | false | Start time for filtering, returns records created after given time.
 end_time | string | false | End time for filtering, returns records created before give time.
 limit | integer | false | Limit the number of records returned.
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
-
-
-
-
-
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
 ## Create new Data
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
 
 ```shell
 # Send new data with a value of 42
@@ -142,13 +139,7 @@ feedName->save(42, latValue, lonValue, eleValue);
 New data
 
 
-### HTTP Request
-
-`POST /{username}/feeds/{feed_key}/data`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -156,24 +147,17 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
-
-
-
 ## Chart data for current feed
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/chart</code></div>
 
 ```shell
 # Query the chart API for the previous hour.
@@ -208,13 +192,7 @@ $ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds
 A JSON record containing chart data and the parameters used to generate it.
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/chart`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -222,11 +200,7 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -235,12 +209,10 @@ end_time | string | false | End time for filtering, returns records created befo
 
 
 
-
-
-
-
-
 ## Create multiple new Data records
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/batch</code></div>
 
 ```shell
 $ curl -H "Content-Type: application/json" -d @batch.json -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/batch
@@ -284,13 +256,7 @@ aio.send_batch_data(feed_name.key, data_list)
 New data
 
 
-### HTTP Request
-
-`POST /{username}/feeds/{feed_key}/data/batch`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -298,24 +264,17 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
+## Previous Data in Feed
 
-
-
-## Previous Data in Queue
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/previous</code></div>
 
 ```shell
 ```
@@ -353,9 +312,6 @@ data = aio.receive_previous(feed.key)
 Data response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/previous`
 
 
 ### Path Parameters
@@ -375,7 +331,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
@@ -384,7 +340,10 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Next Data in Queue
+## Next Data in Feed
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/next</code></div>
 
 ```shell
 ```
@@ -422,9 +381,6 @@ data = aio.receive_next(feed.key)
 Data response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/next`
 
 
 ### Path Parameters
@@ -444,16 +400,14 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
+## Last Data in Feed
 
-
-
-
-
-## Last Data in Queue
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/last</code></div>
 
 ```shell
 ```
@@ -489,13 +443,7 @@ include | string | false | List of Data record fields to include in response as 
 Data response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/last`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -503,24 +451,18 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
+## First Data Record in Feed
 
-
-
-
-
-## First Data in Queue
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/first</code></div>
 
 ```shell
 ```
@@ -558,13 +500,7 @@ data = aio.receive(feed.key)
 Data response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/first`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -572,24 +508,19 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
-
-
-
-
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
 
 ## Last Data in MQTT CSV format
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/retain</code></div>
 
 ```shell
 ```
@@ -612,13 +543,7 @@ include | string | false | List of Data record fields to include in response as 
 CSV string in `value,lat,lon,ele` format. The lat, lon, and ele values are left blank if they are not set.
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/retain`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -628,14 +553,10 @@ feed_key | string | true | a valid feed key
 
 
 
-
-
-
-
-
-
-
 ## Returns data based on feed key
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
 
 ```shell
 ```
@@ -676,39 +597,28 @@ data = aio.receive(feed_name['key'])
 Data response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/data/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 feed_key | string | true | a valid feed key
-id | string | true | 
-
-
-
+id | string | true |
 
 
 ### Query Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`. 
-
-
-
-
+include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
 
 
 ## Replace existing Data
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
 
 ```shell
 ```
@@ -744,29 +654,16 @@ include | string | false | List of Data record fields to include in response as 
 Updated Data
 
 
-### HTTP Request
-
-`PUT /{username}/feeds/{feed_key}/data/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 feed_key | string | true | a valid feed key
-id | string | true | 
-
-
-
-
-
-
+id | string | true |
 
 
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -774,9 +671,10 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-
-
 ## Delete existing Data
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
 
 ```shell
 ```
@@ -798,37 +696,25 @@ aio.delete_data(feed_name['key'], data_id)
 > Response Sample:
 
 ```json
-"string"
 ```
 
 Deleted Group successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/feeds/{feed_key}/data/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 feed_key | string | true | a valid feed key
-id | string | true | 
-
-
-
-
-
-
-
-
+id | string | true |
 
 
 
 ## Create new data for multiple feeds in a group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/data</code></div>
 
 ```shell
 ```
@@ -866,38 +752,26 @@ id | string | true |
 New data
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/data`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
-
-
-
-
-
-
+group_key | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_feed_data | object | true | 
-
-
+group_feed_data | object | true |
 
 
 
 ## All data for current feed in a specific group
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
 
 ```shell
 ```
@@ -935,31 +809,20 @@ group_feed_data | object | true |
 An array of data
 
 
-### HTTP Request
-
-`GET /{username}/groups/{group_key}/feeds/{feed_key}/data`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
+group_key | string | true |
 feed_key | string | true | a valid feed key
 
 
 
-
-
-
-
-
-
-
-
 ## Create new Data in a feed belonging to a particular group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
 
 ```shell
 ```
@@ -995,29 +858,16 @@ feed_key | string | true | a valid feed key
 New data
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/feeds/{feed_key}/data`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
+group_key | string | true |
 feed_key | string | true | a valid feed key
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -1025,9 +875,10 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-
-
 ## Create multiple new Data records in a feed belonging to a particular group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div>
 
 ```shell
 ```
@@ -1065,29 +916,16 @@ datum | object | true | Data record including a `value` field (required) and opt
 New data
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/feeds/{feed_key}/data/batch`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
+group_key | string | true |
 feed_key | string | true | a valid feed key
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -1095,9 +933,10 @@ data | array | true | A collection of data records including `value` (required) 
 
 
 
-
-
 ## Send data to a feed via webhook URL.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
 
 ```shell
 ```
@@ -1131,17 +970,6 @@ data | array | true | A collection of data records including `value` (required) 
 ```
 
 New feed data record
-
-
-### HTTP Request
-
-`POST /webhooks/feed/:token`
-
-
-
-
-
-
 
 
 
@@ -1149,6 +977,9 @@ New feed data record
 
 ## Send arbitrary data to a feed via webhook URL.
 
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div>
+
 ```shell
 ```
 
@@ -1180,19 +1011,7 @@ New feed data record
 }
 ```
 
-New feed data record
+Returns a new feed data record.
 
-
-### HTTP Request
-
-`POST /webhooks/feed/:token/raw`
-
-
-
-
-
-
-
-
-
+**NOTE:** This method **does not require authentication**.
 

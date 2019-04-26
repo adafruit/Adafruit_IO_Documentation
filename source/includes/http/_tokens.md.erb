@@ -2,6 +2,9 @@
 
 ## All tokens for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/tokens</code></div>
+
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 ```
@@ -28,9 +31,6 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 An array of tokens
 
 
-### HTTP Request
-
-`GET /{username}/tokens`
 
 
 ### Path Parameters
@@ -42,15 +42,10 @@ username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
-
 ## Create a new Token
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/tokens</code></div>
 
 ```shell
 $ curl -F 'token=uniqueToken' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
@@ -76,37 +71,26 @@ $ curl -F 'token=uniqueToken' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/a
 New Token
 
 
-### HTTP Request
-
-`POST /{username}/tokens`
-
 
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-token | object | true | 
-
-
+token | object | true |
 
 
 
 ## Returns Token based on ID
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/tokens/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens/{id}
@@ -132,87 +116,21 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 Token response
 
 
-### HTTP Request
-
-`GET /{username}/tokens/{id}`
 
 
 ### Path Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
-
-
-
-
-
-## Replace an existing Token
-
-```shell
-$ curl -F 'token=uniqueToken' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens/{id}
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
-```
-
-> Response Sample:
-
-```json
-{
-  "token": "string"
-}
-```
-
-Updated token
-
-
-### HTTP Request
-
-`PUT /{username}/tokens/{id}`
-
-
-### Path Parameters
-
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
-
-
-### Body Parameters
-
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-token | object | true | 
-
-
+id | string | true |
 
 
 
 ## Delete an existing Token
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/tokens/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens/{id}
@@ -236,18 +154,12 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 Deleted Token successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/tokens/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
+id | string | true |
 
 
 

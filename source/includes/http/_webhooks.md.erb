@@ -1,6 +1,17 @@
 # Webhooks
 
+<aside class="notice">
+These data publishing webhook methods <strong>do not require authentication</strong>. That
+means you can freely use the URL from a public form without leaking your
+authentication data.
+</aside>
+
+You can create new feed webhook receivers by visiting a feed page and using the "Webhooks" link.
+
 ## Send data to a feed via webhook URL.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token
@@ -37,21 +48,11 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:to
 New feed data record
 
 
-### HTTP Request
-
-`POST /webhooks/feed/:token`
-
-
-
-
-
-
-
-
-
-
 
 ## Send arbitrary data to a feed via webhook URL.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
@@ -88,13 +89,47 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:to
 New feed data record
 
 
-### HTTP Request
-
-`POST /webhooks/feed/:token/raw`
 
 
 
+## Trigger a "ping" message on a feed via webhook URL.
 
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/ping</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/ping
+```
+
+```python
+```
+
+```cpp
+```
+
+```ruby
+```
+
+> Response Sample:
+
+```json
+{
+  "id": "string",
+  "value": "ping",
+  "feed_id": 0,
+  "group_id": 0,
+  "expiration": "string",
+  "lat": 0,
+  "lon": 0,
+  "ele": 0,
+  "completed_at": "string",
+  "created_at": "string",
+  "updated_at": "string",
+  "created_epoch": 0
+}
+```
+
+New feed data record.
 
 
 

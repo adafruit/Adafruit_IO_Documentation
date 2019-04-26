@@ -2,6 +2,9 @@
 
 ## All dashboards for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards</code></div>
+
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
 ```
@@ -49,13 +52,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashbo
 An array of dashboards
 
 
-### HTTP Request
-
-`GET /{username}/dashboards`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -64,14 +61,10 @@ username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
 ## Create a new Dashboard
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards</code></div>
 
 ```shell
 $ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
@@ -118,37 +111,25 @@ $ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2
 New Dashboard
 
 
-### HTTP Request
-
-`POST /{username}/dashboards`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-dashboard | object | true | 
-
-
+dashboard | object | true |
 
 
 
 ## Returns Dashboard based on ID
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
@@ -195,30 +176,19 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashbo
 Dashboard response
 
 
-### HTTP Request
-
-`GET /{username}/dashboards/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
-
-
-
-
-
-
-
-
+id | string | true |
 
 
 
 ## Replace an existing Dashboard
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
 
 ```shell
 $ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
@@ -265,9 +235,6 @@ $ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2
 Updated dashboard
 
 
-### HTTP Request
-
-`PUT /{username}/dashboards/{id}`
 
 
 ### Path Parameters
@@ -276,7 +243,7 @@ Updated dashboard
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
+id | string | true |
 
 
 
@@ -290,13 +257,16 @@ id | string | true |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-dashboard | object | true | 
+dashboard | object | true |
 
 
 
 
 
 ## Delete an existing Dashboard
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
@@ -320,9 +290,6 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashbo
 Deleted Dashboard successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/dashboards/{id}`
 
 
 ### Path Parameters
@@ -331,7 +298,7 @@ Deleted Dashboard successfully
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true | 
+id | string | true |
 
 
 

@@ -2,6 +2,8 @@
 
 ## All feeds for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
@@ -13,7 +15,6 @@ feeds = aio.feeds()
 
 # Not implemented in Adafruit IO CircuitPython
 ```
-
 
 > Response Sample:
 
@@ -93,20 +94,18 @@ feeds = aio.feeds()
 An array of feeds
 
 
-### HTTP Request
-
-`GET /{username}/feeds`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
+
 ## Create a new Feed
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_name}
@@ -206,45 +205,32 @@ Feed = api.create_feed(name: "Feed #{SecureRandom.hex(4)}")
 New feed
 
 
-### HTTP Request
-
-`POST /{username}/feeds`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | false | 
-
-
-
+group_key | string | false |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true | 
-
-
+feed | object | true |
 
 
 
 ## Get feed by feed key
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_key}
@@ -349,13 +335,7 @@ end
 Feed response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -364,15 +344,10 @@ feed_key | string | true | a valid feed key
 
 
 
-
-
-
-
-
-
-
-
 ## Replace an existing Feed
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div>
 
 
 ```shell
@@ -466,13 +441,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 Updated feed
 
 
-### HTTP Request
-
-`PUT /{username}/feeds/{feed_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -480,24 +449,18 @@ username | string | true | a valid username string
 feed_key | string | true | a valid feed key
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true | 
-
-
+feed | object | true |
 
 
 
 ## Delete an existing Feed
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
@@ -525,13 +488,7 @@ api.delete_feed(feed)
 Deleted feed successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/feeds/{feed_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -540,15 +497,10 @@ feed_key | string | true | a valid feed key
 
 
 
-
-
-
-
-
-
-
-
 ## Get detailed feed by feed key
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/details</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/details
@@ -645,13 +597,7 @@ puts JSON.pretty_generate(api.feed_details(feed))
 Feed response
 
 
-### HTTP Request
-
-`GET /{username}/feeds/{feed_key}/details`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -660,15 +606,10 @@ feed_key | string | true | a valid feed key
 
 
 
-
-
-
-
-
-
-
-
 ## Add an existing Feed to a Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/add
@@ -776,38 +717,26 @@ puts "-" * 80
 Updated group
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/add`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
-
-
-
 
 
 ### Query Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false | 
-
-
-
-
-
+feed_key | string | false |
 
 
 
 ## Remove a Feed from a Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/remove</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/remove
@@ -915,38 +844,26 @@ puts "-" * 80
 Updated group
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/remove`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
-
-
-
 
 
 ### Query Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false | 
-
-
-
-
-
+feed_key | string | false |
 
 
 
 ## All feeds for current user in a given group
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
@@ -1040,30 +957,19 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups
 An array of feeds
 
 
-### HTTP Request
-
-`GET /{username}/groups/{group_key}/feeds`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
-
 ## Create a new Feed in a Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
@@ -1155,33 +1061,18 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups
 New feed
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/feeds`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
-
-
-
-
-
-
+group_key | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true | 
-
-
+feed | object | true |
 
 

@@ -2,6 +2,9 @@
 
 ## All groups for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups</code></div>
+
 ```shell
 $ curl -H "X-AIO-Key: {your_aio_key}" http://io.adafruit.com/api/v2/{your_username}/groups
 ```
@@ -99,16 +102,10 @@ $ curl -H "X-AIO-Key: {your_aio_key}" http://io.adafruit.com/api/v2/{your_userna
 ]
 ```
 
-An array of groups
-
-
-### HTTP Request
-
-`GET /{username}/groups`
+An array of groups with their respective feeds .
 
 
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -116,15 +113,10 @@ username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
-
 ## Create a new Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups</code></div>
 
 ```shell
 $ curl -F 'name=New Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/
@@ -225,37 +217,25 @@ AdafruitIO_Group *group = io.group("example");
 New Group
 
 
-### HTTP Request
-
-`POST /{username}/groups`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
-
-
-
 ### Body Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group | object | true | 
-
-
+group | object | true |
 
 
 
 ## Returns Group based on ID
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
 
 ```shell
 curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
@@ -355,30 +335,19 @@ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/gr
 Group response
 
 
-### HTTP Request
-
-`GET /{username}/groups/{group_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
-
-
-
-
-
-
-
-
+group_key | string | true |
 
 
 
 ## Replace an existing Group
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
 
 ```shell
 $ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
@@ -478,38 +447,26 @@ $ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/ap
 Updated group
 
 
-### HTTP Request
-
-`PUT /{username}/groups/{group_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
-
-
-
-
-
-
+group_key | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group | object | true | 
-
-
+group | object | true |
 
 
 
 ## Delete an existing Group
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}
@@ -533,30 +490,20 @@ $ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/
 Deleted Group successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/groups/{group_key}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-group_key | string | true | 
-
-
-
-
-
-
-
+group_key | string | true |
 
 
 
 
 ## Add an existing Feed to a Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div>
 
 ```shell
 $ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/add
@@ -656,38 +603,26 @@ $ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/ap
 Updated group
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/add`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
-
-
-
 
 
 ### Query Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false | 
-
-
-
-
-
+feed_key | string | false |
 
 
 
 ## Remove a Feed from a Group
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/remove</code></div>
 
 ```shell
 $ curl -F 'feed_key=FeedName' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/remove
@@ -787,38 +722,26 @@ $ curl -F 'feed_key=FeedName' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit
 Updated group
 
 
-### HTTP Request
-
-`POST /{username}/groups/{group_key}/remove`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
-
-
-
 
 
 ### Query Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false | 
-
-
-
-
-
+feed_key | string | false |
 
 
 
 ## All feeds for current user in a given group
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div>
 
 ```shell
 $ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds
@@ -911,25 +834,10 @@ $ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/
 An array of feeds
 
 
-### HTTP Request
-
-`GET /{username}/groups/{group_key}/feeds`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_key | string | true | 
+group_key | string | true |
 username | string | true | a valid username string
-
-
-
-
-
-
-
-
-
 
