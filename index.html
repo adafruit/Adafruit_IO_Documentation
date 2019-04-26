@@ -488,7 +488,7 @@
                     <a href="#send-arbitrary-data-to-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Send arbitrary data to a feed via webhook URL.">Send arbitrary data to a feed via webhook URL.</a>
                   </li>
                   <li>
-                    <a href="#trigger-a-quot-ping-quot-message-on-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Trigger a "ping" message on a feed via webhook URL.">Trigger a "ping" message on a feed via webhook URL.</a>
+                    <a href="#trigger-a-notification-message-on-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Trigger a notification message on a feed via webhook URL.">Trigger a notification message on a feed via webhook URL.</a>
                   </li>
               </ul>
           </li>
@@ -5092,12 +5092,12 @@ authentication data.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record</p>
-<h2 id='trigger-a-quot-ping-quot-message-on-a-feed-via-webhook-url'>Trigger a &quot;ping&quot; message on a feed via webhook URL.</h2>
+<h2 id='trigger-a-notification-message-on-a-feed-via-webhook-url'>Trigger a notification message on a feed via webhook URL.</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/ping</code></div></p>
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/notify</code></div></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token/ping
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/webhooks/feed/:token/notify
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
@@ -5265,11 +5265,7 @@ location,1.0,2.0,3.0
 </code></pre>
 <p>It&#39;s also worth noting that JSON subscription formats will always receive string type values, regardless of whether a string or number was published.</p>
 <h1 id='errors'>Errors</h1>
-<aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
-
-<p>The Kittn API uses the following error codes:</p>
+<p>The Adafruit IO API uses the following error codes:</p>
 
 <table><thead>
 <tr>
@@ -5279,39 +5275,27 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
 </thead><tbody>
 <tr>
 <td>400</td>
-<td>Bad Request -- Your request is invalid.</td>
+<td>Bad Request -- Your request is invalid or was in the wrong format.</td>
 </tr>
 <tr>
 <td>401</td>
-<td>Unauthorized -- Your API key is wrong.</td>
+<td>Unauthorized -- Your API key is wrong or you&#39;re trying to view a resource you don&#39;t own.</td>
 </tr>
 <tr>
 <td>403</td>
-<td>Forbidden -- The kitten requested is hidden for administrators only.</td>
+<td>Forbidden -- This action is not permitted.</td>
 </tr>
 <tr>
 <td>404</td>
-<td>Not Found -- The specified kitten could not be found.</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed -- You tried to access a kitten with an invalid method.</td>
+<td>Not Found -- The specified record could not be found.</td>
 </tr>
 <tr>
 <td>406</td>
-<td>Not Acceptable -- You requested a format that isn&#39;t json.</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone -- The kitten requested has been removed from our servers.</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&#39;m a teapot.</td>
+<td>Not Acceptable -- You requested a format that we don&#39;t serve.</td>
 </tr>
 <tr>
 <td>429</td>
-<td>Too Many Requests -- You&#39;re requesting too many kittens! Slow down!</td>
+<td>Too Many Requests -- You&#39;re sending or requesting data too quickly! Slow down!</td>
 </tr>
 <tr>
 <td>500</td>
