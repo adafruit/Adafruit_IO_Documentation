@@ -1,9 +1,24 @@
 # Activities
 
+Activities are Adafruit IO's list of actions you've taken to create, update, or
+delete objects in your Adafruit IO account. We store the last 1000 actions taken for:
+
+* Dashboards
+* Blocks
+* Feeds
+* Groups
+* Triggers
+
+
+
 ## All activities for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span> <code class="path">/api/v2/{username}/activities</code></div>
+
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities
+curl -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/activities
 ```
 
 ```python
@@ -15,7 +30,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activi
 ```ruby
 ```
 
-> Response Sample:
+> Response Sample
 
 ```json
 [
@@ -32,27 +47,14 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activi
 ]
 ```
 
-An array of activities
-
-
-### HTTP Request
-
-`GET /{username}/activities`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 
 
-
-
-
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -62,12 +64,10 @@ limit | integer | false | Limit the number of records returned.
 
 
 
-
-
-
-
-
 ## All activities for current user
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div>>
 
 ```shell
 $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities
@@ -85,19 +85,12 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activi
 > Response Sample:
 
 ```json
-
 ```
 
 Deleted activities successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/activities`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
@@ -105,15 +98,10 @@ username | string | true | a valid username string
 
 
 
-
-
-
-
-
-
-
-
 ## Get activities by type for current user
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/activities/{type}</code></div>
 
 ```shell
 # Returns two records
@@ -149,35 +137,20 @@ $ curl -F 'limit=2' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{use
 An array of activities
 
 
-### HTTP Request
-
-`GET /{username}/activities/{type}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-type | string | true | 
-
-
-
+type | string | true |
 
 
 ### Query Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 start_time | string | false | Start time for filtering, returns records created after given time.
 end_time | string | false | End time for filtering, returns records created before give time.
 limit | integer | false | Limit the number of records returned.
-
-
-
-
-
 
 

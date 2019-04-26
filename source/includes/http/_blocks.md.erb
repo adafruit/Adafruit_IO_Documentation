@@ -2,6 +2,9 @@
 
 ## All blocks for current user
 
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div>
+
 ```shell
 ```
 
@@ -41,30 +44,19 @@
 An array of blocks
 
 
-### HTTP Request
-
-`GET /{username}/dashboards/{dashboard_id}/blocks`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true | 
-
-
-
-
-
-
-
-
+dashboard_id | string | true |
 
 
 
 ## Create a new Block
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div>
 
 ```shell
 ```
@@ -103,38 +95,26 @@ dashboard_id | string | true |
 New Block
 
 
-### HTTP Request
-
-`POST /{username}/dashboards/{dashboard_id}/blocks`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true | 
-
-
-
-
-
-
+dashboard_id | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-block | object | true | 
-
-
+block | object | true |
 
 
 
 ## Returns Block based on ID
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -173,31 +153,20 @@ block | object | true |
 Block response
 
 
-### HTTP Request
-
-`GET /{username}/dashboards/{dashboard_id}/blocks/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true | 
-id | string | true | 
-
-
-
-
-
-
-
-
+dashboard_id | string | true |
+id | string | true |
 
 
 
 ## Replace an existing Block
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -236,39 +205,27 @@ id | string | true |
 Updated block
 
 
-### HTTP Request
-
-`PUT /{username}/dashboards/{dashboard_id}/blocks/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true | 
-id | string | true | 
-
-
-
-
-
-
+dashboard_id | string | true |
+id | string | true |
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-block | object | true | 
-
-
+block | object | true |
 
 
 
 ## Delete an existing Block
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -291,26 +248,12 @@ block | object | true |
 Deleted Block successfully
 
 
-### HTTP Request
-
-`DELETE /{username}/dashboards/{dashboard_id}/blocks/{id}`
-
-
 ### Path Parameters
-
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true | 
-id | string | true | 
-
-
-
-
-
-
-
-
+dashboard_id | string | true |
+id | string | true |
 
 
