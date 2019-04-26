@@ -1,4 +1,6 @@
 
+
+
 <!doctype html>
 <html>
   <head>
@@ -210,6 +212,7 @@
     </a>
     <div class="toc-wrapper">
       <img src="images/logo.png" class="logo" alt="Logo" />
+
         <div class="lang-selector">
               <a href="#" data-language-name="shell">CURL</a>
               <a href="#" data-language-name="cpp">Arduino</a>
@@ -217,11 +220,14 @@
               <a href="#" data-language-name="python">Circuitpython</a>
               <a href="#" data-language-name="ruby">Ruby</a>
         </div>
+
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
         </div>
         <ul class="search-results"></ul>
+
       <ul id="toc" class="toc-list-h1">
+
           <li>
             <a href="#adafruit-io" class="toc-h1 toc-link" data-title="Adafruit IO">Adafruit IO</a>
               <ul class="toc-list-h2">
@@ -528,26 +534,11 @@
           <li>
             <a href="#errors" class="toc-h1 toc-link" data-title="Errors">Errors</a>
           </li>
-          <li>
-            <a href="#cookbook" class="toc-h1 toc-link" data-title="Cookbook">Cookbook</a>
-              <ul class="toc-list-h2">
-                  <li>
-                    <a href="#sending-and-sending-image-data-with-adafruit-io" class="toc-h2 toc-link" data-title="Sending and Sending image data with Adafruit IO">Sending and Sending image data with Adafruit IO</a>
-                  </li>
-                  <li>
-                    <a href="#feed-identifiers" class="toc-h2 toc-link" data-title="Feed Identifiers">Feed Identifiers</a>
-                  </li>
-                  <li>
-                    <a href="#webhook-receivers" class="toc-h2 toc-link" data-title="Webhook Receivers">Webhook Receivers</a>
-                  </li>
-                  <li>
-                    <a href="#sending-floating-point-data-to-adafruit-io" class="toc-h2 toc-link" data-title="Sending floating point data to Adafruit IO">Sending floating point data to Adafruit IO</a>
-                  </li>
-                  <li>
-                    <a href="#mqtt-retrieving-the-last-published-value" class="toc-h2 toc-link" data-title="MQTT, Retrieving the Last Published Value:">MQTT, Retrieving the Last Published Value:</a>
-                  </li>
-              </ul>
-          </li>
+
+            <li>
+              <a class="toc-h1 toc-link" href="/cookbook.html">API Cookbook</a>
+            </li>
+
       </ul>
         <ul class="toc-footer">
             <li><a href='http://io.adafruit.com'>Adafruit IO</a></li>
@@ -559,6 +550,7 @@
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
+
       <div class="content">
         <h1 id='adafruit-io'>Adafruit IO</h1>
 <p>The Adafruit IO HTTP API provides access to your Adafruit IO data from any programming language or hardware environment that can speak HTTP. The easiest way to get started is with an <a href="https://learn.adafruit.com/series/adafruit-io-basics">Adafruit IO learn guide</a> and a simple Internet of Things capable device like the <a href="https://www.adafruit.com/product/2821">Feather Huzzah</a> or a more complicated one like the <a href="https://www.adafruit.com/product/4116">PyPortal</a>.</p>
@@ -596,7 +588,7 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 
 <p><strong>NOTE</strong>: if you regenerate your AIO key, your old key will be immediately invalidated, so you&#39;ll have to replace it in any scripts or sketches where it is in use.</p>
 <h1 id='client-libraries'>Client Libraries</h1>
-<p>We have lots of client libraries to help you get started with your project: </p>
+<p>We have lots of client libraries to help you get started with your project:</p>
 
 <ul>
 <li><p><a href="https://github.com/adafruit/Adafruit_IO_Arduino">Arduino C++</a></p></li>
@@ -605,7 +597,7 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <li><p><a href="https://github.com/adafruit/io-client-ruby">Ruby</a></p></li>
 </ul>
 
-<p><strong>Note:</strong> The following two libraries use V1 of the Adafruit API which have been <a href="https://io.adafruit.com/api/docs/">depreciated</a>. </p>
+<p><strong>Note:</strong> The following two libraries use V1 of the Adafruit API which have been <a href="https://io.adafruit.com/api/docs/">deprecated</a>.</p>
 
 <ul>
 <li><p><a href="https://github.com/adafruit/adafruit-io-node-client">Node.js</a></p></li>
@@ -3615,10 +3607,27 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h1 id='activities'>Activities</h1><h2 id='all-activities-for-current-user'>All activities for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities
+<h1 id='activities'>Activities</h1>
+<p>Activities are Adafruit IO&#39;s list of actions you&#39;ve taken to create, update, or
+delete objects in your Adafruit IO account. We store the last 1000 actions taken for:</p>
+
+<ul>
+<li>Dashboards</li>
+<li>Blocks</li>
+<li>Feeds</li>
+<li>Groups</li>
+<li>Triggers</li>
+</ul>
+<h2 id='all-activities-for-current-user'>All activities for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span> <code class="path">/api/v2/{username}/activities</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+  https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
-<p>Response Sample:</p>
+<p>Response Sample</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
@@ -3632,11 +3641,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
     </span><span class="s2">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
-</span></code></pre>
-<p>An array of activities</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/activities</code></p>
-<h3 id='path-parameters'>Path Parameters</h3>
+</span></code></pre><h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -3680,16 +3685,18 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Limit the number of records returned.</td>
 </tr>
 </tbody></table>
-<h2 id='all-activities-for-current-user-2'>All activities for current user</h2><pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities
+<h2 id='all-activities-for-current-user-2'>All activities for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div>&gt;</p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
-<pre class="highlight json tab-json"><code><span class="w">
-</span></code></pre>
+<pre class="highlight json tab-json"><code></code></pre>
 <p>Deleted activities successfully</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>DELETE /{username}/activities</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3706,7 +3713,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='get-activities-by-type-for-current-user'>Get activities by type for current user</h2><pre class="highlight shell tab-shell"><code><span class="c"># Returns two records</span>
+<h2 id='get-activities-by-type-for-current-user'>Get activities by type for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/activities/{type}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code><span class="c"># Returns two records</span>
 <span class="gp">$ </span>curl -F <span class="s1">'limit=2'</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/activities/<span class="o">{</span><span class="nb">type</span><span class="o">}</span>
 </code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
@@ -3726,8 +3738,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of activities</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/activities/{type}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3778,7 +3788,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Limit the number of records returned.</td>
 </tr>
 </tbody></table>
-<h1 id='blocks'>Blocks</h1><h2 id='all-blocks-for-current-user'>All blocks for current user</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h1 id='blocks'>Blocks</h1><h2 id='all-blocks-for-current-user'>All blocks for current user</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -3803,8 +3818,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of blocks</p>
-<h3 id='http-request'>HTTP Request</h3>
-<p><code>GET /{username}/dashboards/{dashboard_id}/blocks</code></p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3827,7 +3840,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='create-a-new-block'>Create a new Block</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='create-a-new-block'>Create a new Block</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -3850,8 +3868,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New Block</p>
-<h3 id='http-request-2'>HTTP Request</h3>
-<p><code>POST /{username}/dashboards/{dashboard_id}/blocks</code></p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3890,7 +3906,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='returns-block-based-on-id'>Returns Block based on ID</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='returns-block-based-on-id'>Returns Block based on ID</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -3913,8 +3934,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Block response</p>
-<h3 id='http-request-3'>HTTP Request</h3>
-<p><code>GET /{username}/dashboards/{dashboard_id}/blocks/{id}</code></p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3943,7 +3962,12 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-an-existing-block'>Replace an existing Block</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='replace-an-existing-block'>Replace an existing Block</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
@@ -3966,8 +3990,6 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>Updated block</p>
-<h3 id='http-request-4'>HTTP Request</h3>
-<p><code>PUT /{username}/dashboards/{dashboard_id}/blocks/{id}</code></p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4012,15 +4034,18 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-an-existing-block'>Delete an existing Block</h2><pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
+<h2 id='delete-an-existing-block'>Delete an existing Block</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div></p>
+</blockquote>
+<pre class="highlight shell tab-shell"><code></code></pre><pre class="highlight python tab-python"><code></code></pre><pre class="highlight cpp tab-cpp"><code></code></pre><pre class="highlight ruby tab-ruby"><code></code></pre>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre>
 <p>Deleted Block successfully</p>
-<h3 id='http-request-5'>HTTP Request</h3>
-<p><code>DELETE /{username}/dashboards/{dashboard_id}/blocks/{id}</code></p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4887,9 +4912,10 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1><h2 id='client-libraries'>Client Libraries</h2>
 <ul>
 <li><p><em>Arduino</em>: <a href="https://github.com/adafruit/Adafruit_MQTT_Library">Adafruit MQTT</a></p></li>
-<li><p><em>Python</em>: <a href="https://github.com/adafruit/Adafruit_IO_Python">Adafruit IO Python</a> includes a MQTT Client.</p></li>
-<li><p><em>CircuitPython</em>: Accessing the Adafruit IO MQTT API is not currently supported on this platform. </p></li>
+<li><p><em>Python</em>: <a href="https://github.com/adafruit/Adafruit_IO_Python">Adafruit IO Python</a> includes an MQTT Client.</p></li>
+<li><p><em>CircuitPython</em>: Accessing the Adafruit IO MQTT API is not currently supported on this platform.</p></li>
 <li><p><em>MicroPython</em>: MicroPython devices can connect to Adafruit IO using <a href="https://github.com/micropython/micropython-lib/tree/master/umqtt.simple"><code>uMQTT</code></a></p></li>
+<li><p><em>Ruby</em>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
 </ul>
 <h2 id='connection-details'>Connection Details</h2>
 <p>We <em>strongly</em> recommend connecting using SSL (Port 8883) if your client allows it.</p>
@@ -4905,11 +4931,11 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>io.adafruit.com</td>
 </tr>
 <tr>
-<td><strong>Port (Secure SSL)</strong></td>
+<td><strong>Secure (SSL) Port</strong></td>
 <td>8883</td>
 </tr>
 <tr>
-<td><strong>Port (insecure)</strong></td>
+<td><strong>Insecure Port</strong></td>
 <td>1883</td>
 </tr>
 <tr>
@@ -5087,78 +5113,9 @@ This error section is stored in a separate file in <code>includes/_errors.md</co
 <td>Service Unavailable -- We&#39;re temporarily offline for maintenance. Please try again later.</td>
 </tr>
 </tbody></table>
-<h1 id='cookbook'>Cookbook</h1>
-<p>This page contains a number of recipes related to Adafruit  IO, which have been found useful in the past. You can add and contribute to this file by filing an <code>issue</code> on the GitHub repository, or by editing this file and submitting a pull request. </p>
-<h2 id='sending-and-sending-image-data-with-adafruit-io'>Sending and Sending image data with Adafruit IO</h2>
-<p>Using an <em>Image Block</em>, you can automatically display a Base64 image data string on your dashboard by sending a Base64 image data string to an Adafruit IO feed.</p>
 
-<p><em>Design Considerations:</em>
-There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data. Image conversion from binary to Base64 happens inside the browser, with no image pre-compression,  <em>and</em>  more importantly, conversion from binary to Base64 expands the size of the image data.</p>
-
-<p>You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  <a href="https://io.adafruit.com/blog/images/2016-12-14-power-switch.png">the .png image used for testing</a>  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.</p>
-
-<p><img src="https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png" alt="base64imagepreview" /></p>
-<h2 id='feed-identifiers'>Feed Identifiers</h2>
-<p>Names are for humans.</p>
-
-<p>Keys are for computers.</p>
-
-<p>You tell the computer the name, and it will tell you the key.</p>
-
-<p><strong>When  using  Adafruit  IO, you&#39;ll want to tell the client (the computer) the feed&#39;s **key</strong> instead of the feed name.**</p>
-
-<p>For more information about this topic:</p>
-
-<p>https://learn.adafruit.com/naming-things-in-adafruit-io/introduction</p>
-
-<p>https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds</p>
-<h2 id='webhook-receivers'>Webhook Receivers</h2>
-<p>Webhook receiver URLs give you a limited use, unique API address that you can send data to and have it appear in your Adafruit IO feed. Webhook URLs can be shared with anyone and used from anywhere on the web.</p>
-
-<p>You can access a webhook by navigating to your feed and clicking the <em>Webhooks</em> button on the right-hand sidebar.</p>
-<h3 id='raw-webhooks'>Raw Webhooks</h3>
-<p>If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don&#39;t have control over the payload the service is sending--add <code>/raw</code> to the end of the Adafruit IO webhook URL that you share with the service.</p>
-<h3 id='notify-webhooks'>Notify Webhooks</h3>
-<p>If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add <code>/notify</code> to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message &quot;ping&quot;.</p>
-<h2 id='sending-floating-point-data-to-adafruit-io'>Sending floating point data to Adafruit IO</h2>
-<p>If you&#39;re sending <code>3.1415</code> and only want to send <code>3.14</code> - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. </p>
-<h2 id='mqtt-retrieving-the-last-published-value'>MQTT, Retrieving the Last Published Value:</h2>
-<p>MQTT is a tremendously useful protocol for building small connected devices and is relatively simple to understand and implement (if implementing networking protocols is your thing). Unfortunately, a few features of the Adafruit IO platform make it difficult for us to support the entire MQTT 3.1+ protocol specification in our broker. Specifically, one particular feature, the publish retain flag.</p>
-
-<p>In the MQTT protocol, setting the retain flag on a published message asks the MQTT broker (server) to store that message. Then any new clients which connect and subscribe to that topic will immediately receive the retained message. Retain makes writing basic MQTT-only Internet of Things clients easier, without it, a client that connects and subscribes to a feed topic has to wait until a new value is published on the feed to know what state it should be in. In the case of slowly updated feeds, there could be hours between updates which means a device that disconnects and reconnects (for example, due to power cycling or sleeping) might lose the current value for a long time between updates.</p>
-
-<p>Among other factors, our scale, Adafruit IO&#39;s mix of MQTT &amp; HTTP APIs, the speed at which we’re taking in new data, and the fact that we’re already storing almost every message that is sent mean that a “simple” feature like retain becomes difficult to support without making MQTT service performance worse for everyone.</p>
-
-<p>Since we don’t actually store data in the broker but at a lower level and can’t support PUBLISH retain directly, we’re proposing a different solution for the retaining problem: the /get topic modifier.</p>
-
-<p>The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add /get to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: &#39;\0&#39;) . IO will immediately publish, just for that client, the most recent value received on the feed.</p>
-
-<p>For example, let&#39;s imagine we have a device that subscribes to a counter feed: uname/f/counter. If we want to get the latest value, the /get topic we should publish to is uname/f/counter/get. After connecting, subscribing, and publishing to the /get topic, we will immediately receive a message on our uname/f/counter subscription with the last value that was published to the feed.</p>
-
-<p>If you’re using the Adafruit IO Arduino library, you can add /get support to your project in one line of code:</p>
-<pre class="highlight plaintext"><code>// ... from the adafruitio_01_subscribe example sketch
-AdafruitIO_Feed *counter = io.feed("counter");
-
-void setup() {
-
-  // 1. start IO connection
-  io.connect();
-
-  // 2. prepare MQTT subscription with handler function
-  counter-&gt;onMessage(handleMessage);
-
-  // 3. wait for successful connection
-  while(io.mqttStatus() &lt; AIO_CONNECTED) {
-    delay(500);
-  }
-
-  // 4. send /get message, requesting last value
-  counter-&gt;get(); // ask Adafruit IO to resend the last value
-
-}
-// ....
-</code></pre>
       </div>
+
       <div class="dark-box">
           <div class="lang-selector">
                 <a href="#" data-language-name="shell">CURL</a>

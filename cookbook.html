@@ -1,0 +1,349 @@
+
+
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>Adafruit IO API Cookbook</title>
+
+    <style>
+      .highlight table td { padding: 5px; }
+.highlight table pre { margin: 0; }
+.highlight .gh {
+  color: #999999;
+}
+.highlight .sr {
+  color: #f6aa11;
+}
+.highlight .go {
+  color: #888888;
+}
+.highlight .gp {
+  color: #555555;
+}
+.highlight .gs {
+}
+.highlight .gu {
+  color: #aaaaaa;
+}
+.highlight .nb {
+  color: #f6aa11;
+}
+.highlight .cm {
+  color: #75715e;
+}
+.highlight .cp {
+  color: #75715e;
+}
+.highlight .c1 {
+  color: #75715e;
+}
+.highlight .cs {
+  color: #75715e;
+}
+.highlight .c, .highlight .cd {
+  color: #75715e;
+}
+.highlight .err {
+  color: #960050;
+}
+.highlight .gr {
+  color: #960050;
+}
+.highlight .gt {
+  color: #960050;
+}
+.highlight .gd {
+  color: #49483e;
+}
+.highlight .gi {
+  color: #49483e;
+}
+.highlight .ge {
+  color: #49483e;
+}
+.highlight .kc {
+  color: #66d9ef;
+}
+.highlight .kd {
+  color: #66d9ef;
+}
+.highlight .kr {
+  color: #66d9ef;
+}
+.highlight .no {
+  color: #66d9ef;
+}
+.highlight .kt {
+  color: #66d9ef;
+}
+.highlight .mf {
+  color: #ae81ff;
+}
+.highlight .mh {
+  color: #ae81ff;
+}
+.highlight .il {
+  color: #ae81ff;
+}
+.highlight .mi {
+  color: #ae81ff;
+}
+.highlight .mo {
+  color: #ae81ff;
+}
+.highlight .m, .highlight .mb, .highlight .mx {
+  color: #ae81ff;
+}
+.highlight .sc {
+  color: #ae81ff;
+}
+.highlight .se {
+  color: #ae81ff;
+}
+.highlight .ss {
+  color: #ae81ff;
+}
+.highlight .sd {
+  color: #e6db74;
+}
+.highlight .s2 {
+  color: #e6db74;
+}
+.highlight .sb {
+  color: #e6db74;
+}
+.highlight .sh {
+  color: #e6db74;
+}
+.highlight .si {
+  color: #e6db74;
+}
+.highlight .sx {
+  color: #e6db74;
+}
+.highlight .s1 {
+  color: #e6db74;
+}
+.highlight .s {
+  color: #e6db74;
+}
+.highlight .na {
+  color: #a6e22e;
+}
+.highlight .nc {
+  color: #a6e22e;
+}
+.highlight .nd {
+  color: #a6e22e;
+}
+.highlight .ne {
+  color: #a6e22e;
+}
+.highlight .nf {
+  color: #a6e22e;
+}
+.highlight .vc {
+  color: #ffffff;
+}
+.highlight .nn {
+  color: #ffffff;
+}
+.highlight .nl {
+  color: #ffffff;
+}
+.highlight .ni {
+  color: #ffffff;
+}
+.highlight .bp {
+  color: #ffffff;
+}
+.highlight .vg {
+  color: #ffffff;
+}
+.highlight .vi {
+  color: #ffffff;
+}
+.highlight .nv {
+  color: #ffffff;
+}
+.highlight .w {
+  color: #ffffff;
+}
+.highlight {
+  color: #ffffff;
+}
+.highlight .n, .highlight .py, .highlight .nx {
+  color: #ffffff;
+}
+.highlight .ow {
+  color: #f92672;
+}
+.highlight .nt {
+  color: #f92672;
+}
+.highlight .k, .highlight .kv {
+  color: #f92672;
+}
+.highlight .kn {
+  color: #f92672;
+}
+.highlight .kp {
+  color: #f92672;
+}
+.highlight .o {
+  color: #f92672;
+}
+    </style>
+    <link href="stylesheets/screen.css" rel="stylesheet" media="screen" />
+    <link href="stylesheets/print.css" rel="stylesheet" media="print" />
+      <script src="javascripts/all_nosearch.js"></script>
+  </head>
+
+  <body class="cookbook" data-languages="[&quot;shell&quot;,&quot;cpp&quot;,&quot;python&quot;,&quot;python&quot;,&quot;ruby&quot;]">
+    <a href="#" id="nav-button">
+      <span>
+        NAV
+        <img src="images/navbar.png" alt="Navbar" />
+      </span>
+    </a>
+    <div class="toc-wrapper">
+      <img src="images/logo.png" class="logo" alt="Logo" />
+
+        <div class="lang-selector">
+              <a href="#" data-language-name="shell">CURL</a>
+              <a href="#" data-language-name="cpp">Arduino</a>
+              <a href="#" data-language-name="python">Python</a>
+              <a href="#" data-language-name="python">Circuitpython</a>
+              <a href="#" data-language-name="ruby">Ruby</a>
+        </div>
+
+
+      <ul id="toc" class="toc-list-h1">
+            <li>
+              <a class="toc-h1 toc-link" href="/">API Documentation</a>
+            </li>
+
+          <li>
+            <a href="#cookbook" class="toc-h1 toc-link" data-title="Cookbook">Cookbook</a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#sending-and-sending-image-data-with-adafruit-io" class="toc-h2 toc-link" data-title="Sending and Sending image data with Adafruit IO">Sending and Sending image data with Adafruit IO</a>
+                  </li>
+                  <li>
+                    <a href="#feed-identifiers" class="toc-h2 toc-link" data-title="Feed Identifiers">Feed Identifiers</a>
+                  </li>
+                  <li>
+                    <a href="#webhook-receivers" class="toc-h2 toc-link" data-title="Webhook Receivers">Webhook Receivers</a>
+                  </li>
+                  <li>
+                    <a href="#sending-floating-point-data-to-adafruit-io" class="toc-h2 toc-link" data-title="Sending floating point data to Adafruit IO">Sending floating point data to Adafruit IO</a>
+                  </li>
+                  <li>
+                    <a href="#mqtt-retrieving-the-last-published-value" class="toc-h2 toc-link" data-title="MQTT, Retrieving the Last Published Value:">MQTT, Retrieving the Last Published Value:</a>
+                  </li>
+              </ul>
+          </li>
+
+
+      </ul>
+        <ul class="toc-footer">
+            <li><a href='https://io.adafruit.com'>Adafruit IO</a></li>
+            <li><a href='https://io.adafruit.com/blog'>Adafruit IO News</a></li>
+            <li><a href='https://io.adafruit.com/plus'>Adafruit IO Plus</a></li>
+            <li><a href='https://io.adafruit.com/terms'>Adafruit IO ToS</a></li>
+            <li><a href='https://io.adafruit.com/feedback'>Submit Feedback</a></li>
+        </ul>
+    </div>
+    <div class="page-wrapper">
+      <div class="dark-box"></div>
+
+      <div class="content">
+        <h1 id='cookbook'>Cookbook</h1>
+<p>This page contains a number of recipes related to Adafruit  IO, which have been found useful in the past. You can add and contribute to this file by filing an <code>issue</code> on the GitHub repository, or by editing this file and submitting a pull request. </p>
+<h2 id='sending-and-sending-image-data-with-adafruit-io'>Sending and Sending image data with Adafruit IO</h2>
+<p>Using an <em>Image Block</em>, you can automatically display a Base64 image data string on your dashboard by sending a Base64 image data string to an Adafruit IO feed.</p>
+
+<p><em>Design Considerations:</em>
+There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data. Image conversion from binary to Base64 happens inside the browser, with no image pre-compression,  <em>and</em>  more importantly, conversion from binary to Base64 expands the size of the image data.</p>
+
+<p>You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  <a href="https://io.adafruit.com/blog/images/2016-12-14-power-switch.png">the .png image used for testing</a>  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.</p>
+
+<p><img src="https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png" alt="base64imagepreview" /></p>
+<h2 id='feed-identifiers'>Feed Identifiers</h2>
+<p>Names are for humans.</p>
+
+<p>Keys are for computers.</p>
+
+<p>You tell the computer the name, and it will tell you the key.</p>
+
+<p><strong>When  using  Adafruit  IO, you&#39;ll want to tell the client (the computer) the feed&#39;s **key</strong> instead of the feed name.**</p>
+
+<p>For more information about this topic:</p>
+
+<p>https://learn.adafruit.com/naming-things-in-adafruit-io/introduction</p>
+
+<p>https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds</p>
+<h2 id='webhook-receivers'>Webhook Receivers</h2>
+<p>Webhook receiver URLs give you a limited use, unique API address that you can send data to and have it appear in your Adafruit IO feed. Webhook URLs can be shared with anyone and used from anywhere on the web.</p>
+
+<p>You can access a webhook by navigating to your feed and clicking the <em>Webhooks</em> button on the right-hand sidebar.</p>
+<h3 id='raw-webhooks'>Raw Webhooks</h3>
+<p>If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don&#39;t have control over the payload the service is sending--add <code>/raw</code> to the end of the Adafruit IO webhook URL that you share with the service.</p>
+<h3 id='notify-webhooks'>Notify Webhooks</h3>
+<p>If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add <code>/notify</code> to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message &quot;ping&quot;.</p>
+<h2 id='sending-floating-point-data-to-adafruit-io'>Sending floating point data to Adafruit IO</h2>
+<p>If you&#39;re sending <code>3.1415</code> and only want to send <code>3.14</code> - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. </p>
+<h2 id='mqtt-retrieving-the-last-published-value'>MQTT, Retrieving the Last Published Value:</h2>
+<p>MQTT is a tremendously useful protocol for building small connected devices and is relatively simple to understand and implement (if implementing networking protocols is your thing). Unfortunately, a few features of the Adafruit IO platform make it difficult for us to support the entire MQTT 3.1+ protocol specification in our broker. Specifically, one particular feature, the publish retain flag.</p>
+
+<p>In the MQTT protocol, setting the retain flag on a published message asks the MQTT broker (server) to store that message. Then any new clients which connect and subscribe to that topic will immediately receive the retained message. Retain makes writing basic MQTT-only Internet of Things clients easier, without it, a client that connects and subscribes to a feed topic has to wait until a new value is published on the feed to know what state it should be in. In the case of slowly updated feeds, there could be hours between updates which means a device that disconnects and reconnects (for example, due to power cycling or sleeping) might lose the current value for a long time between updates.</p>
+
+<p>Among other factors, our scale, Adafruit IO&#39;s mix of MQTT &amp; HTTP APIs, the speed at which we’re taking in new data, and the fact that we’re already storing almost every message that is sent mean that a “simple” feature like retain becomes difficult to support without making MQTT service performance worse for everyone.</p>
+
+<p>Since we don’t actually store data in the broker but at a lower level and can’t support PUBLISH retain directly, we’re proposing a different solution for the retaining problem: the /get topic modifier.</p>
+
+<p>The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add /get to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: &#39;\0&#39;) . IO will immediately publish, just for that client, the most recent value received on the feed.</p>
+
+<p>For example, let&#39;s imagine we have a device that subscribes to a counter feed: uname/f/counter. If we want to get the latest value, the /get topic we should publish to is uname/f/counter/get. After connecting, subscribing, and publishing to the /get topic, we will immediately receive a message on our uname/f/counter subscription with the last value that was published to the feed.</p>
+
+<p>If you’re using the Adafruit IO Arduino library, you can add /get support to your project in one line of code:</p>
+<pre class="highlight plaintext"><code>// ... from the adafruitio_01_subscribe example sketch
+AdafruitIO_Feed *counter = io.feed("counter");
+
+void setup() {
+
+  // 1. start IO connection
+  io.connect();
+
+  // 2. prepare MQTT subscription with handler function
+  counter-&gt;onMessage(handleMessage);
+
+  // 3. wait for successful connection
+  while(io.mqttStatus() &lt; AIO_CONNECTED) {
+    delay(500);
+  }
+
+  // 4. send /get message, requesting last value
+  counter-&gt;get(); // ask Adafruit IO to resend the last value
+
+}
+// ....
+</code></pre>
+      </div>
+
+      <div class="dark-box">
+          <div class="lang-selector">
+                <a href="#" data-language-name="shell">CURL</a>
+                <a href="#" data-language-name="cpp">Arduino</a>
+                <a href="#" data-language-name="python">Python</a>
+                <a href="#" data-language-name="python">Circuitpython</a>
+                <a href="#" data-language-name="ruby">Ruby</a>
+          </div>
+      </div>
+    </div>
+  </body>
+</html>
