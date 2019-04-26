@@ -92,13 +92,13 @@ New feed data record
 
 
 
-## Trigger a "ping" message on a feed via webhook URL.
+## Trigger a notification message on a feed via webhook URL.
 
 > HTTP Request
-> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/ping</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/notify</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/ping
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/notify
 ```
 
 ```python
