@@ -305,19 +305,19 @@
                     <a href="#create-group-data" class="toc-h2 toc-link" data-title="Create Group Data">Create Group Data</a>
                   </li>
                   <li>
-                    <a href="#get-all-data-for-a-group-39-s-feed" class="toc-h2 toc-link" data-title="Get all Data for a Group's Feed">Get all Data for a Group's Feed</a>
+                    <a href="#get-data-for-group-39-s-feed" class="toc-h2 toc-link" data-title="Get Data for Group's Feed">Get Data for Group's Feed</a>
                   </li>
                   <li>
-                    <a href="#create-data-in-a-group-39-s-feed" class="toc-h2 toc-link" data-title="Create Data in a Group's feed">Create Data in a Group's feed</a>
+                    <a href="#create-data-in-a-group-39-s-feed" class="toc-h2 toc-link" data-title="Create Data in a Group's Feed">Create Data in a Group's Feed</a>
                   </li>
                   <li>
-                    <a href="#create-new-data-records-in-a-group-39-s-feed" class="toc-h2 toc-link" data-title="Create New Data Records in a Group's Feed">Create New Data Records in a Group's Feed</a>
+                    <a href="#create-data-in-a-group-39-s-feed-2" class="toc-h2 toc-link" data-title="Create Data in a Group's Feed">Create Data in a Group's Feed</a>
                   </li>
                   <li>
-                    <a href="#send-data-to-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Send data to a feed via webhook URL.">Send data to a feed via webhook URL.</a>
+                    <a href="#send-data-to-a-feed-via-webhook" class="toc-h2 toc-link" data-title="Send Data to a Feed via Webhook">Send Data to a Feed via Webhook</a>
                   </li>
                   <li>
-                    <a href="#send-arbitrary-data-to-a-feed-via-webhook-url" class="toc-h2 toc-link" data-title="Send arbitrary data to a feed via webhook URL.">Send arbitrary data to a feed via webhook URL.</a>
+                    <a href="#send-arbitrary-data-to-feed-via-webhook" class="toc-h2 toc-link" data-title="Send Arbitrary Data to Feed via Webhook">Send Arbitrary Data to Feed via Webhook</a>
                   </li>
               </ul>
           </li>
@@ -1529,7 +1529,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='get-all-data-for-a-group-39-s-feed'>Get all Data for a Group&#39;s Feed</h2>
+<h2 id='get-data-for-group-39-s-feed'>Get Data for Group&#39;s Feed</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div></p>
@@ -1584,7 +1584,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>a valid feed key</td>
 </tr>
 </tbody></table>
-<h2 id='create-data-in-a-group-39-s-feed'>Create Data in a Group&#39;s feed</h2>
+<h2 id='create-data-in-a-group-39-s-feed'>Create Data in a Group&#39;s Feed</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div></p>
@@ -1653,7 +1653,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='create-new-data-records-in-a-group-39-s-feed'>Create New Data Records in a Group&#39;s Feed</h2>
+<h2 id='create-data-in-a-group-39-s-feed-2'>Create Data in a Group&#39;s Feed</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div></p>
@@ -1724,7 +1724,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>A collection of data records including <code>value</code> (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
-<h2 id='send-data-to-a-feed-via-webhook-url'>Send data to a feed via webhook URL.</h2>
+<h2 id='send-data-to-a-feed-via-webhook'>Send Data to a Feed via Webhook</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div></p>
@@ -1749,7 +1749,7 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record</p>
-<h2 id='send-arbitrary-data-to-a-feed-via-webhook-url'>Send arbitrary data to a feed via webhook URL.</h2>
+<h2 id='send-arbitrary-data-to-feed-via-webhook'>Send Arbitrary Data to Feed via Webhook</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div></p>
