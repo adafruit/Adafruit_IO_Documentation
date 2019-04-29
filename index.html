@@ -511,7 +511,7 @@
                     <a href="#client-libraries" class="toc-h2 toc-link" data-title="Client Libraries">Client Libraries</a>
                   </li>
                   <li>
-                    <a href="#connection-details" class="toc-h2 toc-link" data-title="Connection Details">Connection Details</a>
+                    <a href="#adafruit-io-mqtt-connection-details" class="toc-h2 toc-link" data-title="Adafruit IO MQTT Connection Details">Adafruit IO MQTT Connection Details</a>
                   </li>
               </ul>
           </li>
@@ -697,6 +697,8 @@ X-Pagination-Count: 1000
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
 <p>An array of zero or more data points.</p>
+
+<p>This API is paginated.</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -866,9 +868,18 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
     </span><span class="s2">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
   </span><span class="p">},</span><span class="w">
   </span><span class="s2">"parameters"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="s2">"start_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-02-28T16:17:09Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"end_time"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2019-04-29T16:17:09Z"</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"resolution"</span><span class="p">:</span><span class="w"> </span><span class="mi">120</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"hours"</span><span class="p">:</span><span class="w"> </span><span class="mi">1440</span><span class="p">,</span><span class="w">
+    </span><span class="s2">"field"</span><span class="p">:</span><span class="w"> </span><span class="s2">"avg"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"columns"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+  </span><span class="s2">"columns"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="s2">"date"</span><span class="p">,</span><span class="w"> </span><span class="s2">"value"</span><span class="p">],</span><span class="w">
+  </span><span class="s2">"data"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+    </span><span class="p">[</span><span class="w"> </span><span class="s2">"2019-03-01T14:00:00Z"</span><span class="p">,</span><span class="w"> </span><span class="s2">"62.579827586206896"</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="p">[</span><span class="w"> </span><span class="s2">"2019-03-02T18:00:00Z"</span><span class="p">,</span><span class="w"> </span><span class="s2">"64.94642857142857"</span><span class="w"> </span><span class="p">],</span><span class="w">
+    </span><span class="p">[</span><span class="w"> </span><span class="s2">"..."</span><span class="p">,</span><span class="w"> </span><span class="s2">"..."</span><span class="p">]</span><span class="w">
+  </span><span class="p">]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>A JSON record containing chart data and the parameters used to generate it.</p>
@@ -5161,15 +5172,23 @@ authentication data.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record.</p>
-<h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1><h2 id='client-libraries'>Client Libraries</h2>
+<h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1>
+<p><a href="http://mqtt.org/">MQTT</a>, or message queue telemetry transport, is a protocol for device communication that Adafruit IO supports. Using a MQTT library or client you can publish and subscribe to a feed to send and receive feed data.</p>
+
+<p>If you aren&#39;t familiar with MQTT check out this <a href="http://www.hivemq.com/mqtt-essentials-part-1-introducing-mqtt/">introduction from the HiveMQ blog</a>. 
+All of the subsequent posts in the <a href="http://www.hivemq.com/mqtt-essentials-wrap-up/">MQTT essentials series</a> are great and worth reading too.</p>
+<h2 id='client-libraries'>Client Libraries</h2>
+<p>To use the MQTT API that Adafruit IO exposes you&#39;ll need a MQTT client library.  For Python, Ruby, and Arduino you can use Adafruit&#39;s
+IO libraries as they include support for MQTT. For other languages or platforms look for a MQTT library that ideally supports the MQTT 3.1.1 protocol.</p>
+
 <ul>
-<li><p><em>Arduino</em>: <a href="https://github.com/adafruit/Adafruit_MQTT_Library">Adafruit MQTT</a></p></li>
-<li><p><em>Python</em>: <a href="https://github.com/adafruit/Adafruit_IO_Python">Adafruit IO Python</a> includes an MQTT Client.</p></li>
-<li><p><em>CircuitPython</em>: Accessing the Adafruit IO MQTT API is not currently supported on this platform.</p></li>
-<li><p><em>MicroPython</em>: MicroPython devices can connect to Adafruit IO using <a href="https://github.com/micropython/micropython-lib/tree/master/umqtt.simple"><code>uMQTT</code></a></p></li>
-<li><p><em>Ruby</em>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
+<li><p><strong>Arduino</strong>: <a href="https://github.com/adafruit/Adafruit_MQTT_Library">Adafruit MQTT</a></p></li>
+<li><p><strong>Python</strong>: <a href="https://github.com/adafruit/Adafruit_IO_Python">Adafruit IO Python</a> includes an MQTT Client.</p></li>
+<li><p><strong>CircuitPython</strong>: Accessing the Adafruit IO MQTT API is not currently supported on this platform.</p></li>
+<li><p><strong>MicroPython</strong>: MicroPython devices can connect to Adafruit IO using <a href="https://github.com/micropython/micropython-lib/tree/master/umqtt.simple">uMQTT</a></p></li>
+<li><p><strong>Ruby</strong>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
 </ul>
-<h2 id='connection-details'>Connection Details</h2>
+<h2 id='adafruit-io-mqtt-connection-details'>Adafruit IO MQTT Connection Details</h2>
 <p>We <em>strongly</em> recommend connecting using SSL (Port 8883) if your client allows it.</p>
 
 <table><thead>
@@ -5200,7 +5219,7 @@ authentication data.
 </tr>
 </tbody></table>
 
-<p><em>Need to manually set a Client ID for your MQTT client?</em> Use a unique value such as a (random GUID)[https://www.guidgenerator.com/online-guid-generator.aspx].</p>
+<p><em>Need to manually set a Client ID for your MQTT client?</em> Use a unique value such as a <a href="https://www.guidgenerator.com/online-guid-generator.aspx">random GUID</a>.</p>
 <h1 id='mqtt-api-qos'>MQTT API QoS</h1>
 <p>One feature of MQTT is the ability to specify a QoS, or quality of service, level when publishing feed data.  This allows an application to confirm that its data has been sucessfully published.</p>
 
