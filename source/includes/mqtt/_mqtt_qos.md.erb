@@ -1,4 +1,5 @@
 # MQTT API QoS
+
 One feature of MQTT is the ability to specify a QoS, or quality of service, level when publishing feed data.  This allows an application to confirm that its data has been sucessfully published.
 
 If you aren't familiar with MQTT QoS levels [be sure to read this great blog post](http://www.hivemq.com/mqtt-essentials-part-6-mqtt-quality-of-service-levels/) explaining their meaning.
@@ -6,3 +7,12 @@ If you aren't familiar with MQTT QoS levels [be sure to read this great blog pos
 For publishing feed values **the Adafruit IO MQTT API supports QoS level 0 (at most once) and 1 (at least once) only**.  
 
 QoS level 2 (exactly once) is _not_ currently supported.
+
+# MQTT API Rate Limiting
+
+Adafruit IO's MQTT server imposes a rate limit to prevent excessive load on the service.  If a user performs too many publish actions in a short period of time then some of the publish requests might be rejected. 
+The current rate limit is at most 1 request per second (or 60 requests within 60 seconds), without an Adafruit IO+ Boost applied to your account.
+
+If you exceed this limit, a notice will be sent to the `(username)/throttle` topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account.
+
+This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below 2 requests/second.
