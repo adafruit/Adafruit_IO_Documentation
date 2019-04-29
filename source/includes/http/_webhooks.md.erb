@@ -1,5 +1,12 @@
 # Webhooks
 
+Webhooks are how REST-API supporting sites support data ‘pushing’. For example, say you wanted to get a user’s latest Twitter message. 
+Instead of constantly connecting to the twitter API every minute to check if a new message has been posted,  you can ask Twitter to update a webhook
+URL on each post. That means Twitter will contact you when there’s new data. But, as you can imagine, you need a webserver to listen for that posting.
+In this case, Adafruit IO can act as that webhook destination.
+
+Adafruit IO only supports receiving data at this time, we need a service that will publish data into a feed. 
+
 <aside class="notice">
 These data publishing webhook methods <strong>do not require authentication</strong>. That
 means you can freely use the URL from a public form without leaking your
