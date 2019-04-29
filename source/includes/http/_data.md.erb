@@ -48,6 +48,8 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 
 An array of zero or more data points.
 
+This API is paginated.
+
 
 ### Path Parameters
 
@@ -183,9 +185,18 @@ $ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds
     "name": "string"
   },
   "parameters": {
+    "start_time": "2019-02-28T16:17:09Z",
+    "end_time": "2019-04-29T16:17:09Z",
+    "resolution": 120,
+    "hours": 1440,
+    "field": "avg"
   },
-  "columns": null,
-  "data": null
+  "columns": ["date", "value"],
+  "data": [
+    [ "2019-03-01T14:00:00Z", "62.579827586206896" ],
+    [ "2019-03-02T18:00:00Z", "64.94642857142857" ],
+    [ "...", "..."]
+  ]
 }
 ```
 
