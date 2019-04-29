@@ -1,12 +1,60 @@
 # Groups
 
-Groups are a set of Feeds. They're used for publishing and reading to multiple feeds at a time. 
+> A Group Record
+
+```json
+{
+  "id": 0,
+  "name": "string",
+  "description": "string",
+  "feeds": [
+    {
+      "id": 0,
+      "name": "string",
+      "key": "string",
+      "group": {
+        "id": 0,
+        "name": "string",
+        "description": "string",
+        "created_at": "string",
+        "updated_at": "string"
+      },
+      "groups": [
+        {
+          "id": 0,
+          "name": "string",
+          "description": "string",
+          "created_at": "string",
+          "updated_at": "string"
+        }
+      ],
+      "description": "string",
+      "unit_type": "string",
+      "unit_symbol": "string",
+      "history": true,
+      "visibility": "string",
+      "license": "string",
+      "enabled": true,
+      "last_value": "string",
+      "status": "string",
+      "status_notify": true,
+      "status_timeout": 0,
+      "created_at": "string",
+      "updated_at": "string"
+    }
+  ],
+  "created_at": "string",
+  "updated_at": "string"
+}
+```
+
+Groups are a set of Feeds. They're used for publishing and reading to multiple feeds at a time.
 For example, if you are building a weather station, you would add feeds for `humidity` and `temperature` to a new `weatherstation` group.
 
 You can create, read, update, or delete group records. Every **CREATE**, **UPDATE**, or **DELETE** action on a group record counts against your rate limit.
 
 
-## All groups for current user
+## All Groups
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups</code></div>
@@ -119,7 +167,7 @@ username | string | true | a valid username string
 
 
 
-## Create a new Group
+## Create a Group
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups</code></div>
@@ -238,7 +286,7 @@ group | object | true |
 
 
 
-## Returns Group based on ID
+## Get a Group
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -350,7 +398,7 @@ group_key | string | true |
 
 
 
-## Replace an existing Group
+## Update a Group
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -469,7 +517,7 @@ group | object | true |
 
 
 
-## Delete an existing Group
+## Delete a Group
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -506,7 +554,7 @@ group_key | string | true |
 
 
 
-## Add an existing Feed to a Group
+## Add a Feed to a Group
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div>
@@ -744,7 +792,7 @@ feed_key | string | false |
 
 
 
-## All feeds for current user in a given group
+## All Feeds in a Group
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div>
