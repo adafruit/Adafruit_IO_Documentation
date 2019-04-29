@@ -251,6 +251,9 @@
             <a href="#rate-limiting" class="toc-h1 toc-link" data-title="Rate Limiting">Rate Limiting</a>
           </li>
           <li>
+            <a href="#pagination" class="toc-h1 toc-link" data-title="Pagination">Pagination</a>
+          </li>
+          <li>
             <a href="#data" class="toc-h1 toc-link" data-title="Data">Data</a>
               <ul class="toc-list-h2">
                   <li>
@@ -615,9 +618,40 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 
 <p>If you have <a href="https://io.adafruit.com/plus">upgraded to an Adafruit IO Plus account</a>, the base rate limit is  <strong>60 data points per minute</strong>.</p>
 
-<p>If you exceed this limit, a notice will be sent to the <code>{username}/throttle</code> MQTT topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account. This limit applies to all actions over the HTTP and MQTT APIs, so if you have multiple devices or clients publishing data, be sure to delay their updates enough that the total rate is below your account limit.</p>
+<p>If you exceed this limit, a notice will be sent to the <code>{username}/throttle</code> MQTT topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account. This limit applies to all <strong>Data record modification</strong> actions over the HTTP and MQTT APIs, so if you have multiple devices or clients publishing data, be sure to delay their updates enough that the total rate is below your account limit.</p>
+
+<p><strong>One data record modification</strong> is any action that creates, updates, or deletes a single Data record.</p>
+<h1 id='pagination'>Pagination</h1>
+<p>Adafruit IO’s API only returns 1000 data points at a time. To get the rest of the data (if your feed is over 1000 data points), you’ll need to “paginate” the data.</p>
+
+<p>What does this mean?</p>
+
+<blockquote>
+<p>Pagination headers:</p>
+</blockquote>
+<pre class="highlight plaintext"><code>X-Pagination-Limit: 1000
+X-Pagination-Total: 84548
+X-Pagination-Start: 2019-02-11T22:52:18.103+0000
+X-Pagination-End: 2019-02-12T16:03:00.694+0000
+X-Pagination-Count: 1000
+</code></pre>
+<p>When you perform <a href="#get-all-data-for-the-given-feed">a data query</a>, the results are always sorted newest-to-oldest and include <code>X-Pagination-*</code> headers.</p>
+
+<p>Limit (<code>X-Pagination-Limit</code>) is either the requested limit if it was included as a parameter or 1000, whichever is less. Total (<code>X-Pagination-Total</code>) is the total number of data points in the feed for the given <code>start_time</code> and <code>end_time</code>. <em>Note, this value may be up to 5 minutes behind real time.</em></p>
+
+<p>Start (<code>X-Pagination-Start</code>) is the <code>created_at</code> value on the oldest value in the result, End (<code>X-Pagination-End</code>) is the <code>created_at</code> value on the newest value in the result, and Count (<code>X-Pagination-Count</code>) is the number of data points in the current request.</p>
+
+<p>Whenever Limit and Count are both 1000 and Total is more than 1000, that’s evidence that more data is available.</p>
+
+<p>You can get the next 1000 data points by using the <code>X-Pagination-Start</code> value OR the <code>created_at</code> value of the oldest data point in the API response as the <code>end_time</code> parameter in your next request to the data API.</p>
+
+<p>When visualized on a timeline, the concept of pagination looks like this:</p>
+
+<p><img src="images/http/api-pagination.png" alt="Api pagination" /></p>
+
+<p>Note that long running, frequently updated feeds could have more than a hundred “pages” of data. If you make requests without a small delay in between, you could hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests.</p>
 <h1 id='data'>Data</h1>
-<p>Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on Adafruit IO.</p>
+<p>Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on an Adafruit IO <a href="#feeds">Feed</a>.</p>
 
 <p>You can create, read, update, or delete data records. Every <strong>CREATE</strong>, <strong>UPDATE</strong>, or <strong>DELETE</strong> action on a data record counts against your rate limit.</p>
 
@@ -653,7 +687,7 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre>
-<p>An array of data</p>
+<p>An array of zero or more data points.</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
