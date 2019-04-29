@@ -1,0 +1,115 @@
+# MQTT Data Format
+
+There are a few ways to send data to our MQTT API if you're writing your own client library.
+
+The simplest way to send values to an IO Feed topic is to just send the value. 
+For example, a temperature sensor is going to produce numeric values like `22.587`.
+If you're sending to `mosfet/feeds/photocell-one` you can use the raw number or a string. That means either `22.587` or `22.587` will be 
+accepted as a numeric value. Adafruit IO does its best to treat data as numeric values so that
+we can show you your data as a chart on an Adafruit IO dashboard and through our [Charting API](https://io.adafruit.com/api/docs/#!/Data/chartData).
+
+
+## Sending data with location
+
+To tag your data with a location value, you'll either need to wrap it in a JSON object first or send it to the special `/csv` formatted MQTT topic.
+
+## Sending JSON
+
+JSON can be sent to either the base topic or the /json topic - for example `mosfet/feeds/photocell-one` or `mosfet/feeds/photocell-one/json`.
+The proper format for location tagged JSON data is:
+
+```
+Example JSON topic object:
+
+  {
+    "value": 22.587, 
+    "lat": 38.1123,
+    "lon": -91.2325, 
+    "ele": 112
+  }
+
+```
+
+Specifically, JSON objects must include a 'value' key, and may include 'lat', 'lon', and 'ele' keys. 
+
+## Sending CSV
+
+Alternatively, you can send location tagged data to `/csv` topics. In this example, that would be the topic `mosfet/feeds/photocell-one/csv` instead of `mosfet/feeds/photocell-one`. Both store data in the same feed. The format IO expects for location tagged CSV data is VALUE, LATITUDE, LONGITUDE, ELEVATION.
+
+With the example data shown before, that means you could publish the string "22.587,38.1123,-91.2325,112" to mosfet/feeds/photocell-one/csv. to store the value "22.587" in the location latitude: 38.1123, longitude: -91.2325, elevation: 112.
+
+An example is displayed on the sidbar of this page which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.
+
+```
+  # first you'll need https://github.com/njh/ruby-mqtt
+  require 'mqtt'
+
+  username = 'test_username'
+  key      = 'not-a-real-key'
+  url      = "mqtts://#{ username }:#{ key }@io.adafruit.com"
+
+  mqtt_client = MQTT::Client.connect(url, 8883)
+
+  # simplest thing that could possibly work
+  mqtt_client.publish('test_username/feeds/example', 22.587)
+
+  # sending numbers as strings is fine, IO stores all data internally
+  # as strings anyways
+  mqtt_client.publish('test_username/feeds/example', '22.587')
+
+  # CSV formatted, no location
+  mqtt_client.publish('test_username/feeds/example/csv', '22.587')
+
+  # CSV formatted, with location
+  mqtt_client.publish('test_username/feeds/example/csv', 
+                      '22.587,38.1123,-91.2325,112')
+
+  # JSON formatted, no location 
+  mqtt_client.publish('test_username/feeds/example', '{"value":22.587}')
+  mqtt_client.publish('test_username/feeds/example/json', '{"value":22.587}')
+
+  # JSON formatted, with location
+  mqtt_client.publish('test_username/feeds/example', 
+    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
+  mqtt_client.publish('test_username/feeds/example/json',
+    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
+```
+
+
+## Sending JSON Data through Adafruit IO
+
+Because Adafruit IO supports additional features beyond a basic MQTT brokering service, such as location tagging for data points,
+the service supports data in the JSON format described above. Namely, the example JSON response on the sidebar.
+
+```
+JSON Response Format Example
+
+  {
+    "value": 22.587, 
+    "lat": 38.1123,
+    "lon": -91.2325, 
+    "ele": 112
+  }
+```
+
+This lets us store the individual value, `22.587`, and data about the value: its latitude, longitude, and elevation. Metadata!
+
+But what happens when the value you want to send is itself JSON? Good news! There are a few solutions available to you in that situation.
+
+### IO-Formatted JSON
+
+The simplest way to send JSON data to Adafruit IO is to wrap it in the format described above. For example, if instead of `22.587`, 
+I wanted to send something like, `{"sensor-1":22.587,"sensor-2":13.182}`, the "wrapped" version would look like this:
+
+```
+Example of IO-Formatted JSON
+{
+  "value": {"sensor-1":22.587,"sensor-2":13.182}, 
+  "lat": 38.1123,
+  "lon": -91.2325, 
+  "ele": 112
+}
+```
+
+It's worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.
+
