@@ -142,3 +142,43 @@ The third way you can send raw JSON data is to just send it. If Adafruit IO does
 it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, 
 sending the string `{"sensor-1":22.587,"sensor-2":13.182}` will result in `{"sensor-1":22.587,"sensor-2":13.182}` being stored in IO and sent 
 to MQTT subscribers.
+
+## Retrieving the Last Published Value
+
+MQTT is a tremendously useful protocol for building small connected devices and is relatively simple to understand and implement (if implementing networking protocols is your thing). Unfortunately, a few features of the Adafruit IO platform make it difficult for us to support the entire MQTT 3.1+ protocol specification in our broker. Specifically, one particular feature, the publish retain flag.
+
+In the MQTT protocol, setting the `retain` flag on a published message asks the MQTT broker (server) to store that message. Then any new clients which connect and subscribe to that topic will immediately receive the retained message. Retain makes writing basic MQTT-only Internet of Things clients easier, without it, a client that connects and subscribes to a feed topic has to wait until a new value is published on the feed to know what state it should be in. In the case of slowly updated feeds, there could be hours between updates which means a device that disconnects and reconnects (for example, due to power cycling or sleeping) might lose the current value for a long time between updates.
+
+Among other factors, our scale, Adafruit IO's mix of MQTT & HTTP APIs, the speed at which we’re taking in new data, and the fact that we’re already storing almost every message that is sent mean that a “simple” feature like retain becomes difficult to support without making MQTT service performance worse for everyone.
+
+Since we don’t actually store data in the broker but at a lower level and can’t support PUBLISH retain directly, we’re proposing a different solution for the retaining problem: the `/get` topic modifier.
+
+The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add `/get` to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: '\0') . IO will immediately publish, just for that client, the most recent value received on the feed.
+
+For example, let's imagine we have a device that subscribes to a counter feed: `uname/f/counter`. If we want to get the latest value, the /get topic we should publish to is `uname/f/counter/get`. After connecting, subscribing, and publishing to the /get topic, we will immediately receive a message on our `uname/f/counter` subscription with the last value that was published to the feed.
+
+If you’re using the Adafruit IO Arduino library, you can add /get support to your project in one line of code, displayed on the sidebar of this section
+
+```
+// ... from the adafruitio_01_subscribe example sketch
+AdafruitIO_Feed *counter = io.feed("counter");
+
+void setup() {
+
+  // 1. start IO connection
+  io.connect();
+
+  // 2. prepare MQTT subscription with handler function
+  counter->onMessage(handleMessage);
+
+  // 3. wait for successful connection
+  while(io.mqttStatus() < AIO_CONNECTED) {
+    delay(500);
+  }
+
+  // 4. send /get message, requesting last value
+  counter->get(); // ask Adafruit IO to resend the last value
+
+}
+// ....
+```

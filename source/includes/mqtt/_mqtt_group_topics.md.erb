@@ -4,7 +4,7 @@ You aren't limited to just Feed based MQTT topics, Adafruit IO supports grouped 
 
 The topics formats for publishing or subscribing are:
 
--   `(username)/groups/(group name or key)**`
+-   `(username)/groups/(group name or key)`
 -   `(username)/groups/(group name or key)/json`
 -   `(username)/groups/(group name or key)/csv`
 
@@ -12,9 +12,10 @@ The topics formats for publishing or subscribing are:
 
 If you use the /json or /csv endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.
 
-The JSON format IO expects looks like this:
+The JSON and CSV format IO expects are displayed on the sidebar of this section.
 
 ```
+JSON Expected Response from Adafruit IO
 {
   "feeds": {
     "key-1": "value 1",
@@ -29,19 +30,18 @@ The JSON format IO expects looks like this:
 }
 ```
 
-The CSV format IO expects is:
-
 ```
+CSV Format Expected Response from Adafruit IO
 key-1,value 1
 key-2,value 2
 key-3,value 3
 location,0.0,0.0,0.0
 ```
 
-Guidelines for publishing to group MQTT topics:
+## Guidelines for publishing to group MQTT topics:
 
--   In each payload format, "key-1" represents the respective feed's key and "value 1" represents the value you'd like to publish to that feed.
--   For CSV location values, the location is interpreted as `lat`, `lon`, `ele` and `ele` is optional / not required.
+-   In each payload format, `key-1` represents the respective feed's key and `value 1` represents the value you'd like to publish to that feed.
+-   For CSV location values, the location is interpreted as `lat`, `lon`, `ele` and `ele` is optional `/` not required.
 -   Any number of feeds present in the group may be included.
 -   Each value may be either a string or a number.
 -   If any feed key is included that does not already belong to a feed in the group, then a new feed with the given key as its name will be created.
@@ -50,9 +50,11 @@ Guidelines for publishing to group MQTT topics:
 
 If you use the /json or /csv endings when subscribing to your group MQTT topic, your data will be formatted in JSON or CSV, respectively. By default, IO publishes values in JSON format.
 
-The formats your subscription will receive are the same as the formats IO expects to receive, so in the case of JSON:
+The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are displayed on the sidebar of this section.
 
 ```
+Expected Group JSON Response
+
 {
   "feeds": {
     "key-1": "value 1",
@@ -70,19 +72,21 @@ The formats your subscription will receive are the same as the formats IO expect
 And CSV:
 
 ```
-key-1,value 1
-key-2,value 2
-key-3,value 3
-location,1.0,2.0,3.0
+Expected Group CSV Response
+
+  key-1,value 1
+  key-2,value 2
+  key-3,value 3
+  location,1.0,2.0,3.0
 ```
 
 It's important to note that you will only receive updated values for the feeds that received new values. That means if you're subscribed to  `{username}/groups/example`  and publish to  `{username}/feeds/key-1`, the subscription will receive:
 
-```
+`
 {
   "feeds": {
     "key-1": "value 1"  }
 }
-```
+`
 
 It's also worth noting that JSON subscription formats will always receive string type values, regardless of whether a string or number was published.
