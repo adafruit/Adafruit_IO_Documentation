@@ -779,7 +779,7 @@ group_feed_data | object | true |
 
 
 
-## Get all Data for a Group's Feed
+## Get Data for Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
@@ -830,7 +830,7 @@ feed_key | string | true | a valid feed key
 
 
 
-## Create Data in a Group's feed
+## Create Data in a Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
@@ -886,7 +886,7 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-## Create New Data Records in a Group's Feed
+## Create Data in a Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div>
@@ -944,7 +944,7 @@ data | array | true | A collection of data records including `value` (required) 
 
 
 
-## Send data to a feed via webhook URL.
+## Send Data to a Feed via Webhook
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
@@ -986,7 +986,7 @@ New feed data record
 
 
 
-## Send arbitrary data to a feed via webhook URL.
+## Send Arbitrary Data to Feed via Webhook
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div>
