@@ -241,12 +241,6 @@
             </li>
 
           <li>
-            <a href="#client-libraries" class="toc-h1 toc-link" data-title="Client Libraries">Client Libraries</a>
-          </li>
-          <li>
-            <a href="#rate-limiting" class="toc-h1 toc-link" data-title="Rate Limiting">Rate Limiting</a>
-          </li>
-          <li>
             <a href="#adafruit-io-mqtt-api" class="toc-h1 toc-link" data-title="Adafruit IO MQTT API">Adafruit IO MQTT API</a>
               <ul class="toc-list-h2">
                   <li>
@@ -332,35 +326,7 @@
       <div class="dark-box"></div>
 
       <div class="content">
-        <h1 id='client-libraries'>Client Libraries</h1>
-<p>We have lots of client libraries to help you get started with your project:</p>
-
-<ul>
-<li><p><a href="https://github.com/adafruit/Adafruit_IO_Arduino">Arduino C++</a></p></li>
-<li><p><a href="https://github.com/adafruit/Adafruit_CircuitPython_AdafruitIO/">CircuitPython</a></p></li>
-<li><p><a href="https://github.com/adafruit/Adafruit_IO_Python">Python</a></p></li>
-<li><p><a href="https://github.com/adafruit/io-client-ruby">Ruby</a></p></li>
-</ul>
-
-<p><strong>Note:</strong> The following two libraries use V1 of the Adafruit API which have been <a href="https://io.adafruit.com/api/docs/">deprecated</a>.</p>
-
-<ul>
-<li><p><a href="https://github.com/adafruit/adafruit-io-node-client">Node.js</a></p></li>
-<li><p><a href="https://github.com/adafruit/io-client-go">Go</a></p></li>
-</ul>
-
-<p>They&#39;re all open source, so if they don&#39;t already do what you want, you can fork them and add any feature you&#39;d like.</p>
-<h1 id='rate-limiting'>Rate Limiting</h1>
-<p>Adafruit IO imposes a rate limit on all data modification APIs to prevent excessive load on the service. If a user performs too many data create, update, or delete actions in a short period of time then the system will start rejecting requests.</p>
-
-<p>If you have a free Adafruit IO Account, the rate limit is <strong>30 data points per minute</strong>.</p>
-
-<p>If you have <a href="https://io.adafruit.com/plus">upgraded to an Adafruit IO Plus account</a>, the base rate limit is  <strong>60 data points per minute</strong>.</p>
-
-<p><strong><em>If you exceed this limit</em></strong>, a notice will be sent to the <code>{username}/throttle</code> MQTT topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account. This limit applies to all <strong>Data record modification</strong> actions over the HTTP and MQTT APIs, so if you have multiple devices or clients publishing data, be sure to delay their updates enough that the total rate is below your account limit.</p>
-
-<p><strong>One data record modification</strong> is any action that creates, updates, or deletes a single Data record.</p>
-<h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1>
+        <h1 id='adafruit-io-mqtt-api'>Adafruit IO MQTT API</h1>
 <p><a href="http://mqtt.org/">MQTT</a>, or message queue telemetry transport, is a protocol for device communication that Adafruit IO supports. Using a MQTT library or client you can publish and subscribe to a feed to send and receive feed data.</p>
 
 <p>If you aren&#39;t familiar with MQTT check out this <a href="http://www.hivemq.com/mqtt-essentials-part-1-introducing-mqtt/">introduction from the HiveMQ blog</a>. 
