@@ -1,18 +1,28 @@
 # Adafruit IO MQTT API
 
+[MQTT](http://mqtt.org/), or message queue telemetry transport, is a protocol for device communication that Adafruit IO supports. Using a MQTT library or client you can publish and subscribe to a feed to send and receive feed data.
+
+If you aren't familiar with MQTT check out this [introduction from the HiveMQ blog](http://www.hivemq.com/mqtt-essentials-part-1-introducing-mqtt/). 
+All of the subsequent posts in the [MQTT essentials series](http://www.hivemq.com/mqtt-essentials-wrap-up/) are great and worth reading too.
+
+
 ## Client Libraries
 
-* *Arduino*: [Adafruit MQTT](https://github.com/adafruit/Adafruit_MQTT_Library)
 
-* *Python*: [Adafruit IO Python](https://github.com/adafruit/Adafruit_IO_Python) includes an MQTT Client.
+To use the MQTT API that Adafruit IO exposes you'll need a MQTT client library.  For Python, Ruby, and Arduino you can use Adafruit's
+IO libraries as they include support for MQTT. For other languages or platforms look for a MQTT library that ideally supports the MQTT 3.1.1 protocol.
 
-* *CircuitPython*: Accessing the Adafruit IO MQTT API is not currently supported on this platform.
+* **Arduino**: [Adafruit MQTT](https://github.com/adafruit/Adafruit_MQTT_Library)
 
-* *MicroPython*: MicroPython devices can connect to Adafruit IO using [`uMQTT`](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple)
+* **Python**: [Adafruit IO Python](https://github.com/adafruit/Adafruit_IO_Python) includes an MQTT Client.
 
-* *Ruby*: [Adafruit IO Ruby](https://github.com/adafruit/io-client-ruby) includes an MQTT client.
+* **CircuitPython**: Accessing the Adafruit IO MQTT API is not currently supported on this platform.
 
-## Connection Details
+* **MicroPython**: MicroPython devices can connect to Adafruit IO using [uMQTT](https://github.com/micropython/micropython-lib/tree/master/umqtt.simple)
+
+* **Ruby**: [Adafruit IO Ruby](https://github.com/adafruit/io-client-ruby) includes an MQTT client.
+
+## Adafruit IO MQTT Connection Details
 
 We *strongly* recommend connecting using SSL (Port 8883) if your client allows it.
 
@@ -24,5 +34,5 @@ We *strongly* recommend connecting using SSL (Port 8883) if your client allows i
 | **Username**         | Your Adafruit IO Username |
 | **Password**         | Your Adafruit IO Key      |
 
-_Need to manually set a Client ID for your MQTT client?_ Use a unique value such as a (random GUID)[https://www.guidgenerator.com/online-guid-generator.aspx].
+_Need to manually set a Client ID for your MQTT client?_ Use a unique value such as a [random GUID](https://www.guidgenerator.com/online-guid-generator.aspx).
 
