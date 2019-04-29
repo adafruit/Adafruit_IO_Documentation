@@ -544,10 +544,10 @@ void setup() {
 
 }
 // ....
-</code></pre><h1 id='mqtt-topics'>MQTT Topics</h1>
+</code></pre><h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='mqtt-feed-topic-format'>MQTT Feed Topic Format</h2>
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
-<h2 id='mqtt-feed-topic-format'>MQTT Feed Topic Format</h2>
+
 <p><code>Your_Adafruit_IO_Username</code>/<em>feeds</em>/<code>Feed-Key</code></p>
 <h2 id='mqtt-group-topic-format'>MQTT Group Topic Format</h2>
 <p><code>Your_Adafruit_IO_Username</code>/<em>groups</em>/<code>Feed-Key</code></p>
@@ -570,7 +570,7 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 
 <p><strong>Be aware the MQTT server sends feed updates on all possible paths for a specific feed</strong>. For example, subscribing to <code>IO-Username/f/#</code> and publishing to <code>IO-Username/f/photocell-one</code> would produce messages from: <code>IO-Username/f/photocell-one</code>, <code>IO-Username/f/photocell-one/json</code>, and <code>IO-Username/f/photocell-one/csv</code>; each referring to the same updated value.  To reduce noise, <em>make sure to grab the specific topic</em> of the feed <code>/</code> format you&#39;re interested in and change your subscription to that.</p>
 
-<p>If you&#39;d like to avoid the formatted feeds (&quot;/json&quot; and &quot;/csv&quot; topics) <em>but still see all the feeds you&#39;re publishing to</em>, you can use MQTT&#39;s + wildcard in place of #. In this case, subscribing to <code>IO-Username/f/+</code> would produce output on <code>IO-Username/f/photocell-one</code>, but <em>not</em> <code>IO-Username/f/photocell-one/json</code>.</p>
+<p>If you&#39;d like to avoid the formatted feeds (<code>/json</code> and <code>/csv</code> topics) <em>but still see all the feeds you&#39;re publishing to</em>, you can use MQTT&#39;s + wildcard in place of #. In this case, subscribing to <code>IO-Username/f/+</code> would produce output on <code>IO-Username/f/photocell-one</code>, but <em>not</em> <code>IO-Username/f/photocell-one/json</code>.</p>
 <h1 id='mqtt-group-topics'>MQTT Group Topics</h1>
 <p>You aren&#39;t limited to just Feed based MQTT topics, Adafruit IO supports grouped feeds as well.  <a href="https://io.adafruit.com/api/docs/#operation/createGroupData">Similar to our HTTP group data creation API</a>, you can publish to multiple feeds or subscribe to multiple feeds through a single MQTT topic.</p>
 
@@ -582,7 +582,7 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 <li>  <code>(username)/groups/(group name or key)/csv</code></li>
 </ul>
 <h3 id='publishing-to-feeds-in-a-group'>Publishing to feeds in a group</h3>
-<p>If you use the /json or /csv endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.</p>
+<p>If you use the <code>/json</code> or <code>/csv</code> endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.</p>
 
 <p>The JSON and CSV format IO expects are displayed on the sidebar of this section.</p>
 <pre class="highlight plaintext"><code>JSON Expected Response from Adafruit IO
@@ -612,7 +612,7 @@ location,0.0,0.0,0.0
 <li>  If any feed key is included that does not already belong to a feed in the group, then a new feed with the given key as its name will be created.</li>
 </ul>
 <h3 id='subscribing-to-groups'>Subscribing to groups</h3>
-<p>If you use the /json or /csv endings when subscribing to your group MQTT topic, your data will be formatted in JSON or CSV, respectively. By default, IO publishes values in JSON format.</p>
+<p>If you use the <code>/json</code> or <code>/csv</code> endings when subscribing to your group MQTT topic, your data will be formatted in JSON or CSV, respectively. By default, IO publishes values in JSON format.</p>
 
 <p>The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are displayed on the sidebar of this section.</p>
 <pre class="highlight plaintext"><code>Expected Group JSON Response
@@ -629,9 +629,7 @@ location,0.0,0.0,0.0
     "ele": 3.0
   }
 }
-</code></pre>
-<p>And CSV:</p>
-<pre class="highlight plaintext"><code>Expected Group CSV Response
+</code></pre><pre class="highlight plaintext"><code>Expected Group CSV Response
 
   key-1,value 1
   key-2,value 2
