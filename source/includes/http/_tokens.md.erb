@@ -2,7 +2,7 @@
 
 Tokens are used for authenticating an Adafruit IO user. See the _Authentication_ page for more information about this.
 
-## All tokens for current user
+## Get All Tokens
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/tokens</code></div>
@@ -44,7 +44,7 @@ username | string | true | a valid username string
 
 
 
-## Create a new Token
+## Create Token
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/tokens</code></div>
@@ -89,7 +89,7 @@ token | object | true |
 
 
 
-## Returns Token based on ID
+## Returns Token
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/tokens/{id}</code></div>
@@ -129,7 +129,7 @@ id | string | true |
 
 
 
-## Delete an existing Token
+## Delete Token
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/tokens/{id}</code></div>

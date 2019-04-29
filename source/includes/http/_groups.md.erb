@@ -54,7 +54,7 @@ For example, if you are building a weather station, you would add feeds for `hum
 You can create, read, update, or delete group records. Every **CREATE**, **UPDATE**, or **DELETE** action on a group record counts against your rate limit.
 
 
-## All Groups
+## Get All Groups
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups</code></div>
@@ -167,7 +167,7 @@ username | string | true | a valid username string
 
 
 
-## Create a Group
+## Create Group
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups</code></div>
@@ -286,7 +286,7 @@ group | object | true |
 
 
 
-## Get a Group
+## Get Group
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -398,7 +398,7 @@ group_key | string | true |
 
 
 
-## Update a Group
+## Update Group
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -517,7 +517,7 @@ group | object | true |
 
 
 
-## Delete a Group
+## Delete Group
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/groups/{group_key}</code></div>
@@ -554,7 +554,7 @@ group_key | string | true |
 
 
 
-## Add a Feed to a Group
+## Add Feed to Group
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/add</code></div>
@@ -673,7 +673,7 @@ feed_key | string | false |
 
 
 
-## Remove a Feed from a Group
+## Remove Feed from Group
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/remove</code></div>
@@ -792,7 +792,7 @@ feed_key | string | false |
 
 
 
-## All Feeds in a Group
+## Get Group Feeds
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds</code></div>

@@ -2,7 +2,7 @@
 
 Each Adafruit IO user contains permissions which can be set and modified.
 
-## All permissions for current user and type
+## Get All Permissions
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div>
@@ -50,7 +50,7 @@ type_id | string | true |
 
 
 
-## Create a new Permission
+## Create Permission
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div>
@@ -103,7 +103,7 @@ permission | object | true |
 
 
 
-## Returns Permission based on ID
+## Returns Permission
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
@@ -150,7 +150,7 @@ id | string | true |
 
 
 
-## Replace an existing Permission
+## Replace Permission
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
@@ -204,7 +204,7 @@ permission | object | true |
 
 
 
-## Delete an existing Permission
+## Delete Permission
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
