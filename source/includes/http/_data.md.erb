@@ -6,7 +6,7 @@ You can create, read, update, or delete data records. Every **CREATE**, **UPDATE
 
 Data points belong to feeds, so every Data API call starts with a Feed URL.
 
-## Get all data for the given feed
+## Get Feed Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
@@ -76,7 +76,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Create new Data
+## Create Data
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
@@ -162,7 +162,7 @@ Parameter |   Type  |  Required |       Description
 datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
-## Chart data for current feed
+## Chart Feed Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/chart</code></div>
@@ -226,7 +226,7 @@ end_time | string | false | End time for filtering, returns records created befo
 
 
 
-## Create multiple new Data records
+## Create Multiple Data Records
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/batch</code></div>
@@ -288,7 +288,7 @@ Parameter |   Type  |  Required |       Description
 data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
-## Previous Data in Feed
+## Get Previous Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/previous</code></div>
@@ -351,13 +351,7 @@ Parameter |   Type  |  Required |       Description
 include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 
 
-
-
-
-
-
-
-## Next Data in Feed
+## Get Next Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/next</code></div>
@@ -421,7 +415,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Last Data in Feed
+## Get Last Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/last</code></div>
@@ -476,7 +470,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## First Data Record in Feed
+## Get First Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/first</code></div>
@@ -534,7 +528,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Last Data in MQTT CSV format
+## Get Last Data (CSV)
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/retain</code></div>
@@ -570,7 +564,7 @@ feed_key | string | true | a valid feed key
 
 
 
-## Returns data based on feed key
+## Return Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -632,7 +626,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Replace existing Data
+## Replace Data
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -688,7 +682,7 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-## Delete existing Data
+## Delete Data
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -728,7 +722,7 @@ id | string | true |
 
 
 
-## Create new data for multiple feeds in a group
+## Create Group Data
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/data</code></div>
@@ -785,7 +779,7 @@ group_feed_data | object | true |
 
 
 
-## All data for current feed in a specific group
+## Get all Data for a Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
@@ -836,7 +830,7 @@ feed_key | string | true | a valid feed key
 
 
 
-## Create new Data in a feed belonging to a particular group
+## Create Data in a Group's feed
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
@@ -892,7 +886,7 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-## Create multiple new Data records in a feed belonging to a particular group
+## Create New Data Records in a Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div>

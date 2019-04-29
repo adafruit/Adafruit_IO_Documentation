@@ -4,7 +4,7 @@ Dashboards allow you to visualize data and control Adafruit IO connected project
 Blocks such as charts, sliders, and buttons are available to help you quickly get your IoT project up and running without the need 
 for any custom code.
 
-## All dashboards for current user
+## All dashboards
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards</code></div>
@@ -65,7 +65,7 @@ username | string | true | a valid username string
 
 
 
-## Create a new Dashboard
+## Create a Dashboard
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards</code></div>
@@ -130,7 +130,7 @@ dashboard | object | true |
 
 
 
-## Returns Dashboard based on ID
+## Return Dashboard
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
@@ -189,7 +189,7 @@ id | string | true |
 
 
 
-## Replace an existing Dashboard
+## Replace a Dashboard
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
@@ -239,8 +239,6 @@ $ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2
 Updated dashboard
 
 
-
-
 ### Path Parameters
 
 
@@ -248,12 +246,6 @@ Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 id | string | true |
-
-
-
-
-
-
 
 
 ### Body Parameters
@@ -264,10 +256,7 @@ Parameter |   Type  |  Required |       Description
 dashboard | object | true |
 
 
-
-
-
-## Delete an existing Dashboard
+## Delete a Dashboard
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
