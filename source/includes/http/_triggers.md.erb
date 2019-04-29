@@ -10,7 +10,7 @@ or to even another feed. If so, you’ll be able to send an email notification, 
 For example, you can set up a reactive trigger to notify you when the temperature falls below a certain value.
 When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.
 
-## All triggers for current user
+## All Triggers
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers</code></div>
@@ -40,7 +40,7 @@ username | string | true | a valid username string
 
 
 
-## Create a new Trigger
+## Create a Trigger
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/triggers</code></div>
@@ -75,7 +75,7 @@ trigger | object | true |
 
 
 
-## Returns Trigger based on ID
+## Return a Trigger
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>
@@ -104,7 +104,7 @@ id | string | true |
 
 
 
-## Replace an existing Trigger
+## Replace Trigger
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>
@@ -140,7 +140,7 @@ trigger | object | true |
 
 
 
-## Delete an existing Trigger
+## Delete Trigger
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/triggers/{id}</code></div>

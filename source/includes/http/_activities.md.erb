@@ -9,7 +9,7 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 * Groups
 * Triggers
 
-## All activities for current user
+## All Activities
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span> <code class="path">/api/v2/{username}/activities</code></div>
@@ -61,42 +61,7 @@ end_time | string | false | End time for filtering, returns records created befo
 limit | integer | false | Limit the number of records returned.
 
 
-
-## All activities for current user
-
-> HTTP Request
-> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div>
-
-```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/activities
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
-```
-
-> Response Sample:
-
-```json
-```
-
-Deleted activities successfully
-
-
-### Path Parameters
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-
-
-
-## Get activities by type for current user
+## Get Activities by Type
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/activities/{type}</code></div>

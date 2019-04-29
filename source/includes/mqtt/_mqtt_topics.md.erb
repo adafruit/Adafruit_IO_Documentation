@@ -1,12 +1,14 @@
 # MQTT Topics
 
+## MQTT Feed Topic Format
+
 Adafruit IO's MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed's topic to be notified when the feed has a new value.
 
-## MQTT Feed Topic Format
 `Your_Adafruit_IO_Username`/_feeds_/`Feed-Key`
 
 ## MQTT Group Topic Format
+
 `Your_Adafruit_IO_Username`/_groups_/`Feed-Key`
 
 ## Small Topic Format for Embedded Systems
@@ -28,5 +30,5 @@ Once subscribed to the path above any change to a feed owned by `Your_Adafruit_I
 
 **Be aware the MQTT server sends feed updates on all possible paths for a specific feed**. For example, subscribing to `IO-Username/f/#` and publishing to `IO-Username/f/photocell-one` would produce messages from: `IO-Username/f/photocell-one`, `IO-Username/f/photocell-one/json`, and `IO-Username/f/photocell-one/csv`; each referring to the same updated value.  To reduce noise, _make sure to grab the specific topic_ of the feed `/` format you're interested in and change your subscription to that.
 
-If you'd like to avoid the formatted feeds ("/json" and "/csv" topics) _but still see all the feeds you're publishing to_, you can use MQTT's + wildcard in place of #. In this case, subscribing to `IO-Username/f/+` would produce output on `IO-Username/f/photocell-one`, but _not_ `IO-Username/f/photocell-one/json`.
+If you'd like to avoid the formatted feeds (`/json` and `/csv` topics) _but still see all the feeds you're publishing to_, you can use MQTT's + wildcard in place of #. In this case, subscribing to `IO-Username/f/+` would produce output on `IO-Username/f/photocell-one`, but _not_ `IO-Username/f/photocell-one/json`.
 
