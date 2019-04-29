@@ -3833,6 +3833,13 @@ For example, if you are building a weather station, you would add feeds for <cod
 </tr>
 </tbody></table>
 <h1 id='webhooks'>Webhooks</h1>
+<p>Webhooks are how REST-API supporting sites support data ‘pushing’. For example, say you wanted to get a user’s latest Twitter message. 
+Instead of constantly connecting to the twitter API every minute to check if a new message has been posted,  you can ask Twitter to update a webhook
+URL on each post. That means Twitter will contact you when there’s new data. But, as you can imagine, you need a webserver to listen for that posting.
+In this case, Adafruit IO can act as that webhook destination.</p>
+
+<p>Adafruit IO only supports receiving data at this time, we need a service that will publish data into a feed. </p>
+
 <aside class="notice">
 These data publishing webhook methods <strong>do not require authentication</strong>. That
 means you can freely use the URL from a public form without leaking your
@@ -3918,7 +3925,17 @@ authentication data.
 </span><span class="p">}</span><span class="w">
 </span></code></pre>
 <p>New feed data record.</p>
-<h1 id='triggers'>Triggers</h1><h2 id='all-triggers-for-current-user'>All triggers for current user</h2>
+<h1 id='triggers'>Triggers</h1>
+<p>Triggers are a way to do something when a certain situation occurs. There’s two kinds of triggers supported at this time: Scheduled and Reactive.</p>
+
+<p>Scheduled triggers are the simplest. They’re a little like the Feed Notifications we mentioned earlier. You can simply have a feed value emailed to 
+yourself on a set schedule.</p>
+
+<p>Reactive Triggers are much more advanced, and can integrate basic logic. At a basic level, they check if a feed value is somehow comparable to a value
+or to even another feed. If so, you’ll be able to send an email notification, post a webhook or even publish a message to another feed.
+For example, you can set up a reactive trigger to notify you when the temperature falls below a certain value.
+When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.</p>
+<h2 id='all-triggers-for-current-user'>All triggers for current user</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers</code></div></p>
@@ -5181,7 +5198,9 @@ for any custom code.</p>
 <td></td>
 </tr>
 </tbody></table>
-<h1 id='users'>Users</h1><h2 id='get-information-about-yourself'>Get information about yourself</h2>
+<h1 id='users'>Users</h1>
+<p>Adafruit IO can return information about your username, activity-level, rate-limit and current actions. </p>
+<h2 id='get-information-about-yourself'>Get information about yourself</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/user</code></div></p>
@@ -5234,7 +5253,9 @@ for any custom code.</p>
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h1 id='tokens'>Tokens</h1><h2 id='all-tokens-for-current-user'>All tokens for current user</h2>
+<h1 id='tokens'>Tokens</h1>
+<p>Tokens are used for authenticating an Adafruit IO user. See the <em>Authentication</em> page for more information about this.</p>
+<h2 id='all-tokens-for-current-user'>All tokens for current user</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/tokens</code></div></p>
