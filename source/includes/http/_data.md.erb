@@ -1,6 +1,6 @@
 # Data
 
-Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on Adafruit IO.
+Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on an Adafruit IO <a href="#feeds">Feed</a>.
 
 You can create, read, update, or delete data records. Every **CREATE**, **UPDATE**, or **DELETE** action on a data record counts against your rate limit.
 
@@ -46,7 +46,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 ]
 ```
 
-An array of data
+An array of zero or more data points.
 
 
 ### Path Parameters

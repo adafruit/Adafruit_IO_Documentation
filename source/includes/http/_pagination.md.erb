@@ -1,0 +1,31 @@
+# Pagination
+
+Adafruit IO’s API only returns 1000 data points at a time. To get the rest of the data (if your feed is over 1000 data points), you’ll need to “paginate” the data.
+
+What does this mean?
+
+> Pagination headers:
+
+```
+X-Pagination-Limit: 1000
+X-Pagination-Total: 84548
+X-Pagination-Start: 2019-02-11T22:52:18.103+0000
+X-Pagination-End: 2019-02-12T16:03:00.694+0000
+X-Pagination-Count: 1000
+```
+
+When you perform <a href="#get-all-data-for-the-given-feed">a data query</a>, the results are always sorted newest-to-oldest and include `X-Pagination-*` headers.
+
+Limit (`X-Pagination-Limit`) is either the requested limit if it was included as a parameter or 1000, whichever is less. Total (`X-Pagination-Total`) is the total number of data points in the feed for the given `start_time` and `end_time`. *Note, this value may be up to 5 minutes behind real time.*
+
+Start (`X-Pagination-Start`) is the `created_at` value on the oldest value in the result, End (`X-Pagination-End`) is the `created_at` value on the newest value in the result, and Count (`X-Pagination-Count`) is the number of data points in the current request.
+
+Whenever Limit and Count are both 1000 and Total is more than 1000, that’s evidence that more data is available.
+
+You can get the next 1000 data points by using the `X-Pagination-Start` value OR the `created_at` value of the oldest data point in the API response as the `end_time` parameter in your next request to the data API.
+
+When visualized on a timeline, the concept of pagination looks like this:
+
+<%= image_tag "images/http/api-pagination.png" %>
+
+Note that long running, frequently updated feeds could have more than a hundred “pages” of data. If you make requests without a small delay in between, you could hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests.
