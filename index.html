@@ -241,7 +241,7 @@
             <a href="#adafruit-io" class="toc-h1 toc-link" data-title="Adafruit IO">Adafruit IO</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#about-the-adafruit-io-api-documentation" class="toc-h2 toc-link" data-title="About the Adafruit IO API Documentation">About the Adafruit IO API Documentation</a>
+                    <a href="#about-the-api-docs" class="toc-h2 toc-link" data-title="About the API Docs">About the API Docs</a>
                   </li>
               </ul>
           </li>
@@ -249,7 +249,7 @@
             <a href="#authentication" class="toc-h1 toc-link" data-title="Authentication">Authentication</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#including-the-adafruit-io-key-in-requests" class="toc-h2 toc-link" data-title="Including the Adafruit IO Key in requests">Including the Adafruit IO Key in requests</a>
+                    <a href="#including-an-adafruit-io-key" class="toc-h2 toc-link" data-title="Including an Adafruit IO Key">Including an Adafruit IO Key</a>
                   </li>
               </ul>
           </li>
@@ -544,7 +544,7 @@
       <div class="content">
         <h1 id='adafruit-io'>Adafruit IO</h1>
 <p>The Adafruit IO HTTP API provides access to your Adafruit IO data from any programming language or hardware environment that can speak HTTP. The easiest way to get started is with an <a href="https://learn.adafruit.com/series/adafruit-io-basics">Adafruit Learning Guide</a> and a simple Internet of Things capable device like the <a href="https://www.adafruit.com/product/2821">Feather Huzzah</a> or a more complicated one like the <a href="https://www.adafruit.com/product/4116">PyPortal</a>.</p>
-<h2 id='about-the-adafruit-io-api-documentation'>About the Adafruit IO API Documentation</h2>
+<h2 id='about-the-api-docs'>About the API Docs</h2>
 <p>This API documentation is hosted on GitHub Pages and is available <a href="https://github.com/adafruit/Adafruit_IO_Documentation">on GitHub</a>.</p>
 
 <p><strong>Spotted something incorrect or broken?</strong> <a href="https://github.com/adafruit/Adafruit_IO_Documentation/issues/new">Click here to file an issue on the repository</a></p>
@@ -562,7 +562,7 @@
 <p>Now you can copy the key directly from the information form that pops up, or copy one of the code samples that includes your key and username together.</p>
 
 <p><img src="images/authentication/aio-key-modal.png" alt="Aio key modal" /></p>
-<h2 id='including-the-adafruit-io-key-in-requests'>Including the Adafruit IO Key in requests</h2><pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: b780002b85d6411ca0ad9f9c60195f72"</span> <span class="se">\</span>
+<h2 id='including-an-adafruit-io-key'>Including an Adafruit IO Key</h2><pre class="highlight shell tab-shell"><code>curl -H <span class="s2">"X-AIO-Key: b780002b85d6411ca0ad9f9c60195f72"</span> <span class="se">\</span>
     https://io.adafruit.com/api/v2/test_username/feeds
 
 <span class="c"># or</span>

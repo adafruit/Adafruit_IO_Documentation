@@ -247,12 +247,12 @@
                     <a href="#client-libraries" class="toc-h2 toc-link" data-title="Client Libraries">Client Libraries</a>
                   </li>
                   <li>
-                    <a href="#adafruit-io-mqtt-connection-details" class="toc-h2 toc-link" data-title="Adafruit IO MQTT Connection Details">Adafruit IO MQTT Connection Details</a>
+                    <a href="#mqtt-connection-details" class="toc-h2 toc-link" data-title="MQTT Connection Details">MQTT Connection Details</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#mqtt-api-qos" class="toc-h1 toc-link" data-title="MQTT API QoS">MQTT API QoS</a>
+            <a href="#mqtt-qos" class="toc-h1 toc-link" data-title="MQTT QoS">MQTT QoS</a>
           </li>
           <li>
             <a href="#mqtt-api-rate-limiting" class="toc-h1 toc-link" data-title="MQTT API Rate Limiting">MQTT API Rate Limiting</a>
@@ -273,7 +273,7 @@
                     <a href="#sending-json-data-through-adafruit-io" class="toc-h2 toc-link" data-title="Sending JSON Data through Adafruit IO">Sending JSON Data through Adafruit IO</a>
                   </li>
                   <li>
-                    <a href="#retrieving-the-last-published-value" class="toc-h2 toc-link" data-title="Retrieving the Last Published Value">Retrieving the Last Published Value</a>
+                    <a href="#retrieving-a-value" class="toc-h2 toc-link" data-title="Retrieving a Value">Retrieving a Value</a>
                   </li>
               </ul>
           </li>
@@ -281,27 +281,27 @@
             <a href="#mqtt-topics" class="toc-h1 toc-link" data-title="MQTT Topics">MQTT Topics</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#mqtt-feed-topic-format" class="toc-h2 toc-link" data-title="MQTT Feed Topic Format">MQTT Feed Topic Format</a>
+                    <a href="#feed-topic-format" class="toc-h2 toc-link" data-title="Feed Topic Format">Feed Topic Format</a>
                   </li>
                   <li>
-                    <a href="#mqtt-group-topic-format" class="toc-h2 toc-link" data-title="MQTT Group Topic Format">MQTT Group Topic Format</a>
+                    <a href="#group-topic-format" class="toc-h2 toc-link" data-title="Group Topic Format">Group Topic Format</a>
                   </li>
                   <li>
-                    <a href="#small-topic-format-for-embedded-systems" class="toc-h2 toc-link" data-title="Small Topic Format for Embedded Systems">Small Topic Format for Embedded Systems</a>
+                    <a href="#small-topic-format" class="toc-h2 toc-link" data-title="Small Topic Format">Small Topic Format</a>
                   </li>
                   <li>
-                    <a href="#using-a-mqtt-wildcard" class="toc-h2 toc-link" data-title="Using a MQTT Wildcard">Using a MQTT Wildcard</a>
+                    <a href="#using-a-wildcard" class="toc-h2 toc-link" data-title="Using a Wildcard">Using a Wildcard</a>
                   </li>
               </ul>
           </li>
           <li>
-            <a href="#mqtt-group-topics" class="toc-h1 toc-link" data-title="MQTT Group Topics">MQTT Group Topics</a>
+            <a href="#group-topics" class="toc-h1 toc-link" data-title="Group Topics">Group Topics</a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#publishing-to-feeds-in-a-group" class="toc-h2 toc-link" data-title="Publishing to feeds in a group">Publishing to feeds in a group</a>
+                    <a href="#publish-to-feeds-in-a-group" class="toc-h2 toc-link" data-title="Publish to Feeds in a Group">Publish to Feeds in a Group</a>
                   </li>
                   <li>
-                    <a href="#guidelines-for-publishing-to-group-mqtt-topics" class="toc-h2 toc-link" data-title="Guidelines for publishing to group MQTT topics:">Guidelines for publishing to group MQTT topics:</a>
+                    <a href="#group-guidelines" class="toc-h2 toc-link" data-title="Group Guidelines">Group Guidelines</a>
                   </li>
               </ul>
           </li>
@@ -342,7 +342,7 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 <li><p><strong>MicroPython</strong>: MicroPython devices can connect to Adafruit IO using <a href="https://github.com/micropython/micropython-lib/tree/master/umqtt.simple">uMQTT</a></p></li>
 <li><p><strong>Ruby</strong>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
 </ul>
-<h2 id='adafruit-io-mqtt-connection-details'>Adafruit IO MQTT Connection Details</h2>
+<h2 id='mqtt-connection-details'>MQTT Connection Details</h2>
 <p>We <em>strongly</em> recommend connecting using SSL (Port 8883) if your client allows it.</p>
 
 <table><thead>
@@ -374,7 +374,7 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 </tbody></table>
 
 <p><em>Need to manually set a Client ID for your MQTT client?</em> Use a unique value such as a <a href="https://www.guidgenerator.com/online-guid-generator.aspx">random GUID</a>.</p>
-<h1 id='mqtt-api-qos'>MQTT API QoS</h1>
+<h1 id='mqtt-qos'>MQTT QoS</h1>
 <p>One feature of MQTT is the ability to specify a QoS, or quality of service, level when publishing feed data.  This allows an application to confirm that its data has been sucessfully published.</p>
 
 <p>If you aren&#39;t familiar with MQTT QoS levels <a href="http://www.hivemq.com/mqtt-essentials-part-6-mqtt-quality-of-service-levels/">be sure to read this great blog post</a> explaining their meaning.</p>
@@ -498,7 +498,7 @@ If you&#39;re using something like javascript&#39;s <code>JSON.stringify</code> 
 it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, 
 sending the string <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> will result in <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> being stored in IO and sent 
 to MQTT subscribers.</p>
-<h2 id='retrieving-the-last-published-value'>Retrieving the Last Published Value</h2>
+<h2 id='retrieving-a-value'>Retrieving a Value</h2>
 <p>MQTT is a tremendously useful protocol for building small connected devices and is relatively simple to understand and implement
 (if implementing networking protocols is your thing). Unfortunately, a few features of the Adafruit IO platform make it difficult for us to 
 support the entire MQTT 3.1+ protocol specification in our broker. Specifically, one particular feature, the publish retain flag.</p>
@@ -544,21 +544,21 @@ void setup() {
 
 }
 // ....
-</code></pre><h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='mqtt-feed-topic-format'>MQTT Feed Topic Format</h2>
+</code></pre><h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='feed-topic-format'>Feed Topic Format</h2>
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
 
 <p><code>Your_Adafruit_IO_Username</code>/<em>feeds</em>/<code>Feed-Key</code></p>
-<h2 id='mqtt-group-topic-format'>MQTT Group Topic Format</h2>
+<h2 id='group-topic-format'>Group Topic Format</h2>
 <p><code>Your_Adafruit_IO_Username</code>/<em>groups</em>/<code>Feed-Key</code></p>
-<h2 id='small-topic-format-for-embedded-systems'>Small Topic Format for Embedded Systems</h2>
+<h2 id='small-topic-format'>Small Topic Format</h2>
 <p>If you&#39;re using an embedded system and need to conserve space, use the <code>/f/</code> or <code>/g/</code> topic formats:</p>
 
 <ul>
 <li><p><code>Your-AdafruitIO_Username</code>/<em>g</em>/<code>Feed-Key</code></p></li>
 <li><p><code>Your_Adafruit_IO_Username</code>/<em>f</em>/<code>Feed-Key</code></p></li>
 </ul>
-<h2 id='using-a-mqtt-wildcard'>Using a MQTT Wildcard</h2>
+<h2 id='using-a-wildcard'>Using a Wildcard</h2>
 <p>You can also subscribe to the parent &#39;feeds&#39; path to be notified when any owned feed changes using MQTT&#39;s <code>#</code> wildcard character.  For example, the user could subscribe to either:</p>
 
 <ul>
@@ -571,7 +571,7 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 <p><strong>Be aware the MQTT server sends feed updates on all possible paths for a specific feed</strong>. For example, subscribing to <code>IO-Username/f/#</code> and publishing to <code>IO-Username/f/photocell-one</code> would produce messages from: <code>IO-Username/f/photocell-one</code>, <code>IO-Username/f/photocell-one/json</code>, and <code>IO-Username/f/photocell-one/csv</code>; each referring to the same updated value.  To reduce noise, <em>make sure to grab the specific topic</em> of the feed <code>/</code> format you&#39;re interested in and change your subscription to that.</p>
 
 <p>If you&#39;d like to avoid the formatted feeds (<code>/json</code> and <code>/csv</code> topics) <em>but still see all the feeds you&#39;re publishing to</em>, you can use MQTT&#39;s + wildcard in place of #. In this case, subscribing to <code>IO-Username/f/+</code> would produce output on <code>IO-Username/f/photocell-one</code>, but <em>not</em> <code>IO-Username/f/photocell-one/json</code>.</p>
-<h1 id='mqtt-group-topics'>MQTT Group Topics</h1>
+<h1 id='group-topics'>Group Topics</h1>
 <p>You aren&#39;t limited to just Feed based MQTT topics, Adafruit IO supports grouped feeds as well.  <a href="https://io.adafruit.com/api/docs/#operation/createGroupData">Similar to our HTTP group data creation API</a>, you can publish to multiple feeds or subscribe to multiple feeds through a single MQTT topic.</p>
 
 <p>The topics formats for publishing or subscribing are:</p>
@@ -581,7 +581,7 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 <li>  <code>(username)/groups/(group name or key)/json</code></li>
 <li>  <code>(username)/groups/(group name or key)/csv</code></li>
 </ul>
-<h3 id='publishing-to-feeds-in-a-group'>Publishing to feeds in a group</h3>
+<h3 id='publish-to-feeds-in-a-group'>Publish to Feeds in a Group</h3>
 <p>If you use the <code>/json</code> or <code>/csv</code> endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.</p>
 
 <p>The JSON and CSV format IO expects are displayed on the sidebar of this section.</p>
@@ -603,7 +603,7 @@ key-1,value 1
 key-2,value 2
 key-3,value 3
 location,0.0,0.0,0.0
-</code></pre><h2 id='guidelines-for-publishing-to-group-mqtt-topics'>Guidelines for publishing to group MQTT topics:</h2>
+</code></pre><h2 id='group-guidelines'>Group Guidelines</h2>
 <ul>
 <li>  In each payload format, <code>key-1</code> represents the respective feed&#39;s key and <code>value 1</code> represents the value you&#39;d like to publish to that feed.</li>
 <li>  For CSV location values, the location is interpreted as <code>lat</code>, <code>lon</code>, <code>ele</code> and <code>ele</code> is optional <code>/</code> not required.</li>
