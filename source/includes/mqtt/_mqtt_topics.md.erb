@@ -1,17 +1,17 @@
 # MQTT Topics
 
-## MQTT Feed Topic Format
+## Feed Topic Format
 
 Adafruit IO's MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed's topic to be notified when the feed has a new value.
 
 `Your_Adafruit_IO_Username`/_feeds_/`Feed-Key`
 
-## MQTT Group Topic Format
+## Group Topic Format
 
 `Your_Adafruit_IO_Username`/_groups_/`Feed-Key`
 
-## Small Topic Format for Embedded Systems
+## Small Topic Format
 
 If you're using an embedded system and need to conserve space, use the `/f/` or `/g/` topic formats:
 
@@ -19,7 +19,7 @@ If you're using an embedded system and need to conserve space, use the `/f/` or 
 
 * `Your_Adafruit_IO_Username`/_f_/`Feed-Key`
 
-## Using a MQTT Wildcard
+## Using a Wildcard
 
 You can also subscribe to the parent 'feeds' path to be notified when any owned feed changes using MQTT's `#` wildcard character.  For example, the user could subscribe to either:
 

@@ -1,4 +1,4 @@
-# MQTT Group Topics
+# Group Topics
 
 You aren't limited to just Feed based MQTT topics, Adafruit IO supports grouped feeds as well.  [Similar to our HTTP group data creation API](https://io.adafruit.com/api/docs/#operation/createGroupData), you can publish to multiple feeds or subscribe to multiple feeds through a single MQTT topic.
 
@@ -8,7 +8,7 @@ The topics formats for publishing or subscribing are:
 -   `(username)/groups/(group name or key)/json`
 -   `(username)/groups/(group name or key)/csv`
 
-### Publishing to feeds in a group
+### Publish to Feeds in a Group
 
 If you use the `/json` or `/csv` endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.
 
@@ -38,7 +38,7 @@ key-3,value 3
 location,0.0,0.0,0.0
 ```
 
-## Guidelines for publishing to group MQTT topics:
+## Group Guidelines
 
 -   In each payload format, `key-1` represents the respective feed's key and `value 1` represents the value you'd like to publish to that feed.
 -   For CSV location values, the location is interpreted as `lat`, `lon`, `ele` and `ele` is optional `/` not required.
