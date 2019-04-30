@@ -24,13 +24,10 @@ Keys are for computers.
 
 You tell the computer the name, and it will tell you the key.
 
-**When  using  Adafruit  IO, you'll want to tell the client (the computer) the feed's **key** instead of the feed name.**
+When  using  Adafruit  IO, you'll want to tell the client (the computer) the feed's **key** instead of the feed's **name**.
 
-For more information about this topic:
-
-https://learn.adafruit.com/naming-things-in-adafruit-io/introduction
-
-https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds
+For more information about this topic:, visit [the learn guide for feeds](https://learn.adafruit.com/naming-things-in-adafruit-io/introduction)
+or the [IO Development blog post about naming feeds](https://io.adafruit.com/blog/tips/2016/07/14/naming-feeds).
 
 
 ## Webhook Receivers
@@ -46,6 +43,6 @@ If you want to receive the whole contents of webhook events--for example, when r
 
 If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add `/notify` to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message "ping".
 
-## Sending floating point data to Adafruit IO
+## Floating Point Data
 
 If you're sending `3.1415` and only want to send `3.14` - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. 
