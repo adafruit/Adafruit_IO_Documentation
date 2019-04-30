@@ -34,3 +34,37 @@ blockquote {
 }
 
 
+.toc-h1.toc-link {
+  .menu-arrow {
+    padding: 5px 0;
+    margin-right: -6px;
+    float: right;
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+
+    display: flex;
+    justify-content: center;
+    -ms-flex-align: center;
+    -webkit-align-items: center;
+    -webkit-box-align: center;
+    align-items: center;
+
+    svg {
+      display: block;
+      fill: #cccccc;
+    }
+  }
+
+  // &:after {
+  //   content: ' \0003E';
+  // }
+  &.active, &.active-parent {
+    .menu-arrow {
+      svg {
+        // NOTE: do not animate, it's ugly
+        transform: rotateZ(90deg);
+      }
+    }
+  }
+}
