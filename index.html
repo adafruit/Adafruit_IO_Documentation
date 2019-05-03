@@ -278,7 +278,19 @@
           <li>
             <a href="#pagination" class="toc-h1 toc-link" data-title="Pagination">
               Pagination
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
             </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#pagination-headers" class="toc-h2 toc-link" data-title="Pagination Headers">Pagination Headers</a>
+                  </li>
+                  <li>
+                    <a href="#the-link-header" class="toc-h2 toc-link" data-title="The Link Header">The Link Header</a>
+                  </li>
+              </ul>
           </li>
           <li>
             <a href="#data" class="toc-h1 toc-link" data-title="Data">
@@ -692,34 +704,40 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 
 <p><strong>One data record modification</strong> is any action that creates, updates, or deletes a single Data record.</p>
 <h1 id='pagination'>Pagination</h1>
-<p>Adafruit IO’s API only returns 1000 data points at a time. To get the rest of the data (if your feed is over 1000 data points), you’ll need to “paginate” the data.</p>
+<p>Adafruit IO’s API returns at most 1000 data points at a time. To get more data if your feed is over 1000 data points, you’ll need to “paginate” the data.</p>
 
 <p>What does this mean?</p>
 
-<blockquote>
-<p>Pagination headers:</p>
-</blockquote>
-<pre class="highlight plaintext"><code>X-Pagination-Limit: 1000
-X-Pagination-Total: 84548
-X-Pagination-Start: 2019-02-11T22:52:18.103+0000
-X-Pagination-End: 2019-02-12T16:03:00.694+0000
-X-Pagination-Count: 1000
+<p>When you perform <a href="#get-all-data-for-the-given-feed">an HTTP data GET qbuery</a>, the results are always sorted newest-to-oldest and include 5 <code>X-Pagination-*</code> headers and <a href="https://tools.ietf.org/html/rfc5988#section-5">the Link header field</a> in the response. You can see an example of the headers on the right.</p>
+<h2 id='pagination-headers'>Pagination Headers</h2><pre class="highlight yaml tab-yaml"><code><span class="na">X-Pagination-Count</span><span class="pi">:</span> <span class="s">250</span>
+<span class="na">X-Pagination-Limit</span><span class="pi">:</span> <span class="s">250</span>
+<span class="na">X-Pagination-Total</span><span class="pi">:</span> <span class="s">83027</span>
+<span class="na">X-Pagination-Start</span><span class="pi">:</span>
+<span class="na">X-Pagination-End</span><span class="pi">:</span> <span class="s">2019-05-03T17:35:13.637+0000</span>
+<span class="na">Link</span><span class="pi">:</span> <span class="s">&lt;https://io.adafruit.com/api/v2/abachman/feeds/humidity/data?end_time=2019-05-03+17%3A35%3A13+UTC&amp;limit=250&gt;;rel="next", &lt;https://io.adafruit.com/api/v2/abachman/feeds/humidity/data?before=eyJ0aW1lX2lkIjoiMEU1M043N0syUjdUR1Y3MEY3UjJFUVlRVlkiLCJmZWVkX2lkIjoiNjE3MzcwLjAifQ%3D%3D&amp;end_time=2019-05-03+17%3A35%3A13+UTC&amp;limit=250&gt;</span>
 </code></pre>
-<p>When you perform <a href="#get-all-data-for-the-given-feed">a data query</a>, the results are always sorted newest-to-oldest and include <code>X-Pagination-*</code> headers.</p>
+<ul>
+<li><strong>Count</strong> (<code>X-Pagination-Count</code>) is the number of data points in the current request.</li>
+<li><strong>Limit</strong> (<code>X-Pagination-Limit</code>) is either the requested limit if it was included as a parameter or 1000, whichever is less.</li>
+<li><strong>Total</strong> (<code>X-Pagination-Total</code>) is the total number of data points in the feed for the given <code>start_time</code> and <code>end_time</code>. <em>Note, this value may be up to 5 minutes behind real time.</em></li>
+<li><strong>Start</strong> (<code>X-Pagination-Start</code>) is an ISO-8601 formatted date value based on the <code>start_time</code> parameter in the original request, if one was given.</li>
+<li><strong>End</strong> (<code>X-Pagination-End</code>) is an ISO-8601 formatted date value based either on the <code>end_time</code> parameter from the original request or the time when the original request was made.</li>
+<li><strong>Link</strong> is a set of one or more URLs that point you to related resources.</li>
+</ul>
 
-<p>Limit (<code>X-Pagination-Limit</code>) is either the requested limit if it was included as a parameter or 1000, whichever is less. Total (<code>X-Pagination-Total</code>) is the total number of data points in the feed for the given <code>start_time</code> and <code>end_time</code>. <em>Note, this value may be up to 5 minutes behind real time.</em></p>
+<p>Whenever <strong>Limit</strong> and <strong>Count</strong> are both 1000 and <strong>Total</strong> is more than 1000, that’s evidence that more data is available. That&#39;s where the <strong>Link</strong> (<code>Link</code>) header comes in.</p>
+<h2 id='the-link-header'>The Link Header</h2>
+<p>For Adafruit IO <strong>Link</strong> always contains at least one URL inside angle brackets, that&#39;s the link to the page of data you are currently looking at. In the example above, the first URL is <code>https://io.adafruit.us/api/v2/abachman/feeds/example.counter-1/data?end_time=2019-05-02+22%3A33%3A22+UTC&amp;limit=250</code>. The first URL given in the <strong>Link</strong> header can be used to request the same data set again in the future. Even if your original request didn&#39;t include any parameters, the <strong>Link</strong> URL will include a <code>start_time</code> parameter that reflects the time at which you made the request. This is how we can make sure you can request the same data repeatedly.</p>
 
-<p>Start (<code>X-Pagination-Start</code>) is the <code>created_at</code> value on the oldest value in the result, End (<code>X-Pagination-End</code>) is the <code>created_at</code> value on the newest value in the result, and Count (<code>X-Pagination-Count</code>) is the number of data points in the current request.</p>
-
-<p>Whenever Limit and Count are both 1000 and Total is more than 1000, that’s evidence that more data is available.</p>
-
-<p>You can get the next 1000 data points by using the <code>X-Pagination-Start</code> value OR the <code>created_at</code> value of the oldest data point in the API response as the <code>end_time</code> parameter in your next request to the data API.</p>
+<p>The example <strong>Link</strong> value above also includes a <em>next</em> section: <code>rel=&quot;next&quot;, &lt;https://io.adafruit.us/api/v2/abachman/feeds/example.counter-1/data?before=eyJ0aW1lX2lkIjoiMEU0V0RWSk1SNlgxNUgxV0FSR0c2SzFIRUgiLCJmZWVkX2lkIjoiNzMuMCJ9&amp;end_time=2019-05-02+22%3A33%3A22+UTC&amp;limit=250&gt;</code>. The <code>rel=&quot;next&quot;</code> part means the URL that follows is a link to the <em>next page</em> of data. As long as there is more data available, the <strong>Link</strong> header will include a <code>rel=&quot;next&quot;</code> URL. It updates on each request, so you can page through data by making a request, parsing the <strong>Link</strong> header to get a next URL, and then using that URL to make another request. If your initial request includes <code>end_time</code>, <code>start_time</code>, or <code>limit</code> parameters, those parameters will be included in the <code>rel=&quot;next&quot;</code> URL. Note that since data request are always sorted by descending <code>created_at</code> date (newest first, oldest last), the next page of data is always the next older page of data.</p>
 
 <p>When visualized on a timeline, the concept of pagination looks like this:</p>
 
 <p><img src="images/http/api-pagination.png" alt="Api pagination" /></p>
 
-<p>Note that long running, frequently updated feeds could have more than a hundred “pages” of data. If you make requests without a small delay in between, you could hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests.</p>
+<p>Note that long running, frequently updated feeds could have more than a hundred pages of data. In the example above, with a limit of 250 records, it would take 330 requests to get all the data. If you make requests without a small delay in between, you will hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests and request the largest size permitted, right now that&#39;s 1000 records.</p>
+
+<p>If your goal is to store and study the data offline, though, you would be better off downloading the whole feed using the Download button built into Adafruit IO on the web.</p>
 <h1 id='data'>Data</h1>
 <p>Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on an Adafruit IO <a href="#feeds">Feed</a>.</p>
 
@@ -758,18 +776,6 @@ X-Pagination-Count: 1000
 </span><span class="p">]</span><span class="w">
 </span></code></pre><h3 id='response-parameters'>Response Parameters</h3>
 <p>An array of zero or more data points.</p>
-
-<table><thead>
-<tr>
-<th>Response Type</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>an array of zero or more data points</td>
-<td>zero or more data points</td>
-</tr>
-</tbody></table>
 
 <p>This API is paginated.</p>
 <h3 id='path-parameters'>Path Parameters</h3>
@@ -826,6 +832,12 @@ X-Pagination-Count: 1000
 <td>string</td>
 <td>false</td>
 <td>List of Data record fields to include in response as comma separated list. Acceptable values are: <code>value</code>, <code>lat</code>, <code>lon</code>, <code>ele</code>, <code>id</code>, and <code>created_at</code>.</td>
+</tr>
+<tr>
+<td>before</td>
+<td>string</td>
+<td>false</td>
+<td>System generated token used to produce the next page of data. See <a href="#the-link-header">The Link Header</a> for details.</td>
 </tr>
 </tbody></table>
 <h2 id='create-data'>Create Data</h2>
