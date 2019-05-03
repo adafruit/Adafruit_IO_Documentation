@@ -56,9 +56,6 @@ blockquote {
     }
   }
 
-  // &:after {
-  //   content: ' \0003E';
-  // }
   &.active, &.active-parent {
     .menu-arrow {
       svg {

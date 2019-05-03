@@ -1,31 +1,42 @@
+
 # Pagination
 
-Adafruit IO’s API only returns 1000 data points at a time. To get the rest of the data (if your feed is over 1000 data points), you’ll need to “paginate” the data.
+Adafruit IO’s API returns at most 1000 data points at a time. To get more data if your feed is over 1000 data points, you’ll need to “paginate” the data.
 
 What does this mean?
 
-> Pagination headers:
+When you perform <a href="#get-all-data-for-the-given-feed">an HTTP data GET qbuery</a>, the results are always sorted newest-to-oldest and include 5 `X-Pagination-*` headers and [the Link header field](https://tools.ietf.org/html/rfc5988#section-5) in the response. You can see an example of the headers on the right.
 
+## Pagination Headers
+
+```yaml
+X-Pagination-Count: 250
+X-Pagination-Limit: 250
+X-Pagination-Total: 83027
+X-Pagination-Start:
+X-Pagination-End: 2019-05-03T17:35:13.637+0000
+Link: <https://io.adafruit.com/api/v2/abachman/feeds/humidity/data?end_time=2019-05-03+17%3A35%3A13+UTC&limit=250>;rel="next", <https://io.adafruit.com/api/v2/abachman/feeds/humidity/data?before=eyJ0aW1lX2lkIjoiMEU1M043N0syUjdUR1Y3MEY3UjJFUVlRVlkiLCJmZWVkX2lkIjoiNjE3MzcwLjAifQ%3D%3D&end_time=2019-05-03+17%3A35%3A13+UTC&limit=250>
 ```
-X-Pagination-Limit: 1000
-X-Pagination-Total: 84548
-X-Pagination-Start: 2019-02-11T22:52:18.103+0000
-X-Pagination-End: 2019-02-12T16:03:00.694+0000
-X-Pagination-Count: 1000
-```
 
-When you perform <a href="#get-all-data-for-the-given-feed">a data query</a>, the results are always sorted newest-to-oldest and include `X-Pagination-*` headers.
+* **Count** (`X-Pagination-Count`) is the number of data points in the current request.
+* **Limit** (`X-Pagination-Limit`) is either the requested limit if it was included as a parameter or 1000, whichever is less.
+* **Total** (`X-Pagination-Total`) is the total number of data points in the feed for the given `start_time` and `end_time`. *Note, this value may be up to 5 minutes behind real time.*
+* **Start** (`X-Pagination-Start`) is an ISO-8601 formatted date value based on the `start_time` parameter in the original request, if one was given.
+* **End** (`X-Pagination-End`) is an ISO-8601 formatted date value based either on the `end_time` parameter from the original request or the time when the original request was made.
+* **Link** is a set of one or more URLs that point you to related resources.
 
-Limit (`X-Pagination-Limit`) is either the requested limit if it was included as a parameter or 1000, whichever is less. Total (`X-Pagination-Total`) is the total number of data points in the feed for the given `start_time` and `end_time`. *Note, this value may be up to 5 minutes behind real time.*
+Whenever **Limit** and **Count** are both 1000 and **Total** is more than 1000, that’s evidence that more data is available. That's where the **Link** (`Link`) header comes in.
 
-Start (`X-Pagination-Start`) is the `created_at` value on the oldest value in the result, End (`X-Pagination-End`) is the `created_at` value on the newest value in the result, and Count (`X-Pagination-Count`) is the number of data points in the current request.
+## The Link Header
 
-Whenever Limit and Count are both 1000 and Total is more than 1000, that’s evidence that more data is available.
+For Adafruit IO **Link** always contains at least one URL inside angle brackets, that's the link to the page of data you are currently looking at. In the example above, the first URL is `https://io.adafruit.us/api/v2/abachman/feeds/example.counter-1/data?end_time=2019-05-02+22%3A33%3A22+UTC&limit=250`. The first URL given in the **Link** header can be used to request the same data set again in the future. Even if your original request didn't include any parameters, the **Link** URL will include a `start_time` parameter that reflects the time at which you made the request. This is how we can make sure you can request the same data repeatedly.
 
-You can get the next 1000 data points by using the `X-Pagination-Start` value OR the `created_at` value of the oldest data point in the API response as the `end_time` parameter in your next request to the data API.
+The example **Link** value above also includes a *next* section: `rel="next", <https://io.adafruit.us/api/v2/abachman/feeds/example.counter-1/data?before=eyJ0aW1lX2lkIjoiMEU0V0RWSk1SNlgxNUgxV0FSR0c2SzFIRUgiLCJmZWVkX2lkIjoiNzMuMCJ9&end_time=2019-05-02+22%3A33%3A22+UTC&limit=250>`. The `rel="next"` part means the URL that follows is a link to the *next page* of data. As long as there is more data available, the **Link** header will include a `rel="next"` URL. It updates on each request, so you can page through data by making a request, parsing the **Link** header to get a next URL, and then using that URL to make another request. If your initial request includes `end_time`, `start_time`, or `limit` parameters, those parameters will be included in the `rel="next"` URL. Note that since data request are always sorted by descending `created_at` date (newest first, oldest last), the next page of data is always the next older page of data.
 
 When visualized on a timeline, the concept of pagination looks like this:
 
 <%= image_tag "images/http/api-pagination.png" %>
 
-Note that long running, frequently updated feeds could have more than a hundred “pages” of data. If you make requests without a small delay in between, you could hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests.
+Note that long running, frequently updated feeds could have more than a hundred pages of data. In the example above, with a limit of 250 records, it would take 330 requests to get all the data. If you make requests without a small delay in between, you will hit a rate limit. To avoid this, watch for 429 HTTP error responses and handle them in code by adding a 30 second timeout between requests and request the largest size permitted, right now that's 1000 records.
+
+If your goal is to store and study the data offline, though, you would be better off downloading the whole feed using the Download button built into Adafruit IO on the web.

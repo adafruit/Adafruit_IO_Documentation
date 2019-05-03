@@ -50,10 +50,6 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/
 
 An array of zero or more data points.
 
-   Response Type  |  Description |
- ------- |  ----------- |
-an array of zero or more data points | zero or more data points |
-
 This API is paginated.
 
 
@@ -73,6 +69,7 @@ start_time | string | false | Start time for filtering, returns records created 
 end_time | string | false | End time for filtering, returns records created before give time.
 limit | integer | false | Limit the number of records returned.
 include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
+before | string | false | System generated token used to produce the next page of data. See [The Link Header](#the-link-header) for details.
 
 
 
