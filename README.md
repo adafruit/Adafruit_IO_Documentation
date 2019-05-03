@@ -36,6 +36,8 @@ To run slate:
 
 ## Contributing
 
-Contributions are welcome!
+Contributions are welcome! 
 
-This project is based on [slate](https://github.com/lord/slate).
+This project is based on [slate](https://github.com/lord/slate). All source for the documentation sections are in Markdown formatted text files in the [source/includes](https://github.com/adafruit/Adafruit_IO_Documentation/tree/master/source/includes) directory.
+
+If you see a change you'd like to make, you can fork this repository, commit your changes to your copy of the project, and submit it as a pull request. If you have a question or find that something is missing or incorrectly documented, you can let us know by [creating a new issue](https://github.com/adafruit/Adafruit_IO_Documentation/issues) on this project.
