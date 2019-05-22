@@ -1,11 +1,8 @@
 # Webhooks
 
-Webhooks are how REST-API supporting sites support data ‘pushing’. For example, say you wanted to get a user’s latest Twitter message. 
-Instead of constantly connecting to the twitter API every minute to check if a new message has been posted,  you can ask Twitter to update a webhook
-URL on each post. That means Twitter will contact you when there’s new data. But, as you can imagine, you need a webserver to listen for that posting.
-In this case, Adafruit IO can act as that webhook destination.
+Webhooks are one way disconnected web services can share data with each other, automatically. For example, say you wanted to get a user’s latest Twitter message.  Instead of constantly connecting to the twitter API every minute to check if a new message has been posted,  you can ask Twitter to update a webhook URL on each post. That means Twitter will contact you when there’s new data. But, as you can imagine, you need a webserver to listen for that posting.  In this case, Adafruit IO can act as that webhook destination.
 
-Adafruit IO only supports receiving data at this time, we need a service that will publish data into a feed. 
+Adafruit IO only supports receiving data at this time.
 
 <aside class="notice">
 These data publishing webhook methods <strong>do not require authentication</strong>. That
@@ -15,13 +12,22 @@ authentication data.
 
 You can create new feed webhook receivers by visiting a feed page and using the "Webhooks" link.
 
-## Send Data
+
+
+## Send Data via Webhook
+
+Create a data value. The request body should be the same as the [create data method](#create-data).
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token
+# publish as form data
+curl -F "value=42" https://io.adafruit.com/api/v2/webhooks/feed/:token
+
+# publish as JSON
+curl -F '{"value":"42"}' -H 'Content-Type: application/json' \
+    https://io.adafruit.com/api/v2/webhooks/feed/:token
 ```
 
 ```python
@@ -35,34 +41,40 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:to
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
-
-New feed data record
+<%= partial 'responses/datum', locals: {value: '42'} %>
 
 
 
-## Send Arbitrary Data
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+token     | string  | true      | the webhook token
+
+
+### Body Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+value     | string  | true      | Data value
+lat       | float   | false     | latitude value for location
+lon       | float   | false     | longitude value for location
+ele       | float   | false     | elevation value for location
+
+
+## Send Arbitrary Data via Webhook
+
+New feed data record whose value is the raw contents of the webhook request body.
+
+Use this path if the web service you're connecting to can't be configured to match the webhook `Send Data` API body format.
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
+curl -H "Content-Type: text/plain" \
+    --data "this is raw data, { 'not properly formatted json' }" \
+    https://io.adafruit.com/api/v2/webhooks/feed/:token/raw
 ```
 
 ```python
@@ -76,34 +88,24 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:to
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum', locals: { value:  "this is raw data, { 'not properly formatted json' }"} %>
 
-New feed data record
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+token     | string  | true      | the webhook token
 
 
 
-## Trigger a Notification
+## Send Notification via Webhook
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/notify</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:token/notify
+$ curl -X POST https://io.adafruit.com/api/v2/webhooks/feed/:token/notify
 ```
 
 ```python
@@ -117,27 +119,9 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/webhooks/feed/:to
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "ping",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
-
-New feed data record.
+<%= partial 'responses/datum', locals: { value:  "ping"} %>
 
 
+Creates a new feed data record with the value "ping", regardless of what was posted.
 
-
-
-
+This path is helpful if you're using a low-memory MQTT client that can't handle the large webhook payloads that a service like GitHub publishes and all you care about is _that_ something happened, not _precisely what_ happened.

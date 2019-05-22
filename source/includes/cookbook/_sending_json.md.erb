@@ -1,0 +1,80 @@
+## Sending and Storing JSON
+
+```json
+{
+  "value": 22.587,
+  "lat": 38.1123,
+  "lon": -91.2325,
+  "ele": 112
+}
+```
+
+Because Adafruit IO supports additional features beyond a basic MQTT brokering service, such as location tagging for data points, the service supports data in the JSON format described in the [HTTP create data API description](/#create-data).
+
+
+This lets us store the individual value, `22.587`, and data about the value: its latitude, longitude, and elevation. Data about the data is "metadata"!
+
+But what happens when the value you want to send is itself JSON? Good news! There are a few solutions available to you in that situation.
+
+
+
+### Double encoded JSON strings
+
+```javascript
+JSON.stringify({
+  "value": JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
+})
+```
+
+**The safest way to can send JSON data as a value** is to "double encode" it before sending, in which case IO will treat it as a raw string. If you're using something like javascript's `JSON.stringify` function or Ruby's `JSON.generate`, double encoding means passing the result of `JSON.stringify` through `JSON.stringify` a second time
+
+The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
+
+`JSON.parse(JSON.parse(input))`
+
+
+### IO formatted JSON
+
+```json
+{
+  "value": {"sensor-1":22.587,"sensor-2":13.182},
+  "lat": 38.1123,
+  "lon": -91.2325,
+  "ele": 112
+}
+```
+
+The simplest way to send JSON data to Adafruit IO is include it directly in the datum formatted record you send to IO. For example, if instead of 22.587, I wanted to send something like, {"sensor-1":22.587,"sensor-2":13.182}, the "wrapped" version would look like the value on the right.
+
+It's worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.
+
+
+
+### Non-IO formatted JSON
+
+```
+curl -H "Content-Type: application/json" \
+    -H "X-AIO-Key: toomanysecrets" \
+    --data '{"sensor-1":22.587,"sensor-2":13.182}' \
+    https://io.adafruit.com/api/v2/username/feeds/feed-key/data
+
+```
+
+Another way you can send raw JSON data is to just send it. If Adafruit IO doesn't find a "value" key in the JSON object you send, it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, sending the string `{"sensor-1":22.587,"sensor-2":13.182}` will result in `{"sensor-1":22.587,"sensor-2":13.182}` being stored in IO and sent to MQTT subscribers.
+
+**NOTE:** This solution is the riskiest, because if your JSON blob includes the key named `value`, then IO will interpret _that_ as the value you want to store and ignore all the other keys.
+
+
+
+### That's not JSON at all!
+
+```javascript
+btoa(JSON.stringify({ "something": "here" }))
+// "eyJzb21ldGhpbmciOiJoZXJlIn0="
+atob("eyJzb21ldGhpbmciOiJoZXJlIn0=")
+// {"something":"here"}
+```
+
+If you want to be absolutely sure that Adafruit IO will not interfere with the data you're sending, encode it as a [Base64](https://en.wikipedia.org/wiki/Base64) string first.
+
+This solution is also ideal if you want to store or send binary data with Adafruit IO. You won't get to see any pretty charts, but your data will remain exactly the way you left it.

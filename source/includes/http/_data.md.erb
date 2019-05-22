@@ -6,71 +6,6 @@ You can create, read, update, or delete data records. Every **CREATE**, **UPDATE
 
 Data points belong to feeds, so every Data API call starts with a Feed URL.
 
-## Get Feed Data
-
-> HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
-
-```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
-```
-
-```cpp
-// Not implemented in Adafruit IO Arduino
-```
-
-```python
-# Not implemented in Adafruit IO Python
-
-# Not implemented in Adafruit IO CircuitPython
-```
-
-> Response Sample:
-
-```json
-[
-  {
-    "id": "string",
-    "value": "string",
-    "feed_id": 0,
-    "group_id": 0,
-    "expiration": "string",
-    "lat": 0,
-    "lon": 0,
-    "ele": 0,
-    "completed_at": "string",
-    "created_at": "string",
-    "updated_at": "string",
-    "created_epoch": 0
-  }
-]
-```
-
-### Response Parameters
-
-An array of zero or more data points.
-
-This API is paginated.
-
-
-### Path Parameters
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-feed_key | string | true | a valid feed key
-
-
-### Query Parameters
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-start_time | string | false | Start time for filtering, returns records created after given time.
-end_time | string | false | End time for filtering, returns records created before give time.
-limit | integer | false | Limit the number of records returned.
-include | string | false | List of Data record fields to include in response as comma separated list. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
-before | string | false | System generated token used to produce the next page of data. See [The Link Header](#the-link-header) for details.
-
 
 
 ## Create Data
@@ -124,22 +59,7 @@ feedName->save(42, latValue, lonValue, eleValue);
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
 
 New data
 
@@ -157,6 +77,60 @@ feed_key | string | true | a valid feed key
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+
+
+
+## Get Feed Data
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+```
+
+```cpp
+// Not implemented in Adafruit IO Arduino
+```
+
+```python
+# Not implemented in Adafruit IO Python
+
+# Not implemented in Adafruit IO CircuitPython
+```
+
+> Response Sample:
+
+<%= partial 'responses/data' %>
+
+
+### Response Parameters
+
+An array of zero or more data points.
+
+This API is paginated.
+
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+username  | string  | true      | a valid username string
+feed_key  | string  | true      | a valid feed key
+
+
+### Query Parameters
+
+Parameter  | Type       | Required  | Description
+---------  | -------    | --------- | -----------------------
+start_time | string     | false     | Start time for filtering, returns records created after given time.
+end_time   | string     | false     | End time for filtering, returns records created before give time.
+limit      | integer    | false     | Limit the number of records returned.
+include    | csv string | false     | List of Data record fields to include in response records. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
+before     | string     | false     | System generated token used to produce the next page of data. See [The Link Header](#the-link-header) for details.
+
+
+
 
 
 ## Chart Feed Data
@@ -194,7 +168,7 @@ $ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds
     "hours": 1440,
     "field": "avg"
   },
-  "columns": ["date", "value"],
+  "columns": ["date", "avg"],
   "data": [
     [ "2019-03-01T14:00:00Z", "62.579827586206896" ],
     [ "2019-03-02T18:00:00Z", "64.94642857142857" ],
@@ -203,23 +177,29 @@ $ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds
 }
 ```
 
-A JSON record containing chart data and the parameters used to generate it.
+A JSON record containing chart data and the parameters used to generate it. This API will automatically calculate `resolution` based on the optimal time slice for the given `start_time` to `end_time` range or `hours` value given.
+
+Charts on io.adafruit.com use this API with only the `hours` parameter to render charts on dashboards and feed pages.
 
 
 ### Path Parameters
 
-Parameter |   Type  |  Required |       Description
+Parameter | Type    | Required  | Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-feed_key | string | true | a valid feed key
+username  | string  | true      | a valid username string
+feed_key  | string  | true      | a valid feed key
 
 
 ### Query Parameters
 
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-start_time | string | false | Start time for filtering, returns records created after given time.
-end_time | string | false | End time for filtering, returns records created before give time.
+Parameter  | Type    | Required  | Description
+---------  | ------- | --------- | -----------------------
+start_time | string  | false     | Start time for filtering, returns records created after given time.
+end_time   | string  | false     | End time for filtering, returns records created before give time.
+resolution | int     | false     | Size of aggregation slice in minutes. Must be one of: `1`, `5`, `10`, `30`, `60`, `120`, `240`, `480`, or `960`
+hours      | int     | false     | Number of hours to include in the chart. This value is ignored if `start_time` and `end_time` are given.
+field      | string  | false     | Aggregate field to return. Must be one of: `avg`, `sum`, `val`, `min`, `max`, `val_count`
+raw        | boolean | false     | Force raw chart data to be returned. Not compatible with `field` or `resolution` parameters. Use `1` or `true` for boolean true value.
 
 
 
@@ -248,24 +228,8 @@ aio.send_batch_data(feed_name.key, data_list)
 
 > Response Sample:
 
-```json
-[
-  {
-    "id": "string",
-    "value": "string",
-    "feed_id": 0,
-    "group_id": 0,
-    "expiration": "string",
-    "lat": 0,
-    "lon": 0,
-    "ele": 0,
-    "completed_at": "string",
-    "created_at": "string",
-    "updated_at": "string",
-    "created_epoch": 0
-  }
-]
-```
+<%= partial 'responses/data' %>
+
 
 New data
 
@@ -306,22 +270,8 @@ data = aio.receive_previous(feed.key)
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
+
 
 Data response
 
@@ -369,22 +319,7 @@ data = aio.receive_next(feed.key)
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
 
 Data response
 
@@ -431,22 +366,8 @@ include | string | false | List of Data record fields to include in response as 
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
+
 
 Data response
 
@@ -488,24 +409,9 @@ data = aio.receive(feed.key)
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
 
-Data response
+Data response.
 
 
 ### Path Parameters
@@ -525,7 +431,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Get Last Data (CSV)
+## Get Most Recent Data
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/retain</code></div>
@@ -544,8 +450,8 @@ include | string | false | List of Data record fields to include in response as 
 
 > Response Sample:
 
-```json
-"string"
+```csv
+"string",0.0,0.0,0.0
 ```
 
 CSV string in `value,lat,lon,ele` format. The lat, lon, and ele values are left blank if they are not set.
@@ -553,15 +459,15 @@ CSV string in `value,lat,lon,ele` format. The lat, lon, and ele values are left 
 
 ### Path Parameters
 
-Parameter |   Type  |  Required |       Description
+Parameter | Type    | Required  | Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-feed_key | string | true | a valid feed key
+username  | string  | true      | a valid username string
+feed_key  | string  | true      | a valid feed key
 
 
 
 
-## Return Data
+## Get Data Point
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -585,22 +491,8 @@ data = aio.receive(feed_name['key'])
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
+
 
 Data response
 
@@ -623,7 +515,7 @@ include | string | false | List of Data record fields to include in response as 
 
 
 
-## Replace Data
+## Update Data Point
 
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -642,22 +534,8 @@ include | string | false | List of Data record fields to include in response as 
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
+
 
 Updated Data
 
@@ -679,7 +557,7 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 
 
-## Delete Data
+## Delete Data Point
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/{id}</code></div>
@@ -738,24 +616,8 @@ id | string | true |
 
 > Response Sample:
 
-```json
-[
-  {
-    "id": "string",
-    "value": "string",
-    "feed_id": 0,
-    "group_id": 0,
-    "expiration": "string",
-    "lat": 0,
-    "lon": 0,
-    "ele": 0,
-    "completed_at": "string",
-    "created_at": "string",
-    "updated_at": "string",
-    "created_epoch": 0
-  }
-]
-```
+<%= partial 'responses/datum' %>
+
 
 New data
 
@@ -795,24 +657,8 @@ group_feed_data | object | true |
 
 > Response Sample:
 
-```json
-[
-  {
-    "id": "string",
-    "value": "string",
-    "feed_id": 0,
-    "group_id": 0,
-    "expiration": "string",
-    "lat": 0,
-    "lon": 0,
-    "ele": 0,
-    "completed_at": "string",
-    "created_at": "string",
-    "updated_at": "string",
-    "created_epoch": 0
-  }
-]
-```
+<%= partial 'responses/datum' %>
+
 
 An array of data
 
@@ -846,22 +692,8 @@ feed_key | string | true | a valid feed key
 
 > Response Sample:
 
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
+<%= partial 'responses/datum' %>
+
 
 New data
 
@@ -902,24 +734,8 @@ datum | object | true | Data record including a `value` field (required) and opt
 
 > Response Sample:
 
-```json
-[
-  {
-    "id": "string",
-    "value": "string",
-    "feed_id": 0,
-    "group_id": 0,
-    "expiration": "string",
-    "lat": 0,
-    "lon": 0,
-    "ele": 0,
-    "completed_at": "string",
-    "created_at": "string",
-    "updated_at": "string",
-    "created_epoch": 0
-  }
-]
-```
+<%= partial 'responses/data' %>
+
 
 New data
 
@@ -938,88 +754,4 @@ feed_key | string | true | a valid feed key
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
-
-
-
-## Send Data to a Feed via Webhook
-
-> HTTP Request
-> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
-
-```shell
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
-```
-
-> Response Sample:
-
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
-
-New feed data record
-
-
-
-
-
-## Send Arbitrary Data to Feed via Webhook
-
-> HTTP Request
-> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token/raw</code></div>
-
-```shell
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
-```
-
-> Response Sample:
-
-```json
-{
-  "id": "string",
-  "value": "string",
-  "feed_id": 0,
-  "group_id": 0,
-  "expiration": "string",
-  "lat": 0,
-  "lon": 0,
-  "ele": 0,
-  "completed_at": "string",
-  "created_at": "string",
-  "updated_at": "string",
-  "created_epoch": 0
-}
-```
-
-Returns a new feed data record.
-
-**NOTE:** This method **does not require authentication**.
 

@@ -1,7 +1,7 @@
 
 # Adafruit IO API Cookbook
 
-This page contains a number of recipes related to Adafruit IO which have been found useful in the past. You can add and contribute to this file by filing an `issue` on the GitHub repository, or by editing this file and submitting a pull request. 
+This page contains a number of recipes related to Adafruit IO which have been found useful in the past. You can add and contribute to this file by filing an `issue` on the GitHub repository, or by editing this file and submitting a pull request.
 
 ## Sending and Sending image data with Adafruit IO
 
@@ -13,11 +13,10 @@ There are some important things to keep in mind when using this feature. Normal 
 You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  [the .png image used for testing](https://io.adafruit.com/blog/images/2016-12-14-power-switch.png)  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.
 
 ![base64imagepreview](https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png)
-  
+
 
 ## Feed Identifiers
 
-  
 Names are for humans.
 
 Keys are for computers.
@@ -37,6 +36,7 @@ Webhook receiver URLs give you a limited use, unique API address that you can se
 You can access a webhook by navigating to your feed and clicking the _Webhooks_ button on the right-hand sidebar.
 
 ### Raw Webhooks
+
 If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don't have control over the payload the service is sending--add `/raw` to the end of the Adafruit IO webhook URL that you share with the service.
 
 ### Notify Webhooks
@@ -45,4 +45,4 @@ If you only want to be notified that an event has happened, rather than have to 
 
 ## Floating Point Data
 
-If you're sending `3.1415` and only want to send `3.14` - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display. 
+If you're sending `3.1415` and only want to send `3.14` - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display.
