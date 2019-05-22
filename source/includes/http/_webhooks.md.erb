@@ -16,7 +16,7 @@ You can create new feed webhook receivers by visiting a feed page and using the 
 
 ## Send Data via Webhook
 
-Create a data value. The request body should be the same as the [create data method](#create-data).
+Create a data value. The request body should include a value parameter named either `value` or `payload` and may optionally include `lat`, `lon`, and `ele` parameters if you want to tag the data with a location.
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/webhooks/feed/:token</code></div>
