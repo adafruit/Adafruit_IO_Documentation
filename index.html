@@ -3914,7 +3914,7 @@ authentication data.
 
 <p>You can create new feed webhook receivers by visiting a feed page and using the &quot;Webhooks&quot; link.</p>
 <h2 id='send-data-via-webhook'>Send Data via Webhook</h2>
-<p>Create a data value. The request body should be the same as the <a href="#create-data">create data method</a>.</p>
+<p>Create a data value. The request body should include a value parameter named either <code>value</code> or <code>payload</code> and may optionally include <code>lat</code>, <code>lon</code>, and <code>ele</code> parameters if you want to tag the data with a location.</p>
 
 <blockquote>
 <p>HTTP Request
