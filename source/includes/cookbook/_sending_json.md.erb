@@ -1,6 +1,7 @@
 ## Sending and Storing JSON
 
-```json
+```javascript
+// A basic data record
 {
   "value": 22.587,
   "lat": 38.1123,
@@ -20,22 +21,29 @@ But what happens when the value you want to send is itself JSON? Good news! Ther
 
 ### Double encoded JSON strings
 
+**The safest way to can send JSON data as a value** is to "double encode" it before sending, in which case IO will treat it as a raw string. If you're using something like javascript's `JSON.stringify` function or Ruby's `JSON.generate`, double encoding means passing the result of `JSON.stringify` through `JSON.stringify` a second time.
+
+<% partial 'helpers/inline_code' do %>
 ```javascript
 JSON.stringify({
   "value": JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
 })
 ```
-
-**The safest way to can send JSON data as a value** is to "double encode" it before sending, in which case IO will treat it as a raw string. If you're using something like javascript's `JSON.stringify` function or Ruby's `JSON.generate`, double encoding means passing the result of `JSON.stringify` through `JSON.stringify` a second time
+<% end %>
 
 The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
 
-`JSON.parse(JSON.parse(input))`
+<% partial 'helpers/inline_code' do %>
+```javascript
+var data = JSON.parse(message)
+var value = JSON.parse(data.value)
+```
+<% end %>
 
 
 ### IO formatted JSON
 
-```json
+```javascript
 {
   "value": {"sensor-1":22.587,"sensor-2":13.182},
   "lat": 38.1123,
@@ -68,13 +76,15 @@ Another way you can send raw JSON data is to just send it. If Adafruit IO doesn'
 
 ### That's not JSON at all!
 
+If you want to be absolutely sure that Adafruit IO will not interfere with the data you're sending, encode it as a [Base64](https://en.wikipedia.org/wiki/Base64) string first.
+
+<% partial 'helpers/inline_code' do %>
 ```javascript
 btoa(JSON.stringify({ "something": "here" }))
 // "eyJzb21ldGhpbmciOiJoZXJlIn0="
 atob("eyJzb21ldGhpbmciOiJoZXJlIn0=")
 // {"something":"here"}
 ```
-
-If you want to be absolutely sure that Adafruit IO will not interfere with the data you're sending, encode it as a [Base64](https://en.wikipedia.org/wiki/Base64) string first.
+<% end %>
 
 This solution is also ideal if you want to store or send binary data with Adafruit IO. You won't get to see any pretty charts, but your data will remain exactly the way you left it.

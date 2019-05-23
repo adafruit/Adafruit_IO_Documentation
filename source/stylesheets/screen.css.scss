@@ -613,3 +613,17 @@ html, body {
 .highlight, .highlight .w {
   background-color: $code-bg;
 }
+
+////////////////////////////////////////////////////////////////////////////////
+// CUSTOM STYLES (Adafruit)
+////////////////////////////////////////////////////////////////////////////////
+
+// inline code samples https://github.com/lord/slate/issues/855
+.content {
+  .center-column + pre {
+    position: static;
+    float: none;
+    clear: none;
+    left: 0;
+  }
+}
