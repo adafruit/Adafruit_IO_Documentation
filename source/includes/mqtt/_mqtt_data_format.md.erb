@@ -18,17 +18,16 @@ To tag your data with a location value, you'll either need to wrap it in a JSON 
 JSON can be sent to either the base topic or the /json topic - for example `mosfet/feeds/photocell-one` or `mosfet/feeds/photocell-one/json`.
 The proper format for location tagged JSON data is:
 
-```
 Example JSON topic object:
-
+<% partial 'helpers/inline_code' do %>
   {
     "value": 22.587, 
     "lat": 38.1123,
     "lon": -91.2325, 
     "ele": 112
   }
+<% end %>
 
-```
 
 Specifically, JSON objects must include a `value` key, and may include `lat`, `lon`, and `ele` keys. 
 
@@ -38,9 +37,9 @@ Alternatively, you can send location tagged data to `/csv` topics. In this examp
 
 With the example data shown before, that means you could publish the string `"22.587,38.1123,-91.2325,112"` to `mosfet/feeds/photocell-one/csv`. to store the value `"22.587"` in the location `latitude: 38.1123`, `longitude: -91.2325`, `elevation: 112`.
 
-An example is displayed on the sidbar of this page which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.
+An example is displayed below, which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.
 
-```
+<% partial 'helpers/inline_code' do %>
   # first you'll need https://github.com/njh/ruby-mqtt
   require 'mqtt'
 
@@ -73,7 +72,7 @@ An example is displayed on the sidbar of this page which uses a simple Ruby MQTT
     '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
   mqtt_client.publish('test_username/feeds/example/json',
     '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
-```
+<% end %>
 
 
 ## Sending JSON Data through Adafruit IO
@@ -81,16 +80,15 @@ An example is displayed on the sidbar of this page which uses a simple Ruby MQTT
 Because Adafruit IO supports additional features beyond a basic MQTT brokering service, such as location tagging for data points,
 the service supports data in the JSON format described above. Namely, the example JSON response on the sidebar.
 
-```
 JSON Response Format Example
-
+<% partial 'helpers/inline_code' do %>
   {
     "value": 22.587, 
     "lat": 38.1123,
     "lon": -91.2325, 
     "ele": 112
   }
-```
+<% end %>
 
 This lets us store the individual value, `22.587`, and data about the value: its latitude, longitude, and elevation. Metadata!
 
@@ -101,15 +99,15 @@ But what happens when the value you want to send is itself JSON? Good news! Ther
 The simplest way to send JSON data to Adafruit IO is to wrap it in the format described above. For example, if instead of `22.587`, 
 I wanted to send something like, `{"sensor-1":22.587,"sensor-2":13.182}`, the "wrapped" version would look like this:
 
-```
 Example of IO-Formatted JSON
+<% partial 'helpers/inline_code' do %>
 {
   "value": {"sensor-1":22.587,"sensor-2":13.182}, 
   "lat": 38.1123,
   "lon": -91.2325, 
   "ele": 112
 }
-```
+<% end %>
 
 It's worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.
 
@@ -119,22 +117,24 @@ The second way you can send JSON data as a value is to "double encode" it before
 If you're using something like javascript's `JSON.stringify` function or Ruby's `JSON.generate`, double encoding means passing the result of
 `JSON.stringify` through `JSON.stringify` a second time. In this node.js console example, you can see the difference:
 
-```
+
 Example of sending double-encoding strings before sending through Adafruit IO
-  > JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
+<% partial 'helpers/inline_code' do %>
+> JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
   '{"sensor-1":22.587,"sensor-2":13.182}'
   > JSON.stringify(JSON.stringify({"sensor-1":22.587,"sensor-2":13.182}))
   '"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'
-```
+<% end %>
 
 The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
 
-```
+
 Example of sending Double-Encoded JSON Strings directly through Adafruit IO
+<% partial 'helpers/inline_code' do %>
   > var input = '"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'
   > JSON.parse(JSON.parse(input))
   { 'sensor-1': 22.587, 'sensor-2': 13.182 }
-```
+<% end %>
 
 ### Non-IO Formatted JSON
 
@@ -168,9 +168,9 @@ recent value received on the feed.
 
 For example, let's imagine we have a device that subscribes to a counter feed: `uname/f/counter`. If we want to get the latest value, the `/get` topic we should publish to is `uname/f/counter/get`. After connecting, subscribing, and publishing to the `/get` topic, we will immediately receive a message on our `uname/f/counter` subscription with the last value that was published to the feed.
 
-If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code, displayed on the sidebar of this section
+If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code:
 
-```
+<% partial 'helpers/inline_code' do %>
 // ... from the adafruitio_01_subscribe example sketch
 AdafruitIO_Feed *counter = io.feed("counter");
 
@@ -192,4 +192,4 @@ void setup() {
 
 }
 // ....
-```
+<% end %>
