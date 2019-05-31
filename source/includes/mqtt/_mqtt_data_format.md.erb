@@ -20,14 +20,15 @@ The proper format for location tagged JSON data is:
 
 Example JSON topic object:
 <% partial 'helpers/inline_code' do %>
-  {
-    "value": 22.587, 
-    "lat": 38.1123,
-    "lon": -91.2325, 
-    "ele": 112
-  }
+```javascript
+{
+  "value": 22.587, 
+  "lat": 38.1123,
+  "lon": -91.2325, 
+  "ele": 112
+}
+```
 <% end %>
-
 
 Specifically, JSON objects must include a `value` key, and may include `lat`, `lon`, and `ele` keys. 
 
@@ -40,6 +41,7 @@ With the example data shown before, that means you could publish the string `"22
 An example is displayed below, which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.
 
 <% partial 'helpers/inline_code' do %>
+  ```ruby
   # first you'll need https://github.com/njh/ruby-mqtt
   require 'mqtt'
 
@@ -72,6 +74,7 @@ An example is displayed below, which uses a simple Ruby MQTT library and the dat
     '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
   mqtt_client.publish('test_username/feeds/example/json',
     '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
+  ```
 <% end %>
 
 
@@ -82,12 +85,14 @@ the service supports data in the JSON format described above. Namely, the exampl
 
 JSON Response Format Example
 <% partial 'helpers/inline_code' do %>
+```javascript
   {
     "value": 22.587, 
     "lat": 38.1123,
     "lon": -91.2325, 
     "ele": 112
   }
+```
 <% end %>
 
 This lets us store the individual value, `22.587`, and data about the value: its latitude, longitude, and elevation. Metadata!
@@ -101,12 +106,14 @@ I wanted to send something like, `{"sensor-1":22.587,"sensor-2":13.182}`, the "w
 
 Example of IO-Formatted JSON
 <% partial 'helpers/inline_code' do %>
+```javascript
 {
   "value": {"sensor-1":22.587,"sensor-2":13.182}, 
   "lat": 38.1123,
   "lon": -91.2325, 
   "ele": 112
 }
+```
 <% end %>
 
 It's worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.
@@ -120,10 +127,12 @@ If you're using something like javascript's `JSON.stringify` function or Ruby's 
 
 Example of sending double-encoding strings before sending through Adafruit IO
 <% partial 'helpers/inline_code' do %>
+```javascript
 > JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
   '{"sensor-1":22.587,"sensor-2":13.182}'
   > JSON.stringify(JSON.stringify({"sensor-1":22.587,"sensor-2":13.182}))
   '"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'
+```
 <% end %>
 
 The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
@@ -131,9 +140,11 @@ The double encoded JSON string can be sent directly through Adafruit IO without 
 
 Example of sending Double-Encoded JSON Strings directly through Adafruit IO
 <% partial 'helpers/inline_code' do %>
+```javascript
   > var input = '"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'
   > JSON.parse(JSON.parse(input))
   { 'sensor-1': 22.587, 'sensor-2': 13.182 }
+```
 <% end %>
 
 ### Non-IO Formatted JSON
@@ -171,6 +182,7 @@ For example, let's imagine we have a device that subscribes to a counter feed: `
 If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code:
 
 <% partial 'helpers/inline_code' do %>
+```cpp
 // ... from the adafruitio_01_subscribe example sketch
 AdafruitIO_Feed *counter = io.feed("counter");
 
@@ -192,4 +204,5 @@ void setup() {
 
 }
 // ....
+```
 <% end %>
