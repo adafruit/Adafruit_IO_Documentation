@@ -432,98 +432,114 @@ we can show you your data as a chart on an Adafruit IO dashboard and through our
 <h2 id='sending-json'>Sending JSON</h2>
 <p>JSON can be sent to either the base topic or the /json topic - for example <code>mosfet/feeds/photocell-one</code> or <code>mosfet/feeds/photocell-one/json</code>.
 The proper format for location tagged JSON data is:</p>
-<pre class="highlight plaintext"><code>Example JSON topic object:
 
+<p>Example JSON topic object:
+<div class="center-column"></div>
   {
-    "value": 22.587, 
-    "lat": 38.1123,
-    "lon": -91.2325, 
-    "ele": 112
-  }
+    &quot;value&quot;: 22.587, 
+    &quot;lat&quot;: 38.1123,
+    &quot;lon&quot;: -91.2325, 
+    &quot;ele&quot;: 112
+  }</p>
 
-</code></pre>
 <p>Specifically, JSON objects must include a <code>value</code> key, and may include <code>lat</code>, <code>lon</code>, and <code>ele</code> keys. </p>
 <h2 id='sending-csv'>Sending CSV</h2>
 <p>Alternatively, you can send location tagged data to <code>/csv</code> topics. In this example, that would be the topic <code>mosfet/feeds/photocell-one/csv</code> instead of <code>mosfet/feeds/photocell-one</code>. Both store data in the same feed. The format IO expects for location tagged CSV data is VALUE, LATITUDE, LONGITUDE, ELEVATION.</p>
 
 <p>With the example data shown before, that means you could publish the string <code>&quot;22.587,38.1123,-91.2325,112&quot;</code> to <code>mosfet/feeds/photocell-one/csv</code>. to store the value <code>&quot;22.587&quot;</code> in the location <code>latitude: 38.1123</code>, <code>longitude: -91.2325</code>, <code>elevation: 112</code>.</p>
 
-<p>An example is displayed on the sidbar of this page which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.</p>
-<pre class="highlight plaintext"><code>  # first you'll need https://github.com/njh/ruby-mqtt
-  require 'mqtt'
+<p>An example is displayed below, which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.</p>
 
-  username = 'test_username'
-  key      = 'not-a-real-key'
-  url      = "mqtts://#{ username }:#{ key }@io.adafruit.com"
+<div class="center-column"></div>
 
-  mqtt_client = MQTT::Client.connect(url, 8883)
+<p># first you&#39;ll need https://github.com/njh/ruby-mqtt
+  require &#39;mqtt&#39;</p>
 
-  # simplest thing that could possibly work
-  mqtt_client.publish('test_username/feeds/example', 22.587)
+<p>username = &#39;test_username&#39;
+  key      = &#39;not-a-real-key&#39;
+  url      = &quot;mqtts://#{ username }:#{ key }@io.adafruit.com&quot;</p>
 
-  # sending numbers as strings is fine, IO stores all data internally
+<p>mqtt_client = MQTT::Client.connect(url, 8883)</p>
+
+<p># simplest thing that could possibly work
+  mqtt_client.publish(&#39;test_username/feeds/example&#39;, 22.587)</p>
+
+<p># sending numbers as strings is fine, IO stores all data internally
   # as strings anyways
-  mqtt_client.publish('test_username/feeds/example', '22.587')
+  mqtt_client.publish(&#39;test_username/feeds/example&#39;, &#39;22.587&#39;)</p>
 
-  # CSV formatted, no location
-  mqtt_client.publish('test_username/feeds/example/csv', '22.587')
+<p># CSV formatted, no location
+  mqtt_client.publish(&#39;test_username/feeds/example/csv&#39;, &#39;22.587&#39;)</p>
 
-  # CSV formatted, with location
-  mqtt_client.publish('test_username/feeds/example/csv', 
-                      '22.587,38.1123,-91.2325,112')
+<p># CSV formatted, with location
+  mqtt_client.publish(&#39;test_username/feeds/example/csv&#39;, 
+                      &#39;22.587,38.1123,-91.2325,112&#39;)</p>
 
-  # JSON formatted, no location 
-  mqtt_client.publish('test_username/feeds/example', '{"value":22.587}')
-  mqtt_client.publish('test_username/feeds/example/json', '{"value":22.587}')
+<p># JSON formatted, no location 
+  mqtt_client.publish(&#39;test_username/feeds/example&#39;, &#39;{&quot;value&quot;:22.587}&#39;)
+  mqtt_client.publish(&#39;test_username/feeds/example/json&#39;, &#39;{&quot;value&quot;:22.587}&#39;)</p>
 
-  # JSON formatted, with location
-  mqtt_client.publish('test_username/feeds/example', 
-    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
-  mqtt_client.publish('test_username/feeds/example/json',
-    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
-</code></pre><h2 id='sending-json-data-through-adafruit-io'>Sending JSON Data through Adafruit IO</h2>
+<p># JSON formatted, with location
+  mqtt_client.publish(&#39;test_username/feeds/example&#39;, 
+    &#39;{&quot;value&quot;:22.587,&quot;lat&quot;:38.1123,&quot;lon&quot;:-91.2325,&quot;ele&quot;:112}&#39;)
+  mqtt_client.publish(&#39;test_username/feeds/example/json&#39;,
+    &#39;{&quot;value&quot;:22.587,&quot;lat&quot;:38.1123,&quot;lon&quot;:-91.2325,&quot;ele&quot;:112}&#39;)</p>
+<h2 id='sending-json-data-through-adafruit-io'>Sending JSON Data through Adafruit IO</h2>
 <p>Because Adafruit IO supports additional features beyond a basic MQTT brokering service, such as location tagging for data points,
 the service supports data in the JSON format described above. Namely, the example JSON response on the sidebar.</p>
-<pre class="highlight plaintext"><code>JSON Response Format Example
 
+<p>JSON Response Format Example
+<div class="center-column"></div>
   {
-    "value": 22.587, 
-    "lat": 38.1123,
-    "lon": -91.2325, 
-    "ele": 112
-  }
-</code></pre>
+    &quot;value&quot;: 22.587, 
+    &quot;lat&quot;: 38.1123,
+    &quot;lon&quot;: -91.2325, 
+    &quot;ele&quot;: 112
+  }</p>
+
 <p>This lets us store the individual value, <code>22.587</code>, and data about the value: its latitude, longitude, and elevation. Metadata!</p>
 
 <p>But what happens when the value you want to send is itself JSON? Good news! There are a few solutions available to you in that situation.</p>
 <h3 id='io-formatted-json'>IO-Formatted JSON</h3>
 <p>The simplest way to send JSON data to Adafruit IO is to wrap it in the format described above. For example, if instead of <code>22.587</code>, 
 I wanted to send something like, <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code>, the &quot;wrapped&quot; version would look like this:</p>
-<pre class="highlight plaintext"><code>Example of IO-Formatted JSON
+
+<p>Example of IO-Formatted JSON
+<div class="center-column"></div>
 {
-  "value": {"sensor-1":22.587,"sensor-2":13.182}, 
-  "lat": 38.1123,
-  "lon": -91.2325, 
-  "ele": 112
-}
-</code></pre>
+  &quot;value&quot;: {&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}, 
+  &quot;lat&quot;: 38.1123,
+  &quot;lon&quot;: -91.2325, 
+  &quot;ele&quot;: 112
+}</p>
+
 <p>It&#39;s worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.</p>
 <h3 id='double-encoded-json-strings'>Double-Encoded JSON Strings</h3>
 <p>The second way you can send JSON data as a value is to &quot;double encode&quot; it before sending, in which case IO will treat it as a raw string.
 If you&#39;re using something like javascript&#39;s <code>JSON.stringify</code> function or Ruby&#39;s <code>JSON.generate</code>, double encoding means passing the result of
 <code>JSON.stringify</code> through <code>JSON.stringify</code> a second time. In this node.js console example, you can see the difference:</p>
-<pre class="highlight plaintext"><code>Example of sending double-encoding strings before sending through Adafruit IO
-  &gt; JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
-  '{"sensor-1":22.587,"sensor-2":13.182}'
-  &gt; JSON.stringify(JSON.stringify({"sensor-1":22.587,"sensor-2":13.182}))
-  '"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'
-</code></pre>
+
+<p>Example of sending double-encoding strings before sending through Adafruit IO
+<div class="center-column"></div></p>
+
+<blockquote>
+<p>JSON.stringify({&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182})
+  &#39;{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}&#39;
+JSON.stringify(JSON.stringify({&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}))
+  &#39;&quot;{\&quot;sensor-1\&quot;:22.587,\&quot;sensor-2\&quot;:13.182}&quot;&#39;</p>
+</blockquote>
+
 <p>The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.</p>
-<pre class="highlight plaintext"><code>Example of sending Double-Encoded JSON Strings directly through Adafruit IO
-  &gt; var input = '"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'
-  &gt; JSON.parse(JSON.parse(input))
-  { 'sensor-1': 22.587, 'sensor-2': 13.182 }
-</code></pre><h3 id='non-io-formatted-json'>Non-IO Formatted JSON</h3>
+
+<p>Example of sending Double-Encoded JSON Strings directly through Adafruit IO
+<div class="center-column"></div></p>
+
+<blockquote>
+<p>var input = &#39;&quot;{\\&quot;sensor-1\\&quot;:22.587,\\&quot;sensor-2\\&quot;:13.182}&quot;&#39;
+JSON.parse(JSON.parse(input))
+  { &#39;sensor-1&#39;: 22.587, &#39;sensor-2&#39;: 13.182 }</p>
+</blockquote>
+<h3 id='non-io-formatted-json'>Non-IO Formatted JSON</h3>
 <p>The third way you can send raw JSON data is to just send it. If Adafruit IO doesn&#39;t find a &quot;value&quot; key in the JSON object you send, 
 it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, 
 sending the string <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> will result in <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> being stored in IO and sent 
@@ -552,29 +568,32 @@ recent value received on the feed.</p>
 
 <p>For example, let&#39;s imagine we have a device that subscribes to a counter feed: <code>uname/f/counter</code>. If we want to get the latest value, the <code>/get</code> topic we should publish to is <code>uname/f/counter/get</code>. After connecting, subscribing, and publishing to the <code>/get</code> topic, we will immediately receive a message on our <code>uname/f/counter</code> subscription with the last value that was published to the feed.</p>
 
-<p>If you’re using the Adafruit IO Arduino library, you can add <code>/get</code> support to your project in one line of code, displayed on the sidebar of this section</p>
-<pre class="highlight plaintext"><code>// ... from the adafruitio_01_subscribe example sketch
-AdafruitIO_Feed *counter = io.feed("counter");
+<p>If you’re using the Adafruit IO Arduino library, you can add <code>/get</code> support to your project in one line of code:</p>
 
-void setup() {
+<div class="center-column"></div>
 
-  // 1. start IO connection
-  io.connect();
+<p>// ... from the adafruitio_01_subscribe example sketch
+AdafruitIO_Feed *counter = io.feed(&quot;counter&quot;);</p>
 
-  // 2. prepare MQTT subscription with handler function
-  counter-&gt;onMessage(handleMessage);
+<p>void setup() {</p>
 
-  // 3. wait for successful connection
+<p>// 1. start IO connection
+  io.connect();</p>
+
+<p>// 2. prepare MQTT subscription with handler function
+  counter-&gt;onMessage(handleMessage);</p>
+
+<p>// 3. wait for successful connection
   while(io.mqttStatus() &lt; AIO_CONNECTED) {
     delay(500);
-  }
+  }</p>
 
-  // 4. send /get message, requesting last value
-  counter-&gt;get(); // ask Adafruit IO to resend the last value
+<p>// 4. send /get message, requesting last value
+  counter-&gt;get(); // ask Adafruit IO to resend the last value</p>
 
-}
-// ....
-</code></pre><h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='feed-topic-format'>Feed Topic Format</h2>
+<p>}
+// ....</p>
+<h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='feed-topic-format'>Feed Topic Format</h2>
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
 
@@ -614,26 +633,30 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 <h3 id='publish-to-feeds-in-a-group'>Publish to Feeds in a Group</h3>
 <p>If you use the <code>/json</code> or <code>/csv</code> endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.</p>
 
-<p>The JSON and CSV format IO expects are displayed on the sidebar of this section.</p>
-<pre class="highlight plaintext"><code>JSON Expected Response from Adafruit IO
-{
-  "feeds": {
-    "key-1": "value 1",
-    "key-2": "value 2",
-    "key-3": "value 3"
+<p>The JSON and CSV format IO expects are displayed below:</p>
+
+<p>JSON Expected Response from Adafruit IO
+<div class="center-column"></div>
+  {
+  &quot;feeds&quot;: {
+    &quot;key-1&quot;: &quot;value 1&quot;,
+    &quot;key-2&quot;: &quot;value 2&quot;,
+    &quot;key-3&quot;: &quot;value 3&quot;
   },
-  "location": {
-    "lat": 0.0,
-    "lon": 0.0,
-    "ele": 0.0
+  &quot;location&quot;: {
+    &quot;lat&quot;: 0.0,
+    &quot;lon&quot;: 0.0,
+    &quot;ele&quot;: 0.0
   }
-}
-</code></pre><pre class="highlight plaintext"><code>CSV Format Expected Response from Adafruit IO
+}</p>
+
+<p>CSV Format Expected Response from Adafruit IO
+<div class="center-column"></div>
 key-1,value 1
 key-2,value 2
 key-3,value 3
-location,0.0,0.0,0.0
-</code></pre><h2 id='group-guidelines'>Group Guidelines</h2>
+location,0.0,0.0,0.0</p>
+<h2 id='group-guidelines'>Group Guidelines</h2>
 <ul>
 <li>  In each payload format, <code>key-1</code> represents the respective feed&#39;s key and <code>value 1</code> represents the value you&#39;d like to publish to that feed.</li>
 <li>  For CSV location values, the location is interpreted as <code>lat</code>, <code>lon</code>, <code>ele</code> and <code>ele</code> is optional <code>/</code> not required.</li>
@@ -644,36 +667,38 @@ location,0.0,0.0,0.0
 <h3 id='subscribing-to-groups'>Subscribing to groups</h3>
 <p>If you use the <code>/json</code> or <code>/csv</code> endings when subscribing to your group MQTT topic, your data will be formatted in JSON or CSV, respectively. By default, IO publishes values in JSON format.</p>
 
-<p>The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are displayed on the sidebar of this section.</p>
-<pre class="highlight plaintext"><code>Expected Group JSON Response
+<p>The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are below.</p>
 
+<p>Expected Group JSON Response
+<div class="center-column"></div>
 {
-  "feeds": {
-    "key-1": "value 1",
-    "key-2": "value 2",
-    "key-3": "value 3"
+  &quot;feeds&quot;: {
+    &quot;key-1&quot;: &quot;value 1&quot;,
+    &quot;key-2&quot;: &quot;value 2&quot;,
+    &quot;key-3&quot;: &quot;value 3&quot;
   },
-  "location": {
-    "lat": 1.0,
-    "lon": 2.0,
-    "ele": 3.0
+  &quot;location&quot;: {
+    &quot;lat&quot;: 1.0,
+    &quot;lon&quot;: 2.0,
+    &quot;ele&quot;: 3.0
   }
-}
-</code></pre><pre class="highlight plaintext"><code>Expected Group CSV Response
+}</p>
 
+<p>Expected Group CSV Response
+<div class="center-column"></div>
   key-1,value 1
   key-2,value 2
   key-3,value 3
-  location,1.0,2.0,3.0
-</code></pre>
+  location,1.0,2.0,3.0</p>
+
 <p>It&#39;s important to note that you will only receive updated values for the feeds that received new values. That means if you&#39;re subscribed to  <code>{username}/groups/example</code>  and publish to  <code>{username}/feeds/key-1</code>, the subscription will receive:</p>
 
-<p><code>
-{
+<div class="center-column"></div>
+
+<p>{
   &quot;feeds&quot;: {
     &quot;key-1&quot;: &quot;value 1&quot;  }
-}
-</code></p>
+}</p>
 
 <p>It&#39;s also worth noting that JSON subscription formats will always receive string type values, regardless of whether a string or number was published.</p>
 <h1 id='errors'>Errors</h1>
