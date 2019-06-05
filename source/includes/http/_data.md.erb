@@ -123,8 +123,8 @@ feed_key  | string  | true      | a valid feed key
 
 Parameter  | Type       | Required  | Description
 ---------  | -------    | --------- | -----------------------
-start_time | string     | false     | Start time for filtering, returns records created after given time.
-end_time   | string     | false     | End time for filtering, returns records created before give time.
+start_time | string     | false     | Start time for filtering, returns records created after given time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
+end_time   | string     | false     | End time for filtering, returns records created before give time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
 limit      | integer    | false     | Limit the number of records returned.
 include    | csv string | false     | List of Data record fields to include in response records. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 before     | string     | false     | System generated token used to produce the next page of data. See [The Link Header](#the-link-header) for details.
@@ -194,8 +194,8 @@ feed_key  | string  | true      | a valid feed key
 
 Parameter  | Type    | Required  | Description
 ---------  | ------- | --------- | -----------------------
-start_time | string  | false     | Start time for filtering, returns records created after given time.
-end_time   | string  | false     | End time for filtering, returns records created before give time.
+start_time | string  | false     | Start time for filtering, returns records created after given time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
+end_time   | string  | false     | End time for filtering, returns records created before give time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
 resolution | int     | false     | Size of aggregation slice in minutes. Must be one of: `1`, `5`, `10`, `30`, `60`, `120`, `240`, `480`, or `960`
 hours      | int     | false     | Number of hours to include in the chart. This value is ignored if `start_time` and `end_time` are given.
 field      | string  | false     | Aggregate field to return. Must be one of: `avg`, `sum`, `val`, `min`, `max`, `val_count`
