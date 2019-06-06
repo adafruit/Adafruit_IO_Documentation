@@ -12,11 +12,11 @@ The topics formats for publishing or subscribing are:
 
 If you use the `/json` or `/csv` endings on your group MQTT topic, your data should be formatted in JSON or CSV, respectively. By default, IO expects published values to be in JSON format.
 
-The JSON and CSV format IO expects are displayed on the sidebar of this section.
+The JSON and CSV format IO expects are displayed below:
 
-```
 JSON Expected Response from Adafruit IO
-{
+<% partial 'helpers/inline_code' do %>
+  {
   "feeds": {
     "key-1": "value 1",
     "key-2": "value 2",
@@ -28,15 +28,16 @@ JSON Expected Response from Adafruit IO
     "ele": 0.0
   }
 }
-```
+<% end %>
 
-```
 CSV Format Expected Response from Adafruit IO
+<% partial 'helpers/inline_code' do %>
 key-1,value 1
 key-2,value 2
 key-3,value 3
 location,0.0,0.0,0.0
-```
+<% end %>
+
 
 ## Group Guidelines
 
@@ -50,11 +51,10 @@ location,0.0,0.0,0.0
 
 If you use the `/json` or `/csv` endings when subscribing to your group MQTT topic, your data will be formatted in JSON or CSV, respectively. By default, IO publishes values in JSON format.
 
-The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are displayed on the sidebar of this section.
+The formats your subscription will receive are the same as the formats IO expects to receive. Expected responses for JSON and CSV are below.
 
-```
 Expected Group JSON Response
-
+<% partial 'helpers/inline_code' do %>
 {
   "feeds": {
     "key-1": "value 1",
@@ -67,24 +67,23 @@ Expected Group JSON Response
     "ele": 3.0
   }
 }
-```
+<% end %>
 
-```
 Expected Group CSV Response
-
+<% partial 'helpers/inline_code' do %>
   key-1,value 1
   key-2,value 2
   key-3,value 3
   location,1.0,2.0,3.0
-```
+<% end %>
 
 It's important to note that you will only receive updated values for the feeds that received new values. That means if you're subscribed to  `{username}/groups/example`  and publish to  `{username}/feeds/key-1`, the subscription will receive:
 
-`
+<% partial 'helpers/inline_code' do %>
 {
   "feeds": {
     "key-1": "value 1"  }
 }
-`
+<% end %>
 
 It's also worth noting that JSON subscription formats will always receive string type values, regardless of whether a string or number was published.
