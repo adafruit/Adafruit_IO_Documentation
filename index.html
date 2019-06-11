@@ -840,6 +840,15 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div></p>
 </blockquote>
 <pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
+
+<span class="c"># get the most recent value</span>
+<span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data?limit<span class="o">=</span>1
+
+<span class="c"># get the most recent value before a particular time</span>
+<span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="s2">"https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data?limit=1&amp;end_time=2019-05-05T00:00Z"</span>
+
+<span class="c"># get all values in a date range</span>
+<span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="s2">"https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data?start_time=2019-05-04T00:00Z&amp;end_time=2019-05-05T00:00Z"</span>
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="c1">// Not implemented in Adafruit IO Arduino
 </span></code></pre><pre class="highlight python tab-python"><code><span class="c"># Not implemented in Adafruit IO Python</span>
 
@@ -904,13 +913,13 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>start_time</td>
 <td>string</td>
 <td>false</td>
-<td>Start time for filtering, returns records created after given time.</td>
+<td>Start time for filtering, returns records created after given time. Use <a href="https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations">ISO8601 formatted dates</a>.</td>
 </tr>
 <tr>
 <td>end_time</td>
 <td>string</td>
 <td>false</td>
-<td>End time for filtering, returns records created before give time.</td>
+<td>End time for filtering, returns records created before give time. Use <a href="https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations">ISO8601 formatted dates</a>.</td>
 </tr>
 <tr>
 <td>limit</td>
@@ -1001,13 +1010,13 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <td>start_time</td>
 <td>string</td>
 <td>false</td>
-<td>Start time for filtering, returns records created after given time.</td>
+<td>Start time for filtering, returns records created after given time. Use <a href="https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations">ISO8601 formatted dates</a>.</td>
 </tr>
 <tr>
 <td>end_time</td>
 <td>string</td>
 <td>false</td>
-<td>End time for filtering, returns records created before give time.</td>
+<td>End time for filtering, returns records created before give time. Use <a href="https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations">ISO8601 formatted dates</a>.</td>
 </tr>
 <tr>
 <td>resolution</td>
