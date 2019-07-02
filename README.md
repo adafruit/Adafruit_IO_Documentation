@@ -1,6 +1,8 @@
 # Adafruit IO API Documentation
 
-Repository of documentation for Adafruit IO's HTTP and MQTT API.
+Repository of documentation for Adafruit IO's HTTP and MQTT API. This is a fork of the [Slate documentation project](https://github.com/lord/slate). Slate is a set of templates and conventions applied to [the middleman static site generator](https://middlemanapp.com/), so our documentation source mostly [markdown formatted text](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and some Ruby, but the output is static HTML, css, and javascript.
+
+You can visit the live documentation site at https://io.adafruit.com/api/docs/#adafruit-io
 
 ## Building locally
 
