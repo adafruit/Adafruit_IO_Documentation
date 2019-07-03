@@ -1,0 +1,13 @@
+# Webhook Receivers
+
+Webhook receiver URLs give you a limited use, unique API address that you can send data to and have it appear in your Adafruit IO feed. Webhook URLs can be shared with anyone and used from anywhere on the web.
+
+You can access a webhook by navigating to your feed and clicking the _Webhooks_ button on the right-hand sidebar.
+
+## Raw Webhooks
+
+If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don't have control over the payload the service is sending--add `/raw` to the end of the Adafruit IO webhook URL that you share with the service.
+
+## Notify Webhooks
+
+If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add `/notify` to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message "ping".

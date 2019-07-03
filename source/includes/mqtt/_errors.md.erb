@@ -1,0 +1,24 @@
+# Error Topics
+
+Adafruit IO provides two error reporting MQTT topics you can subscribe to:  `{username}/errors` and `{username}/throttle`.
+
+
+## {username}/errors
+
+This topic publishes error messages related to publishing and subscribing to Adafruit IO feeds. Because MQTT is an asynchronous and compact messaging format, we cannot respond to invalid PUBLISH or SUBSCRIBE packets with a comprehensive error message, so we use this topic to update subscribers when an error occurs.
+
+You may only subscribe to your personal errors feed.
+
+
+## {username}/throttle
+
+This topic publishes throttle warning and error messages to all subscribed clients. We do our best to provide an accurate accounting in the error message of the minimum amount of time you should wait before attempting to publish again.
+
+Be warned: exceeding the rate limit too often within a short time span will result in a temporary ban from the Adafruit IO MQTT service.
+
+You may only subscribe to your personal throttle feed.
+
+
+## Adafruit IO Monitor
+
+Both error feeds can be seen live on [your Adafruit IO Monitor page](https://io.adafruit.com/monitor).

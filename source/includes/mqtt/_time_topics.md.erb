@@ -1,0 +1,34 @@
+# Time Topics
+
+Adafruit IO provides some built-in MQTT topics for getting the current server time. The current available topics are:
+
+* `time/seconds`
+* `time/millis`
+* `time/ISO-8601`
+* `time/hours`
+
+
+## time/seconds
+
+This topic publishes the current time in [Unix epoch seconds](https://en.wikipedia.org/wiki/Unix_time).
+
+The current Unix epoch time at the time of writing is: `1562164754`.
+
+
+## time/millis
+
+This topic publishes the same thing as time/seconds every second, but with slightly higher precision and more digits.
+
+The current Unix epoch time in milliseconds at the time of writing is: `1562165081839`
+
+
+## time/ISO-8601
+
+This topic publishes the current time in [ISO 8601 UTC format](https://en.wikipedia.org/wiki/ISO_8601). That's `year-month-dayThour:minute:second.millisecondsZ` where "-", ":", "T", and "Z" are character literals / always included in the time string.
+
+The current time in ISO 8601 UTC format at the time of writing is: `2019-07-03T14:47:16.038Z`
+
+
+## time/hours
+
+This topic publishes the current hour of the day in 24 hour format (the values 0 - 23) in the UTC time zone. It only publishes once every hour.

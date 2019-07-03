@@ -2,16 +2,13 @@
 
 There are a few ways to send data to our MQTT API if you're writing your own client library.
 
-The simplest way to send values to an IO Feed topic is to just send the value. 
-For example, a temperature sensor is going to produce numeric values like `22.587`.
-If you're sending to `mosfet/feeds/photocell-one` you can use the raw number or a string. That means either `22.587` or `22.587` will be 
-accepted as a numeric value. Adafruit IO does its best to treat data as numeric values so that
-we can show you your data as a chart on an Adafruit IO dashboard and through our [Charting API](https://io.adafruit.com/api/docs/#!/Data/chartData).
+The simplest way to send values to an IO Feed topic is to just send the value.  For example, a temperature sensor is going to produce numeric values like `22.587`.  If you're sending to `mosfet/feeds/photocell-one` you can use the raw number or a string. That means either `22.587` or `22.587` will be accepted as a numeric value. Adafruit IO does its best to treat data as numeric values so that we can show you your data as a chart on an Adafruit IO dashboard and through our [Charting API](https://io.adafruit.com/api/docs/#!/Data/chartData).
 
 
 ## Sending data with location
 
 To tag your data with a location value, you'll either need to wrap it in a JSON object first or send it to the special `/csv` formatted MQTT topic.
+
 
 ## Sending JSON
 
@@ -19,18 +16,19 @@ JSON can be sent to either the base topic or the /json topic - for example `mosf
 The proper format for location tagged JSON data is:
 
 Example JSON topic object:
+
 <% partial 'helpers/inline_code' do %>
 ```javascript
 {
-  "value": 22.587, 
+  "value": 22.587,
   "lat": 38.1123,
-  "lon": -91.2325, 
+  "lon": -91.2325,
   "ele": 112
 }
 ```
 <% end %>
 
-Specifically, JSON objects must include a `value` key, and may include `lat`, `lon`, and `ele` keys. 
+Specifically, JSON objects must include a `value` key, and may include `lat`, `lon`, and `ele` keys.
 
 ## Sending CSV
 
@@ -41,40 +39,40 @@ With the example data shown before, that means you could publish the string `"22
 An example is displayed below, which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.
 
 <% partial 'helpers/inline_code' do %>
-  ```ruby
-  # first you'll need https://github.com/njh/ruby-mqtt
-  require 'mqtt'
+```ruby
+# first you'll need https://github.com/njh/ruby-mqtt
+require 'mqtt'
 
-  username = 'test_username'
-  key      = 'not-a-real-key'
-  url      = "mqtts://#{ username }:#{ key }@io.adafruit.com"
+username = 'test_username'
+key      = 'not-a-real-key'
+url      = "mqtts://#{ username }:#{ key }@io.adafruit.com"
 
-  mqtt_client = MQTT::Client.connect(url, 8883)
+mqtt_client = MQTT::Client.connect(url, 8883)
 
-  # simplest thing that could possibly work
-  mqtt_client.publish('test_username/feeds/example', 22.587)
+# simplest thing that could possibly work
+mqtt_client.publish('test_username/feeds/example', 22.587)
 
-  # sending numbers as strings is fine, IO stores all data internally
-  # as strings anyways
-  mqtt_client.publish('test_username/feeds/example', '22.587')
+# sending numbers as strings is fine, IO stores all data internally
+# as strings anyways
+mqtt_client.publish('test_username/feeds/example', '22.587')
 
-  # CSV formatted, no location
-  mqtt_client.publish('test_username/feeds/example/csv', '22.587')
+# CSV formatted, no location
+mqtt_client.publish('test_username/feeds/example/csv', '22.587')
 
-  # CSV formatted, with location
-  mqtt_client.publish('test_username/feeds/example/csv', 
-                      '22.587,38.1123,-91.2325,112')
+# CSV formatted, with location
+mqtt_client.publish('test_username/feeds/example/csv',
+                  '22.587,38.1123,-91.2325,112')
 
-  # JSON formatted, no location 
-  mqtt_client.publish('test_username/feeds/example', '{"value":22.587}')
-  mqtt_client.publish('test_username/feeds/example/json', '{"value":22.587}')
+# JSON formatted, no location
+mqtt_client.publish('test_username/feeds/example', '{"value":22.587}')
+mqtt_client.publish('test_username/feeds/example/json', '{"value":22.587}')
 
-  # JSON formatted, with location
-  mqtt_client.publish('test_username/feeds/example', 
-    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
-  mqtt_client.publish('test_username/feeds/example/json',
-    '{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
-  ```
+# JSON formatted, with location
+mqtt_client.publish('test_username/feeds/example',
+'{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
+mqtt_client.publish('test_username/feeds/example/json',
+'{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}')
+```
 <% end %>
 
 
@@ -84,12 +82,13 @@ Because Adafruit IO supports additional features beyond a basic MQTT brokering s
 the service supports data in the JSON format described above. Namely, the example JSON response on the sidebar.
 
 JSON Response Format Example
+
 <% partial 'helpers/inline_code' do %>
 ```javascript
   {
-    "value": 22.587, 
+    "value": 22.587,
     "lat": 38.1123,
-    "lon": -91.2325, 
+    "lon": -91.2325,
     "ele": 112
   }
 ```
@@ -101,16 +100,16 @@ But what happens when the value you want to send is itself JSON? Good news! Ther
 
 ### IO-Formatted JSON
 
-The simplest way to send JSON data to Adafruit IO is to wrap it in the format described above. For example, if instead of `22.587`, 
-I wanted to send something like, `{"sensor-1":22.587,"sensor-2":13.182}`, the "wrapped" version would look like this:
+The simplest way to send JSON data to Adafruit IO is to wrap it in the format described above. For example, if instead of `22.587`, I wanted to send something like, `{"sensor-1":22.587,"sensor-2":13.182}`, the "wrapped" version would look like this:
 
 Example of IO-Formatted JSON
+
 <% partial 'helpers/inline_code' do %>
 ```javascript
 {
-  "value": {"sensor-1":22.587,"sensor-2":13.182}, 
+  "value": {"sensor-1":22.587,"sensor-2":13.182},
   "lat": 38.1123,
-  "lon": -91.2325, 
+  "lon": -91.2325,
   "ele": 112
 }
 ```
@@ -125,84 +124,34 @@ If you're using something like javascript's `JSON.stringify` function or Ruby's 
 `JSON.stringify` through `JSON.stringify` a second time. In this node.js console example, you can see the difference:
 
 
-Example of sending double-encoding strings before sending through Adafruit IO
+Here's an example of sending double-encoded strings through Adafruit IO:
+
 <% partial 'helpers/inline_code' do %>
 ```javascript
 > JSON.stringify({"sensor-1":22.587,"sensor-2":13.182})
-  '{"sensor-1":22.587,"sensor-2":13.182}'
-  > JSON.stringify(JSON.stringify({"sensor-1":22.587,"sensor-2":13.182}))
-  '"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'
+'{"sensor-1":22.587,"sensor-2":13.182}'
+> JSON.stringify(JSON.stringify({"sensor-1":22.587,"sensor-2":13.182}))
+'"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'
 ```
 <% end %>
 
 The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
 
+Here's an example of interpreting double-encoded JSON Strings sent through Adafruit IO:
 
-Example of sending Double-Encoded JSON Strings directly through Adafruit IO
 <% partial 'helpers/inline_code' do %>
 ```javascript
-  > var input = '"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'
-  > JSON.parse(JSON.parse(input))
-  { 'sensor-1': 22.587, 'sensor-2': 13.182 }
+> var input = '"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'
+> JSON.parse(JSON.parse(input))
+{ 'sensor-1': 22.587, 'sensor-2': 13.182 }
 ```
 <% end %>
 
 ### Non-IO Formatted JSON
 
-The third way you can send raw JSON data is to just send it. If Adafruit IO doesn't find a "value" key in the JSON object you send, 
-it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, 
-sending the string `{"sensor-1":22.587,"sensor-2":13.182}` will result in `{"sensor-1":22.587,"sensor-2":13.182}` being stored in IO and sent 
+The third way you can send raw JSON data is to just send it. If Adafruit IO doesn't find a "value" key in the JSON object you send,
+it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object,
+sending the string `{"sensor-1":22.587,"sensor-2":13.182}` will result in `{"sensor-1":22.587,"sensor-2":13.182}` being stored in IO and sent
 to MQTT subscribers.
 
-## Retrieving a Value
 
-MQTT is a tremendously useful protocol for building small connected devices and is relatively simple to understand and implement
-(if implementing networking protocols is your thing). Unfortunately, a few features of the Adafruit IO platform make it difficult for us to 
-support the entire MQTT 3.1+ protocol specification in our broker. Specifically, one particular feature, the publish retain flag.
-
-In the MQTT protocol, setting the `retain` flag on a published message asks the MQTT broker (server) to store that message. 
-Then any new clients which connect and subscribe to that topic will immediately receive the retained message. Retain makes writing basic MQTT-only 
-Internet of Things clients easier, without it, a client that connects and subscribes to a feed topic has to wait until a new value is published on the
-feed to know what state it should be in. In the case of slowly updated feeds, there could be hours between updates which means a device that disconnects
-and reconnects (for example, due to power cycling or sleeping) might lose the current value for a long time between updates.
-
-Among other factors, our scale, Adafruit IO's mix of MQTT & HTTP APIs, the speed at which we’re taking in new data, and the fact that
-we’re already storing almost every message that is sent mean that a “simple” feature like retain becomes difficult to support without making MQTT 
-service performance worse for everyone.
-
-Since we don’t actually store data in the broker but at a lower level and can’t support PUBLISH retain directly, we’re proposing a different solution for
-the retaining problem: the `/get` topic modifier.
-
-The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add `/get` to the topic you subscribed to
-and publish anything to that new topic (our Arduino library uses the null character: `\0`) . IO will immediately publish, just for that client, the most 
-recent value received on the feed.
-
-For example, let's imagine we have a device that subscribes to a counter feed: `uname/f/counter`. If we want to get the latest value, the `/get` topic we should publish to is `uname/f/counter/get`. After connecting, subscribing, and publishing to the `/get` topic, we will immediately receive a message on our `uname/f/counter` subscription with the last value that was published to the feed.
-
-If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code:
-
-<% partial 'helpers/inline_code' do %>
-```cpp
-// ... from the adafruitio_01_subscribe example sketch
-AdafruitIO_Feed *counter = io.feed("counter");
-
-void setup() {
-
-  // 1. start IO connection
-  io.connect();
-
-  // 2. prepare MQTT subscription with handler function
-  counter->onMessage(handleMessage);
-
-  // 3. wait for successful connection
-  while(io.mqttStatus() < AIO_CONNECTED) {
-    delay(500);
-  }
-
-  // 4. send /get message, requesting last value
-  counter->get(); // ask Adafruit IO to resend the last value
-
-}
-// ....
-```
-<% end %>

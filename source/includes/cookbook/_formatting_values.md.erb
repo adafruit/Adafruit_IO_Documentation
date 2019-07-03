@@ -1,0 +1,9 @@
+# Formatting values
+
+Adafruit IO stores all data as UTF-8 strings without applying formatting. _Some_ data is formatted when rendered on dashboards, but you should always be able to get back what you sent.
+
+
+## Floating Point Data
+
+If you're _sending_ `3.1415` but you only want to _see_ `3.14` - reduce the value to the desired amount of precision in your code. You can round (up or down) or truncate this value to get it in the format you want Adafruit IO to display.
+

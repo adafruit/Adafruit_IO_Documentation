@@ -1,0 +1,83 @@
+# Image Data
+
+Using an *Image Block* on an Adafruit IO, you can automatically display a Base64 image data string on your dashboard by sending a Base64 image data string to an Adafruit IO feed. By dragging and dropping an image onto the block in your browser, you can also send image data on the same feed.
+
+
+## Design Considerations
+
+There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data.
+
+When using the drag-and-drop feature of Adafruit IO dashboards or feed pages, image conversion from binary to Base64 happens inside the browser. That means no image pre-compression or optimization and additional size boost due to the conversion from binary to Base64.
+
+You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  [the .png image used for testing](https://io.adafruit.com/blog/images/2016-12-14-power-switch.png)  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.
+
+![base64imagepreview](https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png)
+
+Flat colored .png images are particularly well suited to small image sizes. The image below is 1024 x 768 pixels and was run through the [ImageOptim](https://imageoptim.com/versions) tool. The base size on disk is 10665 bytes and the Base64 encoded size is 14221 bytes.
+
+<%= image_tag "images/cookbook/plain-text-on-a-plain-background.png" %>
+
+By optimizing heavily with imagemagick, I was able to get an image under 1024 bytes. The gif below is 703 bytes on disk and 941 bytes when converted to Base64, so it will work even on feeds with history turned on.
+
+```sh
+# on macOS 10.14 with ImageMagick 6.9.9-37
+$ convert small-image-with-text.gif -colors 3 \
+    -strip -coalesce -layers Optimize \
+    small-image-with-text-optim.gif
+$ base64 -i small-image-with-text-optim.gif \
+    -o small-image-with-text-optim.gif.base64
+```
+
+<%= image_tag "images/cookbook/small-image-with-text-optim.gif" %>
+
+
+
+## Publishing Image Data
+
+[Here's an example Python sketch](https://gist.github.com/abachman/b0d3687227da7f82818174a89b325588) that publishes image data to an Adafruit IO feed when a signal is received on another IO feed.
+
+The two most important factors for published image data size are image resolution and image formatting. The [Python Imaging Library](https://pypi.org/project/Pillow/) (`pillow`) allows us to resize images and has built in support for jpeg optimization.
+
+The key chunk of code is here:
+
+<% partial 'helpers/inline_code' do %>
+```
+# create an in-memory file to store raw image data
+stream = io.BytesIO()
+
+# write camera data to the stream (file)
+camera.capture(stream, format='jpeg', resize=(800, 600))
+stream.seek(0)
+
+# use Python Imaging Library to optimize the final image data
+image = Image.open(stream, 'r')
+optim_stream = io.BytesIO()
+image.save(optim_stream, format='jpeg', quality=70, optimize=True)
+optim_stream.seek(0)
+
+# convert image binary data to base64 string
+value = base64.b64encode(optim_stream.read())
+
+if len(value) > 102400:
+    print("image file too big!")
+    return
+
+client.publish('image-stream', value)
+```
+<% end %>
+
+We create an image, optimize it, convert it to a Base64 string, and then immediately publish that string to Adafruit IO. It's also worth noting that we never save the image file to disk, it is only ever present in memory, which saves a bit of wear-and-tear on our Raspberry Pi microSD card.
+
+If you wanted to do the same from a single command line command, given an existing image file, you could use curl's support for uploading files from stdin:
+
+<% partial 'helpers/inline_code' do %>
+```
+$ base64 image.jpg | curl -F value=@- -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+```
+<% end %>
+
+The `-F value=@-` tells curl, "I want to POST a multipart form with a single parameter named 'value' whose value is the input to this command." The preceding `base64` command and the `|` character mean that the input to the curl command is the base64 string version of the binary image data.
+
+Stop by the forums if this leaves you with questions or if you're looking for examples in your favorite programming language :D
+

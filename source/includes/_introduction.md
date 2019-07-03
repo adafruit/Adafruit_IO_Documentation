@@ -1,4 +1,4 @@
-# Adafruit IO
+# Adafruit IO HTTP API
 
 The Adafruit IO HTTP API provides access to your Adafruit IO data from any programming language or hardware environment that can speak HTTP. The easiest way to get started is with an [Adafruit Learning Guide](https://learn.adafruit.com/series/adafruit-io-basics) and a simple Internet of Things capable device like the [Feather Huzzah](https://www.adafruit.com/product/2821) or a more complicated one like the [PyPortal](https://www.adafruit.com/product/4116).
 

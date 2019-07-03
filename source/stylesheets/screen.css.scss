@@ -1,8 +1,12 @@
 @charset "utf-8";
+
 @import 'normalize';
 @import 'variables';
 @import 'icon-font';
 @import 'customization';
+
+$fa-enable-utilities: false;
+@import 'font-awesome/font-awesome';
 
 /*
 Copyright 2008-2013 Concur Technologies, Inc.

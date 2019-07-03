@@ -1,4 +1,4 @@
-## Sending and Storing JSON
+# Sending and Storing JSON
 
 ```javascript
 // A basic data record
@@ -19,7 +19,7 @@ But what happens when the value you want to send is itself JSON? Good news! Ther
 
 
 
-### Double encoded JSON strings
+## Double encoded JSON strings
 
 **The safest way to can send JSON data as a value** is to "double encode" it before sending, in which case IO will treat it as a raw string. If you're using something like javascript's `JSON.stringify` function or Ruby's `JSON.generate`, double encoding means passing the result of `JSON.stringify` through `JSON.stringify` a second time.
 
@@ -41,7 +41,7 @@ var value = JSON.parse(data.value)
 <% end %>
 
 
-### IO formatted JSON
+## IO formatted JSON
 
 ```javascript
 {
@@ -58,14 +58,13 @@ It's worth noting that because Adafruit IO parses the entire JSON object that yo
 
 
 
-### Non-IO formatted JSON
+## Non-IO formatted JSON
 
 ```
 curl -H "Content-Type: application/json" \
     -H "X-AIO-Key: toomanysecrets" \
     --data '{"sensor-1":22.587,"sensor-2":13.182}' \
     https://io.adafruit.com/api/v2/username/feeds/feed-key/data
-
 ```
 
 Another way you can send raw JSON data is to just send it. If Adafruit IO doesn't find a "value" key in the JSON object you send, it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object, sending the string `{"sensor-1":22.587,"sensor-2":13.182}` will result in `{"sensor-1":22.587,"sensor-2":13.182}` being stored in IO and sent to MQTT subscribers.
@@ -74,7 +73,7 @@ Another way you can send raw JSON data is to just send it. If Adafruit IO doesn'
 
 
 
-### That's not JSON at all!
+## That's not JSON at all!
 
 If you want to be absolutely sure that Adafruit IO will not interfere with the data you're sending, encode it as a [Base64](https://en.wikipedia.org/wiki/Base64) string first.
 
