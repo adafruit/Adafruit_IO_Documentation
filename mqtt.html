@@ -425,7 +425,7 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 <ul>
 <li><p><strong>Arduino</strong>: <a href="https://github.com/adafruit/Adafruit_MQTT_Library">Adafruit MQTT</a></p></li>
 <li><p><strong>Python</strong>: <a href="https://github.com/adafruit/Adafruit_IO_Python">Adafruit IO Python</a> includes an MQTT Client.</p></li>
-<li><p><strong>CircuitPython</strong>: Accessing the Adafruit IO MQTT API is not currently supported on this platform.</p></li>
+<li><p><strong>CircuitPython</strong>: <a href="https://github.com/adafruit/Adafruit_CircuitPython_AdafruitIO/">Adafruit IO CircuitPython</a> includes a MQTT Client class, <code>IO_MQTT</code>.</p></li>
 <li><p><strong>MicroPython</strong>: MicroPython devices can connect to Adafruit IO using <a href="https://github.com/micropython/micropython-lib/tree/master/umqtt.simple">uMQTT</a></p></li>
 <li><p><strong>Ruby</strong>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
 </ul>
@@ -636,7 +636,13 @@ to MQTT subscribers.</p>
 </span>  <span class="n">counter</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span> <span class="c1">// ask Adafruit IO to resend the last value
 </span><span class="p">}</span>
 <span class="c1">// ....
-</span></code></pre><h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='feed-topic-format'>Feed Topic Format</h2>
+</span></code></pre>
+<p>You can also perform a <code>/get</code> using the Adafruit IO CircuitPython library in one line of code:
+<div class="center-column"></div>
+<code>python
+io.get(&#39;temperature&#39;)
+</code></p>
+<h1 id='mqtt-topics'>MQTT Topics</h1><h2 id='feed-topic-format'>Feed Topic Format</h2>
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
 
@@ -756,6 +762,14 @@ location,1.0,2.0,3.0
 <li><code>time/millis</code></li>
 <li><code>time/ISO-8601</code></li>
 <li><code>time/hours</code></li>
+</ul>
+
+<p>Most of the Adafruit IO client libraries provide helper functions for easy use of these topics:</p>
+
+<ul>
+<li><a href="https://github.com/adafruit/Adafruit_IO_Arduino/blob/master/examples/adafruitio_17_time_subscribe/adafruitio_17_time_subscribe.ino">Arduino</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_IO_Python/blob/master/examples/mqtt/mqtt_time.py">Python</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_CircuitPython_AdafruitIO/blob/master/examples/mqtt/adafruit_io_time.py">CircuitPython</a></li>
 </ul>
 <h2 id='time-seconds'>time/seconds</h2>
 <p>This topic publishes the current time in <a href="https://en.wikipedia.org/wiki/Unix_time">Unix epoch seconds</a>.</p>
