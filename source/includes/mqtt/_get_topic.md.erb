@@ -17,7 +17,7 @@ Since we donâ€™t actually store data in the broker but at a lower level and canâ
 
 ## Using the */get topic
 
-The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add `/get` to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: `\0`) . IO will immediately publish, just for that client, the most recent value received on the feed.
+For any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic using the feed or group **key**, then add `/get` to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: `\0`). IO will immediately publish, just for that client, the most recent value received on the feed.
 
 For example, let's imagine we have a device that subscribes to a counter feed: `uname/f/counter`. If we want to get the latest value, the `/get` topic we should publish to is `uname/f/counter/get`. After connecting to IO, subscribing to `uname/f/counter`, and publishing ` ` to `uname/f/counter/get`, we will immediately receive a message on our `uname/f/counter` subscription with the last value that was published to `counter`.
 
