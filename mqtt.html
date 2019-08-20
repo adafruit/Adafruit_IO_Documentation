@@ -609,7 +609,7 @@ to MQTT subscribers.</p>
 
 <p>Since we don’t actually store data in the broker but at a lower level and can’t support PUBLISH retain directly, we’re proposing a different solution for the retaining problem: the <code>/get</code> topic modifier.</p>
 <h2 id='using-the-get-topic'>Using the */get topic</h2>
-<p>The way it works is that for any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic, then add <code>/get</code> to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: <code>\0</code>) . IO will immediately publish, just for that client, the most recent value received on the feed.</p>
+<p>For any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic using the feed or group <strong>key</strong>, then add <code>/get</code> to the topic you subscribed to and publish anything to that new topic (our Arduino library uses the null character: <code>\0</code>). IO will immediately publish, just for that client, the most recent value received on the feed.</p>
 
 <p>For example, let&#39;s imagine we have a device that subscribes to a counter feed: <code>uname/f/counter</code>. If we want to get the latest value, the <code>/get</code> topic we should publish to is <code>uname/f/counter/get</code>. After connecting to IO, subscribing to <code>uname/f/counter</code>, and publishing <code></code> to <code>uname/f/counter/get</code>, we will immediately receive a message on our <code>uname/f/counter</code> subscription with the last value that was published to <code>counter</code>.</p>
 
