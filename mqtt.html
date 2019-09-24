@@ -266,7 +266,19 @@
           <li class="on-screen">
             <a href="#mqtt-api-rate-limiting" class="toc-h1 toc-link" data-title="MQTT API Rate Limiting">
               MQTT API Rate Limiting
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
             </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#rate-limit-bans" class="toc-h2 toc-link" data-title="Rate Limit Bans">Rate Limit Bans</a>
+                  </li>
+                  <li>
+                    <a href="#preventing-mqtt-bans" class="toc-h2 toc-link" data-title="Preventing MQTT Bans">Preventing MQTT Bans</a>
+                  </li>
+              </ul>
           </li>
           <li class="on-screen">
             <a href="#mqtt-data-format" class="toc-h1 toc-link" data-title="MQTT Data Format">
@@ -394,6 +406,23 @@
                   </li>
               </ul>
           </li>
+          <li class="on-screen">
+            <a href="#troubleshooting" class="toc-h1 toc-link" data-title="Troubleshooting">
+              Troubleshooting
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
+            </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#understanding-error-messages" class="toc-h2 toc-link" data-title="Understanding Error Messages">Understanding Error Messages</a>
+                  </li>
+                  <li>
+                    <a href="#writing-safe-mqtt-code" class="toc-h2 toc-link" data-title="Writing Safe MQTT Code">Writing Safe MQTT Code</a>
+                  </li>
+              </ul>
+          </li>
 
             <li>
 <a href="cookbook.html" class="toc-h1 toc-link append">                API Cookbook
@@ -472,16 +501,29 @@ Connecting to Adafruit IO via MQTT and reusing the client ID of an existing conn
 
 <p>If you aren&#39;t familiar with MQTT QoS levels <a href="http://www.hivemq.com/mqtt-essentials-part-6-mqtt-quality-of-service-levels/">be sure to read this great blog post</a> explaining their meaning.</p>
 
-<p>For publishing feed values <strong>the Adafruit IO MQTT API supports QoS level 0 (at most once) and 1 (at least once) only</strong>.  </p>
+<p>For publishing feed values <strong>the Adafruit IO MQTT API supports QoS level 0 (at most once) and 1 (at least once) only</strong>.</p>
 
 <p>QoS level 2 (exactly once) is <em>not</em> currently supported.</p>
 <h1 id='mqtt-api-rate-limiting'>MQTT API Rate Limiting</h1>
-<p>Adafruit IO&#39;s MQTT server imposes a rate limit to prevent excessive load on the service.  If a user performs too many publish actions in a short period of time then some of the publish requests might be rejected. 
-The current rate limit is at most 1 request per second (or 60 requests within 60 seconds), without an Adafruit IO+ Boost applied to your account.</p>
+<p>Adafruit IO&#39;s MQTT server imposes a rate limit to prevent excessive load on the service.  If a user performs too many <strong>publish</strong> actions in a short period of time then some of the requests will be rejected and an error message will be published on <a href="#error-topics">your /throttle topic</a>. The current rate limit is at most 30 requests per minute for free accounts, 60 per minute with an IO+ account, and expandable via Adafruit IO+ Boost applied to your account.</p>
 
-<p>If you exceed this limit, a notice will be sent to the <code>(username)/throttle</code> topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account.</p>
+<p>We also limit a few other actions on Adafruit IO&#39;s MQTT broker. If you send, within a minute, more than: 100 MQTT SUBSCRIBE requests, 10 <em>failed</em> MQTT SUBSCRIBE requests, or 10 <em>failed</em> MQTT PUBLISH requests; or you send enough messages after passing the rate limit; or you attempt to log in more than 20 times within a minute, your account will be temporarily banned from the MQTT broker.</p>
+
+<p>Most of the systems connecting to Adafruit IO are simple, automated devices and MQTT client scripts. A runaway ESP8266 sending MQTT SUBSCRIBE packets inside the main <code>loop()</code> function of an Arduino sketch can send about 500 packets per minute. It wouldn&#39;t take many poorly written clients connecting to our MQTT broker to crash the service for everyone if we didn&#39;t add rate limits to every action.</p>
+
+<p>If you exceed a rate limit, a notice will be sent to the <code>(username)/throttle</code> topic. If your account is temporarily banned, a notice will be sent to the <code>{username}/errors</code> topic. While developing your project, you should always keep subscriptions to the error topics open so you can see when you&#39;re getting close to the Adafruit IO rate limits and when you&#39;ve been blocked.</p>
 
 <p>This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below 2 requests/second.</p>
+<h2 id='rate-limit-bans'>Rate Limit Bans</h2>
+<p>Temporary MQTT bans start at 30 seconds and scale as a multiple of the number of bans within the last hour up to one hour maximum. For example, 10 rejected MQTT SUBSCRIBE requests will trigger a temporary ban of 30 seconds, that&#39;s 1 ban. If it&#39;s a device that automatically wakes up, connects to Adafruit IO, and sends a stream of rejected SUBSCRIBE packets, it will be banned again. The second ban results in 60 seconds offline, the third is 90 seconds, and so on.</p>
+
+<p>You can visit your Adafruit IO monitor page any time</p>
+<h2 id='preventing-mqtt-bans'>Preventing MQTT Bans</h2>
+<p>A misbehaving MQTT device--for example, a device configured for a different MQTT broker like Home Assistant--that attempts to publish to invalid Adafruit IO MQTT topics can lock <em>every</em> device and browser session out of your Adafruit IO MQTT account for an hour at a time.</p>
+
+<p>The easiest way to prevent a temporary or permanent MQTT block being put against your account is to delay how frequently your MQTT client sends messages.</p>
+
+<p>The second thing to check is that you are not using a different Internet of Things software toolkit to talk to Adafruit IO. The Adafruit IO MQTT broker</p>
 <h1 id='mqtt-data-format'>MQTT Data Format</h1>
 <p>There are a few ways to send data to our MQTT API if you&#39;re writing your own client library.</p>
 
@@ -799,6 +841,54 @@ location,1.0,2.0,3.0
 <p>You may only subscribe to your personal throttle feed.</p>
 <h2 id='adafruit-io-monitor'>Adafruit IO Monitor</h2>
 <p>Both error feeds can be seen live on <a href="https://io.adafruit.com/monitor">your Adafruit IO Monitor page</a>.</p>
+<h1 id='troubleshooting'>Troubleshooting</h1>
+<p>What can you do when something is going wrong with your project? Adafruit IO provides a few ways for you to find out what&#39;s happening behind the scenes with your MQTT connected devices.</p>
+<h2 id='understanding-error-messages'>Understanding Error Messages</h2>
+<p>The two <a href="#error-topics">MQTT error topics</a> produce alerts, warnings, and error messages when there&#39;s a problem with your MQTT data. MQTT error messages are <strong>not stored permanently</strong>, so if you want to see them you&#39;ll need to keep the monitor page open while developing your project.</p>
+
+<p>We try to be descriptive enough that you can figure out what went wrong, but there are a few categories of error messages you may run into. We list an example message for each category of error, yours will look different but most are in the form:</p>
+
+<p><code>CLIENT_ID IP_ADDRESS MQTT_ACTION MQTT_TOPIC ...message</code></p>
+<h3 id='exceeded-rate-limit'>Exceeded Rate Limit</h3>
+<p>On <code>{username}/throttle</code>:</p>
+
+<p>When MQTT packets are arriving too quickly (SUBSCRIBE only, warning):</p>
+
+<p class='error-message-sample'>io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds only 5 attempts remaining in the next 60 seconds, please slow your request rate</p>
+
+<p>When publishing data too quickly (warning): <p class='error-message-sample'>test_username data rate limit reached, 21 seconds until throttle released</p></p>
+
+<p>On <code>{username}/errors</code>:</p>
+
+<p>When MQTT packets are arriving too quickly (SUBSCRIBE only, error):  <p class='error-message-sample'>io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds made too many requests, wait before reconnecting</p></p>
+
+<p>After a certain number of throttle warning messages have been sent: <p class='error-message-sample'>enforcement limit reached, your account is banned for 30 seconds</p></p>
+<h3 id='invalid-mqtt-topic'>Invalid MQTT topic</h3>
+<p>On <code>{username}/errors</code>:</p>
+
+<p>When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <p class='error-message-sample'>io-badstuff-12558 172.18.0.1 SUBSCRIBE LWT/$SYS/obe/pixel/adafruit.server/sessions-005 rejected, not a valid resource topic</p></p>
+<h3 id='mqtt-action-flood'>MQTT action flood</h3>
+<p>On <code>{username}/errors</code>:</p>
+
+<p>When subscribing or publishing to resources faster than IO can verify that you have permission to access them: <p class='error-message-sample'>io-badstuff-94864 172.18.0.1 SUBSCRIBE time/seconds request flood, disconnecting</p></p>
+<h3 id='resource-not-available'>Resource not available</h3>
+<p>On <code>{username}/errors</code>:</p>
+
+<p>When you don&#39;t have permission to access a shared resource: <p class='error-message-sample'>io-badstuff-29349 172.18.0.1 SUBSCRIBE other_username/feeds/something.fake-11 rejected, resource not available or not authorized</p></p>
+<h3 id='action-attempted-while-banned'>Action attempted while banned</h3>
+<p>On <code>{username}/errors</code>:</p>
+
+<p>When attempting to publish or subscribe after your account has been temporarily banned: <p class='error-message-sample'>io-mqtt-0d63acfb 172.18.0.1 PUBLISH test_username/feeds/example.counter-3 rejected, user is temporarily blocked</p></p>
+<h2 id='writing-safe-mqtt-code'>Writing Safe MQTT Code</h2>
+<p><strong>Always. Use. Delay.</strong> Make sure there is time in between messages to the Adafruit IO MQTT broker. If you&#39;re saving data in an Arduino or CircuitPython sketch inside the program&#39;s main loop, make sure you&#39;re delaying, sleeping, or using some other technique to put space in between messages.</p>
+
+<p><strong>Use current libraries.</strong> Adafruit provides complete API client libraries for Arduino, Python, Ruby, and Javascript. When in doubt, use our code to build your next project.</p>
+
+<p><strong>Use the least data possible.</strong> It is always better to send data from a sensor infrequently and slowly increase the frequency as needed rather than sending as quickly as possible from the beginning. An old device or project that you forgot about can easily take down your whole account when you go to add something new. Also, when dealing with sensors like temperature, outdoor light level, or wind speed, reality doesn&#39;t change very fast so there&#39;s no need for your data to change fast either.</p>
+
+<p><strong>Never reuse Internet of Things projects from other systems without making sure it conforms to Adafruit IO&#39;s requirements</strong>. Code that works with Home Assistant, Node Red, or any other open source MQTT broker is likely to use MQTT topic conventions that <em>will not work</em> with Adafruit IO. Plugging Adafruit IO&#39;s broker credentials into an example project from another system is a quick way to get your account locked by a runaway process.</p>
+
+<p><strong>Ask questions on the forums or Discord!</strong> There&#39;s a community of people who may have already run into the same problem you&#39;re having. Search the forums, ask a question, stop by and see what people are working on. Whatever approach you take, you being involved in the Adafruit community can make the difference for someone else. You can find the forums here: <a href="https://forums.adafruit.com/viewforum.php?f=56">https://forums.adafruit.com/viewforum.php?f=56</a> and sign up for Adafruit&#39;s Discord chat server here: <a href="https://discord.gg/adafruit">https://discord.gg/adafruit</a></p>
 
       </div>
 
