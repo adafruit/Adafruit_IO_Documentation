@@ -33,6 +33,11 @@ blockquote {
   }
 }
 
+.error-message-sample {
+  background: rgba(0, 0, 0, .05);
+  font-family: monospace;
+}
+
 .toc-wrapper {
   li.on-screen {
     .toc-h1.toc-link {

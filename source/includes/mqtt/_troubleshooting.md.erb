@@ -1,0 +1,69 @@
+# Troubleshooting
+
+What can you do when something is going wrong with your project? Adafruit IO provides a few ways for you to find out what's happening behind the scenes with your MQTT connected devices.
+
+## Understanding Error Messages
+
+The two [MQTT error topics](#error-topics) produce alerts, warnings, and error messages when there's a problem with your MQTT data. MQTT error messages are **not stored permanently**, so if you want to see them you'll need to keep the monitor page open while developing your project.
+
+We try to be descriptive enough that you can figure out what went wrong, but there are a few categories of error messages you may run into. We list an example message for each category of error, yours will look different but most are in the form:
+
+`CLIENT_ID IP_ADDRESS MQTT_ACTION MQTT_TOPIC ...message`
+
+
+### Exceeded Rate Limit
+
+On `{username}/throttle`:
+
+When MQTT packets are arriving too quickly (SUBSCRIBE only, warning):
+
+<%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds only 5 attempts remaining in the next 60 seconds, please slow your request rate' %>
+
+When publishing data too quickly (warning): <%= error_message 'test_username data rate limit reached, 21 seconds until throttle released' %>
+
+On `{username}/errors`:
+
+When MQTT packets are arriving too quickly (SUBSCRIBE only, error):  <%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds made too many requests, wait before reconnecting' %>
+
+After a certain number of throttle warning messages have been sent: <%= error_message 'enforcement limit reached, your account is banned for 30 seconds' %>
+
+
+### Invalid MQTT topic
+
+On `{username}/errors`:
+
+When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <%= error_message 'io-badstuff-12558 172.18.0.1 SUBSCRIBE LWT/$SYS/obe/pixel/adafruit.server/sessions-005 rejected, not a valid resource topic' %>
+
+
+### MQTT action flood
+
+On `{username}/errors`:
+
+When subscribing or publishing to resources faster than IO can verify that you have permission to access them: <%= error_message 'io-badstuff-94864 172.18.0.1 SUBSCRIBE time/seconds request flood, disconnecting' %>
+
+
+### Resource not available
+
+On `{username}/errors`:
+
+When you don't have permission to access a shared resource: <%= error_message 'io-badstuff-29349 172.18.0.1 SUBSCRIBE other_username/feeds/something.fake-11 rejected, resource not available or not authorized' %>
+
+
+### Action attempted while banned
+
+On `{username}/errors`:
+
+When attempting to publish or subscribe after your account has been temporarily banned: <%= error_message 'io-mqtt-0d63acfb 172.18.0.1 PUBLISH test_username/feeds/example.counter-3 rejected, user is temporarily blocked' %>
+
+
+## Writing Safe MQTT Code
+
+**Always. Use. Delay.** Make sure there is time in between messages to the Adafruit IO MQTT broker. If you're saving data in an Arduino or CircuitPython sketch inside the program's main loop, make sure you're delaying, sleeping, or using some other technique to put space in between messages.
+
+**Use current libraries.** Adafruit provides complete API client libraries for Arduino, Python, Ruby, and Javascript. When in doubt, use our code to build your next project.
+
+**Use the least data possible.** It is always better to send data from a sensor infrequently and slowly increase the frequency as needed rather than sending as quickly as possible from the beginning. An old device or project that you forgot about can easily take down your whole account when you go to add something new. Also, when dealing with sensors like temperature, outdoor light level, or wind speed, reality doesn't change very fast so there's no need for your data to change fast either.
+
+**Never reuse Internet of Things projects from other systems without making sure it conforms to Adafruit IO's requirements**. Code that works with Home Assistant, Node Red, or any other open source MQTT broker is likely to use MQTT topic conventions that _will not work_ with Adafruit IO. Plugging Adafruit IO's broker credentials into an example project from another system is a quick way to get your account locked by a runaway process.
+
+**Ask questions on the forums or Discord!** There's a community of people who may have already run into the same problem you're having. Search the forums, ask a question, stop by and see what people are working on. Whatever approach you take, you being involved in the Adafruit community can make the difference for someone else. You can find the forums here: [https://forums.adafruit.com/viewforum.php?f=56](https://forums.adafruit.com/viewforum.php?f=56) and sign up for Adafruit's Discord chat server here: [https://discord.gg/adafruit](https://discord.gg/adafruit)
