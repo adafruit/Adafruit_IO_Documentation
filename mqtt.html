@@ -688,29 +688,41 @@ io.get(&#39;temperature&#39;)
 <p>Adafruit IO&#39;s MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed&#39;s topic to be notified when the feed has a new value.</p>
 
-<p><code>Your_Adafruit_IO_Username</code>/<em>feeds</em>/<code>Feed-Key</code></p>
+<ul>
+<li><code>{your Adafruit IO username}/feeds/{feed key}</code></li>
+<li><code>{your Adafruit IO username}/feeds/{feed key}/csv</code></li>
+<li><code>{your Adafruit IO username}/feeds/{feed key}/json</code></li>
+</ul>
 <h2 id='group-topic-format'>Group Topic Format</h2>
-<p><code>Your_Adafruit_IO_Username</code>/<em>groups</em>/<code>Feed-Key</code></p>
+<ul>
+<li><code>{your Adafruit IO username}/groups/{group key}</code></li>
+<li><code>{your Adafruit IO username}/groups/{group key}/csv</code></li>
+<li><code>{your Adafruit IO username}/groups/{group key}/json</code></li>
+</ul>
 <h2 id='small-topic-format'>Small Topic Format</h2>
 <p>If you&#39;re using an embedded system and need to conserve space, use the <code>/f/</code> or <code>/g/</code> topic formats:</p>
 
 <ul>
-<li><p><code>Your-AdafruitIO_Username</code>/<em>g</em>/<code>Feed-Key</code></p></li>
-<li><p><code>Your_Adafruit_IO_Username</code>/<em>f</em>/<code>Feed-Key</code></p></li>
+<li><code>{your Adafruit IO username}/g/{group key}</code></li>
+<li><code>{your Adafruit IO username}/g/{group key}/csv</code></li>
+<li><code>{your Adafruit IO username}/g/{group key}/json</code></li>
+<li><code>{your Adafruit IO username}/f/{feed key}</code></li>
+<li><code>{your Adafruit IO username}/f/{feed key}/csv</code></li>
+<li><code>{your Adafruit IO username}/f/{feed key}/json</code></li>
 </ul>
 <h2 id='using-a-wildcard'>Using a Wildcard</h2>
 <p>You can also subscribe to the parent &#39;feeds&#39; path to be notified when any owned feed changes using MQTT&#39;s <code>#</code> wildcard character.  For example, the user could subscribe to either:</p>
 
 <ul>
-<li><code>Your_Adafruit_IO_Username</code>/<em>feeds</em>/<code>#</code></li>
-<li><code>Your_Adafruit_IO_Username</code>/<em>f</em>/<code>#</code></li>
+<li><code>{your Adafruit IO username}/feeds/#</code></li>
+<li><code>{your Adafruit IO username}/f/#</code></li>
 </ul>
 
 <p>Once subscribed to the path above any change to a feed owned by <code>Your_Adafruit_IO_Username</code> will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.</p>
 
 <p><strong>Be aware the MQTT server sends feed updates on all possible paths for a specific feed</strong>. For example, subscribing to <code>IO-Username/f/#</code> and publishing to <code>IO-Username/f/photocell-one</code> would produce messages from: <code>IO-Username/f/photocell-one</code>, <code>IO-Username/f/photocell-one/json</code>, and <code>IO-Username/f/photocell-one/csv</code>; each referring to the same updated value.  To reduce noise, <em>make sure to grab the specific topic</em> of the feed <code>/</code> format you&#39;re interested in and change your subscription to that.</p>
 
-<p>If you&#39;d like to avoid the formatted feeds (<code>/json</code> and <code>/csv</code> topics) <em>but still see all the feeds you&#39;re publishing to</em>, you can use MQTT&#39;s + wildcard in place of #. In this case, subscribing to <code>IO-Username/f/+</code> would produce output on <code>IO-Username/f/photocell-one</code>, but <em>not</em> <code>IO-Username/f/photocell-one/json</code>.</p>
+<p>If you&#39;d like to avoid the formatted feeds (<code>/json</code> and <code>/csv</code> topics) <em>but still see all the feeds you&#39;re publishing to</em>, you can use MQTT&#39;s <code>+</code> wildcard in place of <code>#</code>. In this case, subscribing to <code>IO-Username/f/+</code> would produce output on <code>IO-Username/f/photocell-one</code>, but <em>not</em> <code>IO-Username/f/photocell-one/json</code>.</p>
 <h1 id='group-topics'>Group Topics</h1>
 <p>You aren&#39;t limited to just Feed based MQTT topics, Adafruit IO supports grouped feeds as well.  <a href="https://io.adafruit.com/api/docs/#operation/createGroupData">Similar to our HTTP group data creation API</a>, you can publish to multiple feeds or subscribe to multiple feeds through a single MQTT topic.</p>
 
@@ -828,7 +840,12 @@ location,1.0,2.0,3.0
 <h2 id='time-hours'>time/hours</h2>
 <p>This topic publishes the current hour of the day in 24 hour format (the values 0 - 23) in the UTC time zone. It only publishes once every hour.</p>
 <h1 id='error-topics'>Error Topics</h1>
-<p>Adafruit IO provides two error reporting MQTT topics you can subscribe to:  <code>{username}/errors</code> and <code>{username}/throttle</code>.</p>
+<p>Adafruit IO provides two error reporting MQTT topics you can subscribe to:</p>
+
+<ul>
+<li><code>{username}/errors</code></li>
+<li><code>{username}/throttle</code></li>
+</ul>
 <h2 id='username-errors'>{username}/errors</h2>
 <p>This topic publishes error messages related to publishing and subscribing to Adafruit IO feeds. Because MQTT is an asynchronous and compact messaging format, we cannot respond to invalid PUBLISH or SUBSCRIBE packets with a comprehensive error message, so we use this topic to update subscribers when an error occurs.</p>
 
@@ -864,9 +881,19 @@ location,1.0,2.0,3.0
 
 <p>After a certain number of throttle warning messages have been sent: <p class='error-message-sample'>enforcement limit reached, your account is banned for 30 seconds</p></p>
 <h3 id='invalid-mqtt-topic'>Invalid MQTT topic</h3>
-<p>On <code>{username}/errors</code>:</p>
+<p>There are several variations of invalid MQTT topic errors. All error messages will be published on the <code>{username}/errors</code> topic.</p>
 
 <p>When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <p class='error-message-sample'>io-badstuff-12558 172.18.0.1 SUBSCRIBE LWT/$SYS/obe/pixel/adafruit.server/sessions-005 rejected, not a valid resource topic</p></p>
+
+<p>Sometimes invalid MQTT topics or topics that don&#39;t fit the <code>{username}/{type}/{key}/{format}</code> pattern can look like a different error to IO. The most common is seeing an error message like this when PUBLISHING: <p class='error-message-sample'>io-mqtt-149edf5e 172.18.0.1 PUBLISH ,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,, rejected, only shared feeds may be published to</p></p>
+
+<p>Or: <p class='error-message-sample'>io-mqtt-149edf5e 172.18.0.1 PUBLISH  rejected, only shared feeds may be published to</p></p>
+
+<p>In each case, IO is showing the topic your code specified in between &quot;PUBLISH&quot; and &quot;rejected.&quot; In the first example, the given topic was <code>,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,</code> and in the second example, the given topic was an empty string, <code></code>. Both examples probably mean there was an error in the sketch that caused the MQTT topic to become corrupted in memory before publishing data.</p>
+
+<p>A good idea if you&#39;re getting <em>any</em> error messages when publishing or subscribing from a new sketch is to print out the MQTT topic you&#39;re using to the serial console (<code>Serial.println</code> in Arduino, <code>print()</code> in CircuitPython) in your sketch before you publish or subscribe just to make sure the data you&#39;re sending is the data you think you&#39;re sending.</p>
+
+<p>The meaning of the error message, &quot;rejected, only shared feeds may be published to&quot;, is that IO saw a username other than the one you authenticated with in the <code>{username}</code> part of an MQTT topic and something other than &quot;feeds&quot; or &quot;f&quot; in the <code>{type}</code> part of an MQTT topic. Because the topic part of the MQTT packet IO received was, <code>,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,</code> IO couldn&#39;t find a username or a type in the string, so it had to reject the PUBLISH message.</p>
 <h3 id='mqtt-action-flood'>MQTT action flood</h3>
 <p>On <code>{username}/errors</code>:</p>
 

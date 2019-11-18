@@ -1968,7 +1968,9 @@ curl -H <span class="s2">"Content-Type: application/json"</span> -d <span class=
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds</code></div></p>
 </blockquote>
-<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -H <span class="s2">"X-AIO-Key: {io_key}"</span> /<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_name<span class="o">}</span>
+<pre class="highlight shell tab-shell"><code><span class="gp">$ </span>curl -X POST -H <span class="s2">"Content-Type: application/json"</span> -H <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    --data <span class="s1">'{"feed": {"name": "New Feed"}}'</span> <span class="se">\</span>
+    /<span class="o">{</span>username<span class="o">}</span>/feeds
 </code></pre><pre class="highlight cpp tab-cpp"><code><span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">newFeed</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"newfeed"</span><span class="p">);</span>
 </code></pre><pre class="highlight python tab-python"><code><span class="c"># Adafruit IO Python</span>
 <span class="n">new_feed</span> <span class="o">=</span> <span class="n">Feed</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">"newfeed"</span><span class="p">)</span>
