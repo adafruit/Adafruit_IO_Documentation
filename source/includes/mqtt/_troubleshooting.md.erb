@@ -30,9 +30,19 @@ After a certain number of throttle warning messages have been sent: <%= error_me
 
 ### Invalid MQTT topic
 
-On `{username}/errors`:
+There are several variations of invalid MQTT topic errors. All error messages will be published on the `{username}/errors` topic.
 
 When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <%= error_message 'io-badstuff-12558 172.18.0.1 SUBSCRIBE LWT/$SYS/obe/pixel/adafruit.server/sessions-005 rejected, not a valid resource topic' %>
+
+Sometimes invalid MQTT topics or topics that don't fit the `{username}/{type}/{key}/{format}` pattern can look like a different error to IO. The most common is seeing an error message like this when PUBLISHING: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH ,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,, rejected, only shared feeds may be published to' %>
+
+Or: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH  rejected, only shared feeds may be published to' %>
+
+In each case, IO is showing the topic your code specified in between "PUBLISH" and "rejected." In the first example, the given topic was `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` and in the second example, the given topic was an empty string, ` `. Both examples probably mean there was an error in the sketch that caused the MQTT topic to become corrupted in memory before publishing data.
+
+A good idea if you're getting _any_ error messages when publishing or subscribing from a new sketch is to print out the MQTT topic you're using to the serial console (`Serial.println` in Arduino, `print()` in CircuitPython) in your sketch before you publish or subscribe just to make sure the data you're sending is the data you think you're sending.
+
+The meaning of the error message, "rejected, only shared feeds may be published to", is that IO saw a username other than the one you authenticated with in the `{username}` part of an MQTT topic and something other than "feeds" or "f" in the `{type}` part of an MQTT topic. Because the topic part of the MQTT packet IO received was, `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` IO couldn't find a username or a type in the string, so it had to reject the PUBLISH message.
 
 
 ### MQTT action flood

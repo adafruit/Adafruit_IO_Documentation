@@ -5,30 +5,40 @@
 Adafruit IO's MQTT API exposes feed data using special topics. You can publish a new value for a feed to its topic, or you
 can subscribe to a feed's topic to be notified when the feed has a new value.
 
-`Your_Adafruit_IO_Username`/_feeds_/`Feed-Key`
+* `{your Adafruit IO username}/feeds/{feed key}`
+* `{your Adafruit IO username}/feeds/{feed key}/csv`
+* `{your Adafruit IO username}/feeds/{feed key}/json`
+
 
 ## Group Topic Format
 
-`Your_Adafruit_IO_Username`/_groups_/`Feed-Key`
+* `{your Adafruit IO username}/groups/{group key}`
+* `{your Adafruit IO username}/groups/{group key}/csv`
+* `{your Adafruit IO username}/groups/{group key}/json`
+
 
 ## Small Topic Format
 
 If you're using an embedded system and need to conserve space, use the `/f/` or `/g/` topic formats:
 
-* `Your-AdafruitIO_Username`/_g_/`Feed-Key`
+* `{your Adafruit IO username}/g/{group key}`
+* `{your Adafruit IO username}/g/{group key}/csv`
+* `{your Adafruit IO username}/g/{group key}/json`
+* `{your Adafruit IO username}/f/{feed key}`
+* `{your Adafruit IO username}/f/{feed key}/csv`
+* `{your Adafruit IO username}/f/{feed key}/json`
 
-* `Your_Adafruit_IO_Username`/_f_/`Feed-Key`
 
 ## Using a Wildcard
 
 You can also subscribe to the parent 'feeds' path to be notified when any owned feed changes using MQTT's `#` wildcard character.  For example, the user could subscribe to either:
 
-* `Your_Adafruit_IO_Username`/_feeds_/`#`
-* `Your_Adafruit_IO_Username`/_f_/`#`
+* `{your Adafruit IO username}/feeds/#`
+* `{your Adafruit IO username}/f/#`
 
 Once subscribed to the path above any change to a feed owned by `Your_Adafruit_IO_Username` will be sent to the MQTT client.  The topic will specify the feed that was updated, and the payload will have the new value.
 
 **Be aware the MQTT server sends feed updates on all possible paths for a specific feed**. For example, subscribing to `IO-Username/f/#` and publishing to `IO-Username/f/photocell-one` would produce messages from: `IO-Username/f/photocell-one`, `IO-Username/f/photocell-one/json`, and `IO-Username/f/photocell-one/csv`; each referring to the same updated value.  To reduce noise, _make sure to grab the specific topic_ of the feed `/` format you're interested in and change your subscription to that.
 
-If you'd like to avoid the formatted feeds (`/json` and `/csv` topics) _but still see all the feeds you're publishing to_, you can use MQTT's + wildcard in place of #. In this case, subscribing to `IO-Username/f/+` would produce output on `IO-Username/f/photocell-one`, but _not_ `IO-Username/f/photocell-one/json`.
+If you'd like to avoid the formatted feeds (`/json` and `/csv` topics) _but still see all the feeds you're publishing to_, you can use MQTT's `+` wildcard in place of `#`. In this case, subscribing to `IO-Username/f/+` would produce output on `IO-Username/f/photocell-one`, but _not_ `IO-Username/f/photocell-one/json`.
 
