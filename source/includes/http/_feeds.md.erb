@@ -114,7 +114,9 @@ username | string | true | a valid username string
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" /{username}/feeds/{feed_name}
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"feed": {"name": "New Feed"}}' \
+    /{username}/feeds
 ```
 
 ```cpp
