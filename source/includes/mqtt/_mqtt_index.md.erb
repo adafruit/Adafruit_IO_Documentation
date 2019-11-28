@@ -24,13 +24,15 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 
 ## MQTT Connection Details
 
-We *strongly* recommend connecting using SSL (Port 8883) if your client allows it.
+We *strongly* recommend connecting using SSL (Port 8883) if your client allows it.  Port 443 is for MQTT-over-Websockets
+clients which generally run in browsers, like Eclipse Paho, HiveMQ Websockets, or MQTTJS.
 
 |                      |                           |
 |----------------------|---------------------------|
 | **Host**             | io.adafruit.com           |
 | **Secure (SSL) Port**| 8883                      |
 | **Insecure Port**    | 1883                      |
+| **MQTT over Websocket| 443                       |
 | **Username**         | Your Adafruit IO Username |
 | **Password**         | Your Adafruit IO Key      |
 
