@@ -459,7 +459,8 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 <li><p><strong>Ruby</strong>: <a href="https://github.com/adafruit/io-client-ruby">Adafruit IO Ruby</a> includes an MQTT client.</p></li>
 </ul>
 <h2 id='mqtt-connection-details'>MQTT Connection Details</h2>
-<p>We <em>strongly</em> recommend connecting using SSL (Port 8883) if your client allows it.</p>
+<p>We <em>strongly</em> recommend connecting using SSL (Port 8883) if your client allows it.  Port 443 is for MQTT-over-Websockets
+clients which generally run in browsers, like Eclipse Paho, HiveMQ Websockets, or MQTTJS.</p>
 
 <table><thead>
 <tr>
@@ -478,6 +479,10 @@ IO libraries as they include support for MQTT. For other languages or platforms 
 <tr>
 <td><strong>Insecure Port</strong></td>
 <td>1883</td>
+</tr>
+<tr>
+<td>**MQTT over Websocket</td>
+<td>443</td>
 </tr>
 <tr>
 <td><strong>Username</strong></td>
