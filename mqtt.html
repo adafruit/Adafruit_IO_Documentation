@@ -53,7 +53,7 @@
 .highlight .cs {
   color: #75715e;
 }
-.highlight .c, .highlight .cd {
+.highlight .c, .highlight .ch, .highlight .cd, .highlight .cpf {
   color: #75715e;
 }
 .highlight .err {
@@ -137,7 +137,7 @@
 .highlight .s1 {
   color: #e6db74;
 }
-.highlight .s {
+.highlight .s, .highlight .sa, .highlight .dl {
   color: #e6db74;
 }
 .highlight .na {
@@ -152,41 +152,52 @@
 .highlight .ne {
   color: #a6e22e;
 }
-.highlight .nf {
+.highlight .nf, .highlight .fm {
   color: #a6e22e;
 }
 .highlight .vc {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .nn {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .nl {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .ni {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .bp {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .vg {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .vi {
   color: #ffffff;
+  background-color: #272822;
 }
-.highlight .nv {
+.highlight .nv, .highlight .vm {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .w {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .n, .highlight .py, .highlight .nx {
   color: #ffffff;
+  background-color: #272822;
 }
 .highlight .ow {
   color: #f92672;
@@ -216,11 +227,11 @@
     <a href="#" id="nav-button">
       <span>
         NAV
-        <img src="images/navbar.png" alt="Navbar" />
+        <img src="images/navbar.png" alt="" />
       </span>
     </a>
     <div class="toc-wrapper">
-      <img src="images/logo.png" class="logo" alt="Logo" />
+      <img src="images/logo.png" class="logo" alt="" />
 
         <div class="lang-selector">
               <a href="#" data-language-name="shell">cURL</a>
@@ -542,13 +553,13 @@ The proper format for location tagged JSON data is:</p>
 <p>Example JSON topic object:</p>
 
 <div class="center-column"></div>
-<pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-  <span class="s2">"value"</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span>
-  <span class="s2">"lat"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
-  <span class="s2">"lon"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
-  <span class="s2">"ele"</span><span class="p">:</span> <span class="mi">112</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+  <span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">lat</span><span class="dl">"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">lon</span><span class="dl">"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">ele</span><span class="dl">"</span><span class="p">:</span> <span class="mi">112</span>
 <span class="p">}</span>
-</code></pre>
+</code></pre></div>
 <p>Specifically, JSON objects must include a <code>value</code> key, and may include <code>lat</code>, <code>lon</code>, and <code>ele</code> keys.</p>
 <h2 id='sending-csv'>Sending CSV</h2>
 <p>Alternatively, you can send location tagged data to <code>/csv</code> topics. In this example, that would be the topic <code>mosfet/feeds/photocell-one/csv</code> instead of <code>mosfet/feeds/photocell-one</code>. Both store data in the same feed. The format IO expects for location tagged CSV data is VALUE, LATITUDE, LONGITUDE, ELEVATION.</p>
@@ -558,7 +569,7 @@ The proper format for location tagged JSON data is:</p>
 <p>An example is displayed below, which uses a simple Ruby MQTT library and the data shown, all these examples publish the same data to the same feed.</p>
 
 <div class="center-column"></div>
-<pre class="highlight ruby tab-ruby"><code><span class="c1"># first you'll need https://github.com/njh/ruby-mqtt</span>
+<div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># first you'll need https://github.com/njh/ruby-mqtt</span>
 <span class="nb">require</span> <span class="s1">'mqtt'</span>
 
 <span class="n">username</span> <span class="o">=</span> <span class="s1">'test_username'</span>
@@ -568,7 +579,7 @@ The proper format for location tagged JSON data is:</p>
 <span class="n">mqtt_client</span> <span class="o">=</span> <span class="no">MQTT</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">connect</span><span class="p">(</span><span class="n">url</span><span class="p">,</span> <span class="mi">8883</span><span class="p">)</span>
 
 <span class="c1"># simplest thing that could possibly work</span>
-<span class="n">mqtt_client</span><span class="p">.</span><span class="nf">publish</span><span class="p">(</span><span class="s1">'test_username/feeds/example'</span><span class="p">,</span> <span class="mi">22</span><span class="o">.</span><span class="mi">587</span><span class="p">)</span>
+<span class="n">mqtt_client</span><span class="p">.</span><span class="nf">publish</span><span class="p">(</span><span class="s1">'test_username/feeds/example'</span><span class="p">,</span> <span class="mf">22.587</span><span class="p">)</span>
 
 <span class="c1"># sending numbers as strings is fine, IO stores all data internally</span>
 <span class="c1"># as strings anyways</span>
@@ -590,20 +601,20 @@ The proper format for location tagged JSON data is:</p>
 <span class="s1">'{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}'</span><span class="p">)</span>
 <span class="n">mqtt_client</span><span class="p">.</span><span class="nf">publish</span><span class="p">(</span><span class="s1">'test_username/feeds/example/json'</span><span class="p">,</span>
 <span class="s1">'{"value":22.587,"lat":38.1123,"lon":-91.2325,"ele":112}'</span><span class="p">)</span>
-</code></pre><h2 id='sending-json-data-through-adafruit-io'>Sending JSON Data through Adafruit IO</h2>
+</code></pre></div><h2 id='sending-json-data-through-adafruit-io'>Sending JSON Data through Adafruit IO</h2>
 <p>Because Adafruit IO supports additional features beyond a basic MQTT brokering service, such as location tagging for data points,
 the service supports data in the JSON format described above. Namely, the example JSON response on the sidebar.</p>
 
 <p>JSON Response Format Example</p>
 
 <div class="center-column"></div>
-<pre class="highlight javascript tab-javascript"><code>  <span class="p">{</span>
-    <span class="s2">"value"</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span>
-    <span class="s2">"lat"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
-    <span class="s2">"lon"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
-    <span class="s2">"ele"</span><span class="p">:</span> <span class="mi">112</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code>  <span class="p">{</span>
+    <span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">lat</span><span class="dl">"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">lon</span><span class="dl">"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
+    <span class="dl">"</span><span class="s2">ele</span><span class="dl">"</span><span class="p">:</span> <span class="mi">112</span>
   <span class="p">}</span>
-</code></pre>
+</code></pre></div>
 <p>This lets us store the individual value, <code>22.587</code>, and data about the value: its latitude, longitude, and elevation. Metadata!</p>
 
 <p>But what happens when the value you want to send is itself JSON? Good news! There are a few solutions available to you in that situation.</p>
@@ -613,13 +624,13 @@ the service supports data in the JSON format described above. Namely, the exampl
 <p>Example of IO-Formatted JSON</p>
 
 <div class="center-column"></div>
-<pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
-  <span class="s2">"value"</span><span class="p">:</span> <span class="p">{</span><span class="s2">"sensor-1"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="s2">"sensor-2"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">},</span>
-  <span class="s2">"lat"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
-  <span class="s2">"lon"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
-  <span class="s2">"ele"</span><span class="p">:</span> <span class="mi">112</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="p">{</span>
+  <span class="dl">"</span><span class="s2">value</span><span class="dl">"</span><span class="p">:</span> <span class="p">{</span><span class="dl">"</span><span class="s2">sensor-1</span><span class="dl">"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="dl">"</span><span class="s2">sensor-2</span><span class="dl">"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">},</span>
+  <span class="dl">"</span><span class="s2">lat</span><span class="dl">"</span><span class="p">:</span> <span class="mf">38.1123</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">lon</span><span class="dl">"</span><span class="p">:</span> <span class="o">-</span><span class="mf">91.2325</span><span class="p">,</span>
+  <span class="dl">"</span><span class="s2">ele</span><span class="dl">"</span><span class="p">:</span> <span class="mi">112</span>
 <span class="p">}</span>
-</code></pre>
+</code></pre></div>
 <p>It&#39;s worth noting that because Adafruit IO parses the entire JSON object that you send it, any valid JSON will be parsed and when it is stored in our system and forwarded to any subscribers, it will be regenerated. The significance of that is that if you publish JSON data with whitespace, it will be stored and republished without whitespace, because our generator produces the most compact JSON format possible.</p>
 <h3 id='double-encoded-json-strings'>Double-Encoded JSON Strings</h3>
 <p>The second way you can send JSON data as a value is to &quot;double encode&quot; it before sending, in which case IO will treat it as a raw string.
@@ -629,20 +640,20 @@ If you&#39;re using something like javascript&#39;s <code>JSON.stringify</code> 
 <p>Here&#39;s an example of sending double-encoded strings through Adafruit IO:</p>
 
 <div class="center-column"></div>
-<pre class="highlight javascript tab-javascript"><code><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="s2">"sensor-1"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="s2">"sensor-2"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">})</span>
-<span class="s1">'{"sensor-1":22.587,"sensor-2":13.182}'</span>
-<span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="s2">"sensor-1"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="s2">"sensor-2"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">}))</span>
-<span class="s1">'"{\"sensor-1\":22.587,\"sensor-2\":13.182}"'</span>
-</code></pre>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="dl">"</span><span class="s2">sensor-1</span><span class="dl">"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="dl">"</span><span class="s2">sensor-2</span><span class="dl">"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">})</span>
+<span class="dl">'</span><span class="s1">{"sensor-1":22.587,"sensor-2":13.182}</span><span class="dl">'</span>
+<span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">stringify</span><span class="p">({</span><span class="dl">"</span><span class="s2">sensor-1</span><span class="dl">"</span><span class="p">:</span><span class="mf">22.587</span><span class="p">,</span><span class="dl">"</span><span class="s2">sensor-2</span><span class="dl">"</span><span class="p">:</span><span class="mf">13.182</span><span class="p">}))</span>
+<span class="dl">'</span><span class="s1">"{</span><span class="se">\</span><span class="s1">"sensor-1</span><span class="se">\</span><span class="s1">":22.587,</span><span class="se">\</span><span class="s1">"sensor-2</span><span class="se">\</span><span class="s1">":13.182}"</span><span class="dl">'</span>
+</code></pre></div>
 <p>The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.</p>
 
 <p>Here&#39;s an example of interpreting double-encoded JSON Strings sent through Adafruit IO:</p>
 
 <div class="center-column"></div>
-<pre class="highlight javascript tab-javascript"><code><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="s1">'"{\\\"sensor-1\\\":22.587,\\\"sensor-2\\\":13.182}"'</span>
+<div class="highlight"><pre class="highlight javascript tab-javascript"><code><span class="o">&gt;</span> <span class="kd">var</span> <span class="nx">input</span> <span class="o">=</span> <span class="dl">'</span><span class="s1">"{</span><span class="se">\\\</span><span class="s1">"sensor-1</span><span class="se">\\\</span><span class="s1">":22.587,</span><span class="se">\\\</span><span class="s1">"sensor-2</span><span class="se">\\\</span><span class="s1">":13.182}"</span><span class="dl">'</span>
 <span class="o">&gt;</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">input</span><span class="p">))</span>
-<span class="p">{</span> <span class="s1">'sensor-1'</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span> <span class="s1">'sensor-2'</span><span class="p">:</span> <span class="mf">13.182</span> <span class="p">}</span>
-</code></pre><h3 id='non-io-formatted-json'>Non-IO Formatted JSON</h3>
+<span class="p">{</span> <span class="dl">'</span><span class="s1">sensor-1</span><span class="dl">'</span><span class="p">:</span> <span class="mf">22.587</span><span class="p">,</span> <span class="dl">'</span><span class="s1">sensor-2</span><span class="dl">'</span><span class="p">:</span> <span class="mf">13.182</span> <span class="p">}</span>
+</code></pre></div><h3 id='non-io-formatted-json'>Non-IO Formatted JSON</h3>
 <p>The third way you can send raw JSON data is to just send it. If Adafruit IO doesn&#39;t find a &quot;value&quot; key in the JSON object you send,
 it will treat the whole blob as plain text and store and forward the data. That means with our example JSON object,
 sending the string <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> will result in <code>{&quot;sensor-1&quot;:22.587,&quot;sensor-2&quot;:13.182}</code> being stored in IO and sent
@@ -663,27 +674,27 @@ to MQTT subscribers.</p>
 <p>If you’re using the Adafruit IO Arduino library, you can add <code>/get</code> support to your project in one line of code:</p>
 
 <div class="center-column"></div>
-<pre class="highlight cpp tab-cpp"><code><span class="c1">// ... from the adafruitio_01_subscribe example sketch
-</span><span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">counter</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"counter"</span><span class="p">);</span>
+<div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// ... from the adafruitio_01_subscribe example sketch</span>
+<span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">counter</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"counter"</span><span class="p">);</span>
 
 <span class="kt">void</span> <span class="nf">setup</span><span class="p">()</span> <span class="p">{</span>
-  <span class="c1">// 1. start IO connection
-</span>  <span class="n">io</span><span class="p">.</span><span class="n">connect</span><span class="p">();</span>
+  <span class="c1">// 1. start IO connection</span>
+  <span class="n">io</span><span class="p">.</span><span class="n">connect</span><span class="p">();</span>
 
-  <span class="c1">// 2. prepare MQTT subscription with handler function
-</span>  <span class="n">counter</span><span class="o">-&gt;</span><span class="n">onMessage</span><span class="p">(</span><span class="n">handleMessage</span><span class="p">);</span>
+  <span class="c1">// 2. prepare MQTT subscription with handler function</span>
+  <span class="n">counter</span><span class="o">-&gt;</span><span class="n">onMessage</span><span class="p">(</span><span class="n">handleMessage</span><span class="p">);</span>
 
-  <span class="c1">// 3. wait for successful connection
-</span>  <span class="k">while</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">mqttStatus</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">AIO_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
+  <span class="c1">// 3. wait for successful connection</span>
+  <span class="k">while</span><span class="p">(</span><span class="n">io</span><span class="p">.</span><span class="n">mqttStatus</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">AIO_CONNECTED</span><span class="p">)</span> <span class="p">{</span>
     <span class="n">delay</span><span class="p">(</span><span class="mi">500</span><span class="p">);</span>
   <span class="p">}</span>
 
-  <span class="c1">// 4. send /get message, requesting last value, triggering
-</span>  <span class="c1">//    the handleMessage handler function
-</span>  <span class="n">counter</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span> <span class="c1">// ask Adafruit IO to resend the last value
-</span><span class="p">}</span>
-<span class="c1">// ....
-</span></code></pre>
+  <span class="c1">// 4. send /get message, requesting last value, triggering</span>
+  <span class="c1">//    the handleMessage handler function</span>
+  <span class="n">counter</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span> <span class="c1">// ask Adafruit IO to resend the last value</span>
+<span class="p">}</span>
+<span class="c1">// ....</span>
+</code></pre></div>
 <p>You can also perform a <code>/get</code> using the Adafruit IO CircuitPython library in one line of code:
 <div class="center-column"></div>
 <code>python
@@ -746,27 +757,27 @@ can subscribe to a feed&#39;s topic to be notified when the feed has a new value
 <p>JSON Expected Response from Adafruit IO</p>
 
 <div class="center-column"></div>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"key-2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"key-3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 3"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key-2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key-3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 3"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lon"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"ele"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
+  </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lon"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"ele"</span><span class="p">:</span><span class="w"> </span><span class="mf">0.0</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
+</span></code></pre></div>
 <p>CSV Format Expected Response from Adafruit IO</p>
 
 <div class="center-column"></div>
-<pre class="highlight plaintext"><code>key-1,value 1
+<div class="highlight"><pre class="highlight plaintext"><code>key-1,value 1
 key-2,value 2
 key-3,value 3
 location,0.0,0.0,0.0
-</code></pre><h2 id='group-guidelines'>Group Guidelines</h2>
+</code></pre></div><h2 id='group-guidelines'>Group Guidelines</h2>
 <ul>
 <li>  In each payload format, <code>key-1</code> represents the respective feed&#39;s key and <code>value 1</code> represents the value you&#39;d like to publish to that feed.</li>
 <li>  For CSV location values, the location is interpreted as <code>lat</code>, <code>lon</code>, <code>ele</code> and <code>ele</code> is optional <code>/</code> not required.</li>
@@ -782,36 +793,36 @@ location,0.0,0.0,0.0
 <p>Expected Group JSON Response</p>
 
 <div class="center-column"></div>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"key-2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 2"</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"key-3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 3"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key-2"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key-3"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 3"</span><span class="w">
   </span><span class="p">},</span><span class="w">
-  </span><span class="s2">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"lon"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w">
-    </span><span class="s2">"ele"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="w">
+  </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"lat"</span><span class="p">:</span><span class="w"> </span><span class="mf">1.0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"lon"</span><span class="p">:</span><span class="w"> </span><span class="mf">2.0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"ele"</span><span class="p">:</span><span class="w"> </span><span class="mf">3.0</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
+</span></code></pre></div>
 <p>Expected Group CSV Response</p>
 
 <div class="center-column"></div>
-<pre class="highlight plaintext"><code>key-1,value 1
+<div class="highlight"><pre class="highlight plaintext"><code>key-1,value 1
 key-2,value 2
 key-3,value 3
 location,1.0,2.0,3.0
-</code></pre>
+</code></pre></div>
 <p>It&#39;s important to note that you will only receive updated values for the feeds that received new values. That means if you&#39;re subscribed to  <code>{username}/groups/example</code>  and publish to  <code>{username}/feeds/key-1</code>, the subscription will receive:</p>
 
 <div class="center-column"></div>
-<pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="s2">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-    </span><span class="s2">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"key-1"</span><span class="p">:</span><span class="w"> </span><span class="s2">"value 1"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">}</span><span class="w">
-</span></code></pre>
+</span></code></pre></div>
 <p>It&#39;s also worth noting that JSON subscription formats will always receive string type values, regardless of whether a string or number was published.</p>
 <h1 id='time-topics'>Time Topics</h1>
 <p>Adafruit IO provides some built-in MQTT topics for getting the current server time. The current available topics are:</p>
@@ -828,7 +839,7 @@ location,1.0,2.0,3.0
 <ul>
 <li><a href="https://github.com/adafruit/Adafruit_IO_Arduino/blob/master/examples/adafruitio_17_time_subscribe/adafruitio_17_time_subscribe.ino">Arduino</a></li>
 <li><a href="https://github.com/adafruit/Adafruit_IO_Python/blob/master/examples/mqtt/mqtt_time.py">Python</a></li>
-<li><a href="https://github.com/adafruit/Adafruit_CircuitPython_AdafruitIO/blob/master/examples/mqtt/adafruit_io_time.py">CircuitPython</a></li>
+<li><a href="https://github.com/adafruit/Adafruit_CircuitPython_AdafruitIO/blob/master/examples/adafruit_io_mqtt/adafruit_io_time.py">CircuitPython</a></li>
 </ul>
 <h2 id='time-seconds'>time/seconds</h2>
 <p>This topic publishes the current time in <a href="https://en.wikipedia.org/wiki/Unix_time">Unix epoch seconds</a>.</p>
