@@ -398,6 +398,20 @@
               </ul>
           </li>
           <li class="on-screen">
+            <a href="#randomizer-topics" class="toc-h1 toc-link" data-title="Randomizer Topics">
+              Randomizer Topics
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
+            </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#subscribe-to-the-generated-topic" class="toc-h2 toc-link" data-title="Subscribe to the Generated Topic">Subscribe to the Generated Topic</a>
+                  </li>
+              </ul>
+          </li>
+          <li class="on-screen">
             <a href="#error-topics" class="toc-h1 toc-link" data-title="Error Topics">
               Error Topics
                 <span class="menu-arrow">
@@ -855,6 +869,16 @@ location,1.0,2.0,3.0
 <p>The current time in ISO 8601 UTC format at the time of writing is: <code>2019-07-03T14:47:16.038Z</code></p>
 <h2 id='time-hours'>time/hours</h2>
 <p>This topic publishes the current hour of the day in 24 hour format (the values 0 - 23) in the UTC time zone. It only publishes once every hour.</p>
+<h1 id='randomizer-topics'>Randomizer Topics</h1>
+<p>Create random data streams that can generate colors, words, numbers, or pick a value from a custom data set and send it directly to your devices.</p>
+
+<p>Prior to subcribing to the randomizer topic, you need to <a href="https://io.adafruit.com/services/words">generate the topics</a> to get the id.</p>
+<h2 id='subscribe-to-the-generated-topic'>Subscribe to the Generated Topic</h2>
+<ul>
+<li><code>{username}/integrations/words/{generated topic id}</code></li>
+</ul>
+
+<p>MQTT random word subscriptions will publish data once per minute to every client that is subscribed to the same topic.</p>
 <h1 id='error-topics'>Error Topics</h1>
 <p>Adafruit IO provides two error reporting MQTT topics you can subscribe to:</p>
 
