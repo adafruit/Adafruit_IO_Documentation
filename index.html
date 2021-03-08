@@ -701,6 +701,10 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <p><strong><em>If you exceed this limit</em></strong>, a notice will be sent to the <code>{username}/throttle</code> MQTT topic. You can subscribe to the topic if you wish to know when the Adafruit IO rate limit has been exceeded for your user account. This limit applies to all <strong>Data record modification</strong> actions over the HTTP and MQTT APIs, so if you have multiple devices or clients publishing data, be sure to delay their updates enough that the total rate is below your account limit.</p>
 
 <p><strong>One data record modification</strong> is any action that creates, updates, or deletes a single Data record.</p>
+
+<p><strong>A best practice is to only save or modify data within the hot part of your code loop.</strong> You want to handle authentication and any other API requests before you start your main code loop where you save data.</p>
+
+<p>We have general API throttles to ensure the API isn&#39;t being improperly used either by accident or for nefarious purposes. This throttle level is higher than any data rate limit throttles, but you may run into it if your code isn&#39;t optimized. One example would be if in the main loop of your code you are not only sending data, but also authenticating, retrieving all feeds, or anything else that doesn&#39;t involve saving or modifying data to a feed. In that scenario, you would be hitting the API 3x more times than necessary, and could get throttled, even if you&#39;re saving data within your allotted rate limit.</p>
 <h1 id='pagination'>Pagination</h1>
 <p>Adafruit IO’s API returns at most 1000 data points at a time. To get more data if your feed is over 1000 data points, you’ll need to “paginate” the data.</p>
 
