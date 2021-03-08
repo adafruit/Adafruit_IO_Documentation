@@ -1,0 +1,11 @@
+# Randomizer Topics
+
+Create random data streams that can generate colors, words, numbers, or pick a value from a custom data set and send it directly to your devices.
+
+Prior to subcribing to the randomizer topic, you need to [generate the topics](https://io.adafruit.com/services/words) to get the id.
+
+## Subscribe to the Generated Topic
+
+* `{username}/integrations/words/{generated topic id}`
+
+MQTT random word subscriptions will publish data once per minute to every client that is subscribed to the same topic.
