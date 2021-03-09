@@ -643,7 +643,9 @@ group_key | string | true |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_feed_data | object | true |
+group_feed_data | object | true | A record with the `feeds` property, containing a collection of records with `key` and `value` properties.
+
+Example for `group_feed_data`: `{ feeds: [ { key: string, value: string }, ... ], created_at: string (optional), location: { lat: number, lon: number, ele: number } (optional)}`
 
 
 
