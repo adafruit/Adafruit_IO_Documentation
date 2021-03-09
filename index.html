@@ -1671,9 +1671,11 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 <td>group_feed_data</td>
 <td>object</td>
 <td>true</td>
-<td></td>
+<td>A record with the <code>feeds</code> property, containing a collection of records with <code>key</code> and <code>value</code> properties.</td>
 </tr>
 </tbody></table>
+
+<p>Example for <code>group_feed_data</code>: <code>{ feeds: [ { key: string, value: string }, ... ], created_at: string (optional), location: { lat: number, lon: number, ele: number } (optional)}</code></p>
 <h2 id='get-data-for-group-39-s-feed'>Get Data for Group&#39;s Feed</h2>
 <blockquote>
 <p>HTTP Request
