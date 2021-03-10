@@ -611,6 +611,26 @@
               </ul>
           </li>
           <li class="on-screen">
+            <a href="#services" class="toc-h1 toc-link" data-title="Services">
+              Services
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
+            </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#time" class="toc-h2 toc-link" data-title="Time">Time</a>
+                  </li>
+                  <li>
+                    <a href="#randomizer" class="toc-h2 toc-link" data-title="Randomizer">Randomizer</a>
+                  </li>
+                  <li>
+                    <a href="#weather" class="toc-h2 toc-link" data-title="Weather">Weather</a>
+                  </li>
+              </ul>
+          </li>
+          <li class="on-screen">
             <a href="#errors" class="toc-h1 toc-link" data-title="Errors">
               Errors
             </a>
@@ -5167,6 +5187,33 @@ for any custom code.</p>
 <td></td>
 </tr>
 </tbody></table>
+<h1 id='services'>Services</h1>
+<p>Adafruit IO provides access to several connected services. The current services offered are <a href="https://io.adafruit.com/services/ifttt">IFTTT</a>, <a href="https://io.adafruit.com/services/zapier">Zapier</a>, <a href="https://io.adafruit.com/services/weather">Weather</a>, <a href="https://io.adafruit.com/services/words">Randomizer</a> and <a href="https://io.adafruit.com/services/time">Time</a>.</p>
+
+<p>Each of these services is unique in that you may need to do some setup at the links above prior to utilizing the service via the Adafruit IO HTTP API.</p>
+<h2 id='time'>Time</h2>
+<p>The Adafruit IO time service does not replace a time-synchronization service like NTP, but it can help you figure out your local time on an Internet of Things device that doesn&#39;t have a built in clock.</p>
+
+<p>Detailed documentation on the usage of the time API is found within <a href="https://io.adafruit.com/services/time">Adafruit IO on the time services page</a>.</p>
+<h2 id='randomizer'>Randomizer</h2>
+<p>Create random data streams that can generate colors, words, numbers, or pick a value from a custom data set and send it directly to your devices.</p>
+
+<p>The four available data types are:</p>
+
+<ul>
+<li>Pronounceable nonsense words</li>
+<li>Colors (RGB values, HSL values, CSS hex, or CSS color name)</li>
+<li>Numbers</li>
+<li>Preset (sample from a given set of values)</li>
+</ul>
+
+<p>Detailed documentation on the usage and setup of the randomizer API is found within <a href="https://io.adafruit.com/services/words">Adafruit IO on the randomizer services page</a>.</p>
+<h2 id='weather'>Weather</h2>
+<p>With access to weather data powered by Dark Sky, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.</p>
+
+<p>When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.</p>
+
+<p>Detailed documentation on the usage and setup of the weather API is found within <a href="https://io.adafruit.com/services/weather">Adafruit IO on the weather services page</a>.</p>
 <h1 id='errors'>Errors</h1>
 <p>The Adafruit IO API uses the following error codes:</p>
 
