@@ -1,0 +1,32 @@
+# Services
+
+Adafruit IO provides access to several connected services. The current services offered are [IFTTT](https://io.adafruit.com/services/ifttt), [Zapier](https://io.adafruit.com/services/zapier), [Weather](https://io.adafruit.com/services/weather), [Randomizer](https://io.adafruit.com/services/words) and [Time](https://io.adafruit.com/services/time).
+
+Each of these services is unique in that you may need to do some setup at the links above prior to utilizing the service via the Adafruit IO HTTP API.
+
+## Time
+
+The Adafruit IO time service does not replace a time-synchronization service like NTP, but it can help you figure out your local time on an Internet of Things device that doesn't have a built in clock.
+
+Detailed documentation on the usage of the time API is found within [Adafruit IO on the time services page](https://io.adafruit.com/services/time).
+
+## Randomizer
+
+Create random data streams that can generate colors, words, numbers, or pick a value from a custom data set and send it directly to your devices.
+
+The four available data types are:
+
+* Pronounceable nonsense words
+* Colors (RGB values, HSL values, CSS hex, or CSS color name)
+* Numbers
+* Preset (sample from a given set of values)
+
+Detailed documentation on the usage and setup of the randomizer API is found within [Adafruit IO on the randomizer services page](https://io.adafruit.com/services/words).
+
+## Weather
+
+With access to weather data powered by Dark Sky, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.
+
+When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.
+
+Detailed documentation on the usage and setup of the weather API is found within [Adafruit IO on the weather services page](https://io.adafruit.com/services/weather).

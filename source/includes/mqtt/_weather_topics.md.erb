@@ -1,0 +1,26 @@
+# Weather Topics (IO+)
+
+With access to weather data powered by Dark Sky, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.
+
+When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.
+
+Prior to subscribing to the weather topic, you'll need to [generate the topics](https://io.adafruit.com/services/weather) to get the id.
+
+## Subscribe to the Generated Topic
+
+* `{username}/integration/weather/{id}/{type}`
+
+ Where :id is the ID of the weather record you want data for and :type is the kind of forecast data you want. Valid types are:
+
+* current
+* forecast_minutes_5
+* forecast_minutes_30
+* forecast_hours_1
+* forecast_hours_2
+* forecast_hours_6
+* forecast_hours_24
+* forecast_days_1
+* forecast_days_2
+* forecast_days_5
+
+MQTT weather subscriptions will publish updated data once per minute to every client that is subscribed to a valid topic.
