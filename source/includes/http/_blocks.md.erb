@@ -3,10 +3,12 @@
 Blocks are objects which can be placed on an Adafruit IO Dasboard for a user.
 Blocks IO range from input blocks (sliders and buttons) to output blocks (such as maps or other visual displays).
 
+The `dashboard_key` can be obtained by either the response of a dashboard API call, or via the UI within IO at https://io.adafruit.com/{username}/dashboards.
+
 ## All blocks
 
 > HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div>
 
 ```shell
 ```
@@ -52,14 +54,14 @@ An array of blocks
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true |
+dashboard_key | string | true |
 
 
 
 ## Create a Block
 
 > HTTP Request
-> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div>
 
 ```shell
 ```
@@ -103,7 +105,7 @@ New Block
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true |
+dashboard_key | string | true |
 
 
 ### Body Parameters
@@ -117,7 +119,7 @@ block | object | true |
 ## Returns Block
 
 > HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -161,7 +163,7 @@ Block response
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true |
+dashboard_key | string | true |
 id | string | true |
 
 
@@ -169,7 +171,7 @@ id | string | true |
 ## Replace A Block
 
 > HTTP Request
-> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -213,7 +215,7 @@ Updated block
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true |
+dashboard_key | string | true |
 id | string | true |
 
 
@@ -228,7 +230,7 @@ block | object | true |
 ## Delete a Block
 
 > HTTP Request
-> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_id}/blocks/{id}</code></div>
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
 ```
@@ -256,7 +258,7 @@ Deleted Block successfully
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_id | string | true |
+dashboard_key | string | true |
 id | string | true |
 
 
