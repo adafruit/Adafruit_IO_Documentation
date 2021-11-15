@@ -1,6 +1,6 @@
 # Adafruit IO API Documentation
 
-Repository of documentation for Adafruit IO's HTTP and MQTT API. This is a fork of the [Slate documentation project](https://github.com/lord/slate). Slate is a set of templates and conventions applied to [the middleman static site generator](https://middlemanapp.com/), so our documentation source mostly [markdown formatted text](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and some Ruby, but the output is static HTML, css, and javascript.
+Repository of documentation for Adafruit IO's HTTP and MQTT API. This is a fork of the [Slate documentation project](https://github.com/lord/slate). Slate is a set of templates and conventions applied to [the middleman static site generator](https://middlemanapp.com/), so our documentation source is mostly [markdown formatted text](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet) and some Ruby, but the output is static HTML, css, and javascript.
 
 You can visit the live documentation site at https://io.adafruit.com/api/docs/#adafruit-io
 
@@ -40,6 +40,6 @@ To run slate:
 
 Contributions are welcome! 
 
-This project is based on [slate](https://github.com/lord/slate). All source for the documentation sections are in Markdown formatted text files in the [source/includes](https://github.com/adafruit/Adafruit_IO_Documentation/tree/master/source/includes) directory.
+This project is based on [slate](https://github.com/lord/slate). All source for the documentation sections is in Markdown formatted text files in the [source/includes](https://github.com/adafruit/Adafruit_IO_Documentation/tree/master/source/includes) directory.
 
 If you see a change you'd like to make, you can fork this repository, commit your changes to your copy of the project, and submit it as a pull request. If you have a question or find that something is missing or incorrectly documented, you can let us know by [creating a new issue](https://github.com/adafruit/Adafruit_IO_Documentation/issues) on this project.
