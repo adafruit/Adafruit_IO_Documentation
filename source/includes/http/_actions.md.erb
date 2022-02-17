@@ -1,0 +1,164 @@
+# Actions
+
+Actions are a way to do something when a certain situation occurs. There are two kinds of actions supported at this time: Scheduled and Reactive.
+
+Scheduled actions repeatedly perform an action after a scheduled interval.
+
+Reactive actions are much more advanced, and can integrate basic logic. At a basic level, they check if a feed value is somehow comparable to a value or to even another feed. If so, you’ll be able to send an email notification, post a webhook or even publish a message to another feed.  For example, you can set up a reactive action to notify you when the temperature falls below a certain value.  When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.
+
+## Get All Actions
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "name": "string"
+  }
+]
+```
+
+An array of actions
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+
+## Create Action
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/actions</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions
+```
+
+> Response Sample:
+
+```json
+{
+  "name": "string"
+}
+```
+
+New Action
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+trigger | object | true |
+
+
+
+## Return Action
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
+```
+
+> Response Sample:
+
+```json
+{
+  "name": "string"
+}
+```
+
+Action response
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+id | string | true |
+
+
+
+## Replace Action
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
+```
+
+> Response Sample:
+
+```json
+{
+  "name": "string"
+}
+```
+
+Updated action
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+id | string | true |
+
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+trigger | object | true |
+
+
+
+## Delete Action
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
+```
+
+> Response Sample:
+
+```json
+"string"
+```
+
+Deleted Action successfully
+
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+id | string | true |
+
+

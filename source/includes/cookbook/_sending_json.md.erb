@@ -33,7 +33,7 @@ JSON.stringify({
 
 The double encoded JSON string can be sent directly through Adafruit IO without interference from our processing system, because the processing system will not interpret it as JSON. In your receiving code, because the value passed through includes surrounding double quotes, you have to call your parse function twice to restore the JSON object.
 
-**Important Note:** Data saved in this manner (multiple records saved as JSON in a single feed) will make the data unusable by the IO dashboard and other features such as triggers. IO needs a single value saved into a feed in order to use it in this manner. Saving the JSON objects into a feed is a useful feature if you only need to use the data between two devices, for example.
+**Important Note:** Data saved in this manner (multiple records saved as JSON in a single feed) will make the data unusable by the IO dashboard and other features such as actions. IO needs a single value saved into a feed in order to use it in this manner. Saving the JSON objects into a feed is a useful feature if you only need to use the data between two devices, for example.
 
 <% partial 'helpers/inline_code' do %>
 ```javascript
