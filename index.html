@@ -450,8 +450,8 @@
               </ul>
           </li>
           <li class="on-screen">
-            <a href="#triggers" class="toc-h1 toc-link" data-title="Triggers">
-              Triggers
+            <a href="#actions" class="toc-h1 toc-link" data-title="Actions">
+              Actions
                 <span class="menu-arrow">
                   <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
                   <!-- <span>&gt;</span> -->
@@ -459,19 +459,19 @@
             </a>
               <ul class="toc-list-h2">
                   <li>
-                    <a href="#get-all-triggers" class="toc-h2 toc-link" data-title="Get All Triggers">Get All Triggers</a>
+                    <a href="#get-all-actions" class="toc-h2 toc-link" data-title="Get All Actions">Get All Actions</a>
                   </li>
                   <li>
-                    <a href="#create-trigger" class="toc-h2 toc-link" data-title="Create Trigger">Create Trigger</a>
+                    <a href="#create-action" class="toc-h2 toc-link" data-title="Create Action">Create Action</a>
                   </li>
                   <li>
-                    <a href="#return-trigger" class="toc-h2 toc-link" data-title="Return Trigger">Return Trigger</a>
+                    <a href="#return-action" class="toc-h2 toc-link" data-title="Return Action">Return Action</a>
                   </li>
                   <li>
-                    <a href="#replace-trigger" class="toc-h2 toc-link" data-title="Replace Trigger">Replace Trigger</a>
+                    <a href="#replace-action" class="toc-h2 toc-link" data-title="Replace Action">Replace Action</a>
                   </li>
                   <li>
-                    <a href="#delete-trigger" class="toc-h2 toc-link" data-title="Delete Trigger">Delete Trigger</a>
+                    <a href="#delete-action" class="toc-h2 toc-link" data-title="Delete Action">Delete Action</a>
                   </li>
               </ul>
           </li>
@@ -3737,18 +3737,18 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
 <p>Creates a new feed data record with the value &quot;ping&quot;, regardless of what was posted.</p>
 
 <p>This path is helpful if you&#39;re using a low-memory MQTT client that can&#39;t handle the large webhook payloads that a service like GitHub publishes and all you care about is <em>that</em> something happened, not <em>precisely what</em> happened.</p>
-<h1 id='triggers'>Triggers</h1>
-<p>Triggers are a way to do something when a certain situation occurs. There are two kinds of triggers supported at this time: Scheduled and Reactive.</p>
+<h1 id='actions'>Actions</h1>
+<p>Actions are a way to do something when a certain situation occurs. There are two kinds of actions supported at this time: Scheduled and Reactive.</p>
 
-<p>Scheduled triggers repeatedly perform an action after a scheduled interval.</p>
+<p>Scheduled actions repeatedly perform an action after a scheduled interval.</p>
 
-<p>Reactive Triggers are much more advanced, and can integrate basic logic. At a basic level, they check if a feed value is somehow comparable to a value or to even another feed. If so, you’ll be able to send an email notification, post a webhook or even publish a message to another feed.  For example, you can set up a reactive trigger to notify you when the temperature falls below a certain value.  When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.</p>
-<h2 id='get-all-triggers'>Get All Triggers</h2>
+<p>Reactive actions are much more advanced, and can integrate basic logic. At a basic level, they check if a feed value is somehow comparable to a value or to even another feed. If so, you’ll be able to send an email notification, post a webhook or even publish a message to another feed.  For example, you can set up a reactive action to notify you when the temperature falls below a certain value.  When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.</p>
+<h2 id='get-all-actions'>Get All Actions</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers</code></div></p>
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/actions
 </code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
@@ -3759,7 +3759,7 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
-<p>An array of triggers</p>
+<p>An array of actions</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3776,12 +3776,12 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
 <td>a valid username string</td>
 </tr>
 </tbody></table>
-<h2 id='create-trigger'>Create Trigger</h2>
+<h2 id='create-action'>Create Action</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/triggers</code></div></p>
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/actions</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/actions
 </code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
@@ -3790,7 +3790,7 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
   </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>New Trigger</p>
+<p>New Action</p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3823,12 +3823,12 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='return-trigger'>Return Trigger</h2>
+<h2 id='return-action'>Return Action</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/actions/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
 </code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
@@ -3837,7 +3837,7 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
   </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Trigger response</p>
+<p>Action response</p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3860,12 +3860,12 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='replace-trigger'>Replace Trigger</h2>
+<h2 id='replace-action'>Replace Action</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/actions/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/actions/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
 </code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
@@ -3874,7 +3874,7 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
   </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Updated trigger</p>
+<p>Updated action</p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3913,19 +3913,19 @@ curl <span class="nt">-F</span> <span class="s1">'{"value":"42"}'</span> <span c
 <td></td>
 </tr>
 </tbody></table>
-<h2 id='delete-trigger'>Delete Trigger</h2>
+<h2 id='delete-action'>Delete Action</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/triggers/{id}</code></div></p>
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/actions/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/triggers/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/actions/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
 </code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
 </span></code></pre></div>
-<p>Deleted Trigger successfully</p>
+<p>Deleted Action successfully</p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -3957,7 +3957,7 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 <li>Blocks</li>
 <li>Feeds</li>
 <li>Groups</li>
-<li>Triggers</li>
+<li>Actions</li>
 </ul>
 <h2 id='all-activities'>All Activities</h2>
 <blockquote>
