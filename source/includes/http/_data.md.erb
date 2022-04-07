@@ -645,7 +645,7 @@ Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 group_feed_data | object | true | A record with the `feeds` property, containing a collection of records with `key` and `value` properties.
 
-Example for `group_feed_data`: `{ feeds: [ { key: string, value: string }, ... ], created_at: string (optional), location: { lat: number, lon: number, ele: number } (optional)}`
+Example for `group_feed_data` in the body is as follows: `{ feeds: [ { key: string, value: string }, ... ], created_at: string (optional), location: { lat: number, lon: number, ele: number } (optional)}`
 
 
 
@@ -655,6 +655,8 @@ Example for `group_feed_data`: `{ feeds: [ { key: string, value: string }, ... ]
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
 
 ```shell
+# Send new data with a value of 42 to the group's feeds as json
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/data.json -d '{"feeds":[{"key":"{feed_key}","value":42}]}'
 ```
 
 ```python
