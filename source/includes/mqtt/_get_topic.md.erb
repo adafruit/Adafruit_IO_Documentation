@@ -23,7 +23,6 @@ For example, let's imagine we have a device that subscribes to a counter feed: `
 
 If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code:
 
-<% partial 'helpers/inline_code' do %>
 ```cpp
 // ... from the adafruitio_01_subscribe example sketch
 AdafruitIO_Feed *counter = io.feed("counter");
@@ -44,9 +43,7 @@ void setup() {
   //    the handleMessage handler function
   counter->get(); // ask Adafruit IO to resend the last value
 }
-// ....
 ```
-<% end %>
 
 You can also perform a `/get` using the Adafruit IO CircuitPython library in one line of code:
 <% partial 'helpers/inline_code' do %>
