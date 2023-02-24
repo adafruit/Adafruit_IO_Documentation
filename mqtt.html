@@ -700,8 +700,6 @@ to MQTT subscribers.</p>
 <p>For example, let&#39;s imagine we have a device that subscribes to a counter feed: <code>uname/f/counter</code>. If we want to get the latest value, the <code>/get</code> topic we should publish to is <code>uname/f/counter/get</code>. After connecting to IO, subscribing to <code>uname/f/counter</code>, and publishing <code></code> to <code>uname/f/counter/get</code>, we will immediately receive a message on our <code>uname/f/counter</code> subscription with the last value that was published to <code>counter</code>.</p>
 
 <p>If you’re using the Adafruit IO Arduino library, you can add <code>/get</code> support to your project in one line of code:</p>
-
-<div class="center-column"></div>
 <div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// ... from the adafruitio_01_subscribe example sketch</span>
 <span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">counter</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"counter"</span><span class="p">);</span>
 
@@ -721,7 +719,6 @@ to MQTT subscribers.</p>
   <span class="c1">//    the handleMessage handler function</span>
   <span class="n">counter</span><span class="o">-&gt;</span><span class="n">get</span><span class="p">();</span> <span class="c1">// ask Adafruit IO to resend the last value</span>
 <span class="p">}</span>
-<span class="c1">// ....</span>
 </code></pre></div>
 <p>You can also perform a <code>/get</code> using the Adafruit IO CircuitPython library in one line of code:
 <div class="center-column"></div>
