@@ -21,9 +21,9 @@ For any given Adafruit IO MQTT feed or group, subscribe to the appropriate topic
 
 For example, let's imagine we have a device that subscribes to a counter feed: `uname/f/counter`. If we want to get the latest value, the `/get` topic we should publish to is `uname/f/counter/get`. After connecting to IO, subscribing to `uname/f/counter`, and publishing ` ` to `uname/f/counter/get`, we will immediately receive a message on our `uname/f/counter` subscription with the last value that was published to `counter`.
 
-If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project in one line of code:
+If you’re using the Adafruit IO Arduino library, you can add `/get` support to your project using the following code snippet:
 
-```cpp
+```
 // ... from the adafruitio_01_subscribe example sketch
 AdafruitIO_Feed *counter = io.feed("counter");
 
