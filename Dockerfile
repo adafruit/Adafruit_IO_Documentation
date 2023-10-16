@@ -1,4 +1,4 @@
-FROM ruby:2.6.5
+FROM ruby:3.2.2
 COPY . /usr/src/app
 VOLUME /usr/src/app
 EXPOSE 4567
