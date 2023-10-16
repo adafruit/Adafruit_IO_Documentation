@@ -337,6 +337,20 @@
                   </li>
               </ul>
           </li>
+          <li class="on-screen">
+            <a href="#securing-your-io-account" class="toc-h1 toc-link" data-title="Securing your IO Account">
+              Securing your IO Account
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
+            </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#i-accidentially-shared-my-key-what-do-i-do-now" class="toc-h2 toc-link" data-title="I accidentially shared my key, what do I do now?">I accidentially shared my key, what do I do now?</a>
+                  </li>
+              </ul>
+          </li>
 
 
       </ul>
@@ -497,6 +511,19 @@ client.publish('image-stream', value)
 <p>If you want to receive the whole contents of webhook events--for example, when receiving webhook notifications from a service like Slack or GitHub where you don&#39;t have control over the payload the service is sending--add <code>/raw</code> to the end of the Adafruit IO webhook URL that you share with the service.</p>
 <h2 id='notify-webhooks'>Notify Webhooks</h2>
 <p>If you only want to be notified that an event has happened, rather than have to handle all the data from an event--for example, if a service like GitHub is trying to send 7KB of JSON to your ESP8266--add <code>/notify</code> to the end of your Adafruit IO webhook URL. When data arrives, your feed will receive the message &quot;ping&quot;.</p>
+<h1 id='securing-your-io-account'>Securing your IO Account</h1>
+<p>Your IO Account includes a secret API key. This key is private and should not be shared with anyone.</p>
+
+<p>But, a common pitfalls of the key is it may be accidentally shared by posted code on GitHub or social media. If anyone gains access to your key, <strong>they will have access to your Adafruit IO account</strong>.</p>
+<h2 id='i-accidentially-shared-my-key-what-do-i-do-now'>I accidentially shared my key, what do I do now?</h2>
+<p>You&#39;ll need to generate a new key. This process is simple, but not reversable. Once you generate a new key for your Adafruit IO account,
+all devices using the previous Adafruit IO key will need to be updated to the new key.</p>
+
+<p>To rengenerate your Adafruit IO Key:
+* Navigate to io.adafruit.com and log into your account.
+* Click the key icon on the header.
+* Click the &quot;Regenerate Key&quot; button and confirm the action.
+* The value of &quot;Active Key&quot; will change to a new key. Replace all instances of the previous key with the new one.</p>
 
       </div>
 
