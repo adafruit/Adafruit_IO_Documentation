@@ -8,7 +8,7 @@ gem 'middleman-autoprefixer', '~> 3.0.0'
 gem 'middleman-sprockets', '~> 4.1.1'
 gem 'middleman-syntax', '~> 3.2.0'
 gem 'nokogiri', '~> 1.15.6'
-gem 'rack', '~> 2.2.6'
+gem 'rack', '~> 2.2.8'
 gem 'redcarpet', '~> 3.6.0'
 gem 'rouge', '~> 3.30.0'
 
