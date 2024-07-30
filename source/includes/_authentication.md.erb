@@ -34,3 +34,5 @@ api = Adafruit::IO::Client.new key: api_key, username: username
 When making HTTP requests to Adafruit IO, you can include the API key as a query parameter named `x-aio-key` or as a request header named `X-AIO-Key`. In both cases, "X-AIO-Key" is case insensitive.
 
 **NOTE**: if you regenerate your AIO key, your old key will be immediately invalidated, so you'll have to replace it in any scripts or sketches where it is in use.
+
+**NOTE**: it is a best practice to avoid including your API key in the URL as a query parameter. Some situations may require this, but try to avoid it if you can.
