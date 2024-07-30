@@ -693,6 +693,8 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <p>When making HTTP requests to Adafruit IO, you can include the API key as a query parameter named <code>x-aio-key</code> or as a request header named <code>X-AIO-Key</code>. In both cases, &quot;X-AIO-Key&quot; is case insensitive.</p>
 
 <p><strong>NOTE</strong>: if you regenerate your AIO key, your old key will be immediately invalidated, so you&#39;ll have to replace it in any scripts or sketches where it is in use.</p>
+
+<p><strong>NOTE</strong>: it is a best practice to avoid including your API key in the URL as a query parameter. Some situations may require this, but try to avoid it if you can.</p>
 <h1 id='client-libraries'>Client Libraries</h1>
 <p>We have lots of client libraries to help you get started with your project:</p>
 
