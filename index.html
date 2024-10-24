@@ -770,6 +770,8 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <p>You can create, read, update, or delete data records. Every <strong>CREATE</strong>, <strong>UPDATE</strong>, or <strong>DELETE</strong> action on a data record counts against your rate limit.</p>
 
 <p>Data points belong to feeds, so every Data API call starts with a Feed URL.</p>
+
+<p>Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see <strong>feeds/{feed_key}/batch</strong> and <strong>groups/{groupname}/data</strong> endpoints.</p>
 <h2 id='create-data'>Create Data</h2>
 <blockquote>
 <p>HTTP Request
@@ -860,10 +862,10 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 </tr>
 </thead><tbody>
 <tr>
-<td>datum</td>
+<td><b>Request Body</b></td>
 <td>object</td>
 <td>true</td>
-<td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
+<td>Data record (datum) including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
 <h2 id='get-feed-data'>Get Feed Data</h2>
@@ -1582,10 +1584,10 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 </tr>
 </thead><tbody>
 <tr>
-<td>datum</td>
+<td><b>Request Body</b></td>
 <td>object</td>
 <td>true</td>
-<td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
+<td>Data record (datum) including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
 <h2 id='delete-data-point'>Delete Data Point</h2>
@@ -1818,10 +1820,10 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 </tr>
 </thead><tbody>
 <tr>
-<td>datum</td>
+<td><b>Request Body</b></td>
 <td>object</td>
 <td>true</td>
-<td>Data record including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
+<td>Data record (datum) including a <code>value</code> field (required) and optionally including: <code>lat</code>, <code>lon</code>, <code>ele</code> (latitude, longitude, and elevation values), and <code>created_at</code> (a date/time string).</td>
 </tr>
 </tbody></table>
 <h2 id='create-data-in-a-group-39-s-feed-2'>Create Data in a Group&#39;s Feed</h2>
@@ -1902,6 +1904,8 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 <p>You will need to create one feed for each unique source of data you send to Adafruit IO.</p>
 
 <p>You can create, read, update, or delete feeds. Every <strong>CREATE</strong>, <strong>UPDATE</strong>, or <strong>DELETE</strong> action on a feed record counts against your rate limit.</p>
+
+<p>There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see <strong>feeds/{feed_key}/batch</strong> and <strong>groups/{groupname}/data</strong> endpoints.</p>
 <h2 id='all-feeds'>All Feeds</h2>
 <blockquote>
 <p>HTTP Request
@@ -2586,6 +2590,8 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 For example, if you are building a weather station, you would add feeds for <code>humidity</code> and <code>temperature</code> to a new <code>weatherstation</code> group.</p>
 
 <p>You can create, read, update, or delete group records. Every <strong>CREATE</strong>, <strong>UPDATE</strong>, or <strong>DELETE</strong> action on a group record counts against your rate limit.</p>
+
+<p>There is also an endpoint for submitting multiple feed values to a group, see the <strong>groups/{groupname}/data</strong> endpoint.</p>
 <h2 id='get-all-groups'>Get All Groups</h2>
 <blockquote>
 <p>HTTP Request
