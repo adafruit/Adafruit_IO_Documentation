@@ -6,7 +6,7 @@ You can create, read, update, or delete data records. Every **CREATE**, **UPDATE
 
 Data points belong to feeds, so every Data API call starts with a Feed URL.
 
-
+Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see **feeds/{feed_key}/batch** and **groups/{groupname}/data** endpoints.
 
 ## Create Data
 
@@ -76,7 +76,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+<b>Request Body</b> | object | true | Data record (datum) including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
 
@@ -562,7 +562,7 @@ id | string | true |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+<b>Request Body</b> | object | true | Data record (datum) including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
 
@@ -724,7 +724,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-datum | object | true | Data record including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+<b>Request Body</b> | object | true | Data record (datum) including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
 
 
 
