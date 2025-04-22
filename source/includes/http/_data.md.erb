@@ -14,8 +14,8 @@ Note that there are endpoints for submitting multiple data points to a feed, and
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div>
 
 ```shell
-# Send new data with a value of 42
-$ curl -F 'value=42' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+# Send new data with a value of 42 (note: using single quotes instead prevents variable expansion etc in bash)
+$ curl -F "value=42" -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
 
 # Send new data with a value of 42 and include optional location metadata
 curl -H "Content-Type: application/json" -d '{"value": 42, "lat": 23.1, "lon": "-73.3"}'  -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
