@@ -777,8 +777,8 @@ curl <span class="s2">"https://io.adafruit.com/api/v2/test_username/feeds?x-aio-
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># Send new data with a value of 42</span>
-<span class="nv">$ </span>curl <span class="nt">-F</span> <span class="s1">'value=42'</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># Send new data with a value of 42 (note: using single quotes instead prevents variable expansion etc in bash)</span>
+<span class="nv">$ </span>curl <span class="nt">-F</span> <span class="s2">"value=42"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
 
 <span class="c"># Send new data with a value of 42 and include optional location metadata</span>
 curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-d</span> <span class="s1">'{"value": 42, "lat": 23.1, "lon": "-73.3"}'</span>  <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
