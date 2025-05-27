@@ -1705,8 +1705,8 @@ curl <span class="nt">-H</span> <span class="s2">"Content-Type: application/json
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># Send new data with a value of 42 to the group's feeds as json</span>
-<span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/data.json <span class="nt">-d</span> <span class="s1">'{"feeds":[{"key":"{feed_key}","value":42}]}'</span>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># Get data from the given Feed in the given Group</span>
+<span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/groups/<span class="o">{</span>group_key<span class="o">}</span>/feeds/<span class="o">{</span>feed_key<span class="o">}</span>/data
 </code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
