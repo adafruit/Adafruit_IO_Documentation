@@ -655,8 +655,8 @@ Example for `group_feed_data` in the body is as follows: `{ feeds: [ { key: stri
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data</code></div>
 
 ```shell
-# Send new data with a value of 42 to the group's feeds as json
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/data.json -d '{"feeds":[{"key":"{feed_key}","value":42}]}'
+# Get data from the given Feed in the given Group
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data
 ```
 
 ```python
@@ -767,4 +767,3 @@ feed_key | string | true | a valid feed key
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 data | array | true | A collection of data records including `value` (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
-
