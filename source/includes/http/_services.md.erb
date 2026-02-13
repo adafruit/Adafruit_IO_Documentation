@@ -38,3 +38,29 @@ Get real-time air quality measurements and forecasts sent directly to your devic
 When you have an IO Plus account, you can track air quality through our HTTP or MQTT APIs for up to 5 locations at a time.
 
 Detailed documentation on the usage and setup of the air quality API is found within [Adafruit IO on the air quality services page](https://io.adafruit.com/services/air_quality).
+
+### Get all air quality integration records without their current forecast values.
+
+* `GET /api/v2/{username}/integrations/air_quality`
+
+### Create a new air quality integration record.
+
+```json
+{
+    "location": "latitude, longitude",
+    "name": "Unique friendly name",
+    "provider": "open_meteo"
+}
+```
+
+* `POST /api/v2/{username}/integrations/air_quality`
+
+Request body should be a JSON record in the form shown, where `provider` is either `open_meteo` (global coverage) or `airnow` (US only, official EPA data).
+
+### Get the specified air quality record with current air quality conditions and hourly forecast data including PM2.5, PM10, ozone, nitrogen dioxide, and other pollutants.
+
+* `GET /api/v2/{username}/integrations/air_quality/{id}`
+
+### Permanently delete the specified air quality integration.
+
+* `DELETE /api/v2/{username}/integrations/air_quality/{id}`
