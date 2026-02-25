@@ -200,7 +200,7 @@ Each entry in the `block_feeds` array connects the block to a feed:
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_id | integer | true | the numeric ID of the feed
+feed_id | string or integer | true | the feed to connect — accepts a numeric feed ID (`827982`), a feed key string (`"temperature"`), or a group-qualified key (`"group-key.feed-key"`)
 group_id | integer | false | the numeric ID of the feed's group (defaults to the user's default group)
 
 
@@ -253,6 +253,7 @@ rawDataOnly | string | show raw data without smoothing
 steppedLine | string | use stepped line style
 gridLines | string | show grid lines
 lineWidth | string | width of chart lines
+feedKeyLegend | boolean | use the feed key (e.g. `group.feed`) as the chart legend label instead of the feed name
 
 **Toggle & Button Properties:**
 
@@ -272,6 +273,7 @@ onValue | string | value to send when turned on
 offValue | string | value to send when turned off
 onColor | string | color when on
 offColor | string | color when off
+release | string | value to send when a momentary button is released (momentary_button only, leave blank to send nothing on release)
 
 **Slider Properties:**
 
@@ -311,6 +313,7 @@ Property | Type | Description
 -------- | ---- | -----------
 text | string | static text content
 value | string | static value
+static | boolean | when true, display a fixed value instead of the latest feed value (used by text, multiline_text, and icon blocks)
 preformatted | string | use preformatted text
 backgroundColor | string | background color (dark theme)
 backgroundColorLight | string | background color (light theme)
@@ -325,6 +328,18 @@ Property | Type | Description
 showLocation | string | show location information
 showNumbers | string | show numerical values on map
 historyHours | string | hours of location history to display
+
+**Stream Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+errors | string | show system errors and throttle messages in the stream (`"yes"` or `"no"`, default: `"yes"`)
+
+**Dashboard Link Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+dashboards | string | JSON array of dashboard objects to display as links
 
 
 
