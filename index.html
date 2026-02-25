@@ -628,6 +628,9 @@
                   <li>
                     <a href="#weather" class="toc-h2 toc-link" data-title="Weather">Weather</a>
                   </li>
+                  <li>
+                    <a href="#air-quality" class="toc-h2 toc-link" data-title="Air Quality">Air Quality</a>
+                  </li>
               </ul>
           </li>
           <li class="on-screen">
@@ -5200,7 +5203,7 @@ for any custom code.</p>
 </tr>
 </tbody></table>
 <h1 id='services'>Services</h1>
-<p>Adafruit IO provides access to several connected services. The current services offered are <a href="https://io.adafruit.com/services/ifttt">IFTTT</a>, <a href="https://io.adafruit.com/services/zapier">Zapier</a>, <a href="https://io.adafruit.com/services/weather">Weather</a>, <a href="https://io.adafruit.com/services/words">Randomizer</a> and <a href="https://io.adafruit.com/services/time">Time</a>.</p>
+<p>Adafruit IO provides access to several connected services. The current services offered are <a href="https://io.adafruit.com/services/ifttt">IFTTT</a>, <a href="https://io.adafruit.com/services/zapier">Zapier</a>, <a href="https://io.adafruit.com/services/weather">Weather</a>, <a href="https://io.adafruit.com/services/air_quality">Air Quality</a>, <a href="https://io.adafruit.com/services/words">Randomizer</a> and <a href="https://io.adafruit.com/services/time">Time</a>.</p>
 
 <p>Each of these services is unique in that you may need to do some setup at the links above prior to utilizing the service via the Adafruit IO HTTP API.</p>
 <h2 id='time'>Time</h2>
@@ -5221,11 +5224,40 @@ for any custom code.</p>
 
 <p>Detailed documentation on the usage and setup of the randomizer API is found within <a href="https://io.adafruit.com/services/words">Adafruit IO on the randomizer services page</a>.</p>
 <h2 id='weather'>Weather</h2>
-<p>With access to weather data powered by Dark Sky, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.</p>
+<p>With access to weather data powered by Apple WeatherKit, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.</p>
 
 <p>When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.</p>
 
 <p>Detailed documentation on the usage and setup of the weather API is found within <a href="https://io.adafruit.com/services/weather">Adafruit IO on the weather services page</a>.</p>
+<h2 id='air-quality'>Air Quality</h2>
+<p>Get real-time air quality measurements and forecasts sent directly to your devices. Air quality data is updated at most once every 20 minutes.</p>
+
+<p>When you have an IO Plus account, you can track air quality through our HTTP or MQTT APIs for up to 5 locations at a time.</p>
+
+<p>Detailed documentation on the usage and setup of the air quality API is found within <a href="https://io.adafruit.com/services/air_quality">Adafruit IO on the air quality services page</a>.</p>
+<h3 id='get-all-air-quality-integration-records-without-their-current-forecast-values'>Get all air quality integration records without their current forecast values.</h3>
+<ul>
+<li><code>GET /api/v2/{username}/integrations/air_quality</code></li>
+</ul>
+<h3 id='create-a-new-air-quality-integration-record'>Create a new air quality integration record.</h3><div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+    </span><span class="nl">"location"</span><span class="p">:</span><span class="w"> </span><span class="s2">"latitude, longitude"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Unique friendly name"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"provider"</span><span class="p">:</span><span class="w"> </span><span class="s2">"open_meteo"</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<ul>
+<li><code>POST /api/v2/{username}/integrations/air_quality</code></li>
+</ul>
+
+<p>Request body should be a JSON record in the form shown, where <code>provider</code> is either <code>open_meteo</code> (global coverage) or <code>airnow</code> (US only, official EPA data).</p>
+<h3 id='get-the-specified-air-quality-record-with-current-air-quality-conditions-and-hourly-forecast-data-including-pm2-5-pm10-ozone-nitrogen-dioxide-and-other-pollutants'>Get the specified air quality record with current air quality conditions and hourly forecast data including PM2.5, PM10, ozone, nitrogen dioxide, and other pollutants.</h3>
+<ul>
+<li><code>GET /api/v2/{username}/integrations/air_quality/{id}</code></li>
+</ul>
+<h3 id='permanently-delete-the-specified-air-quality-integration'>Permanently delete the specified air quality integration.</h3>
+<ul>
+<li><code>DELETE /api/v2/{username}/integrations/air_quality/{id}</code></li>
+</ul>
 <h1 id='errors'>Errors</h1>
 <p>The Adafruit IO API uses the following error codes:</p>
 

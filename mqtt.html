@@ -426,6 +426,20 @@
               </ul>
           </li>
           <li class="on-screen">
+            <a href="#air-quality-topics-io" class="toc-h1 toc-link" data-title="Air Quality Topics (IO+)">
+              Air Quality Topics (IO+)
+                <span class="menu-arrow">
+                  <svg width="18" height="18" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path d="M1171 960q0 13-10 23l-466 466q-10 10-23 10t-23-10l-50-50q-10-10-10-23t10-23l393-393-393-393q-10-10-10-23t10-23l50-50q10-10 23-10t23 10l466 466q10 10 10 23z"/></svg>
+                  <!-- <span>&gt;</span> -->
+                </span>
+            </a>
+              <ul class="toc-list-h2">
+                  <li>
+                    <a href="#subscribe-to-the-generated-topic" class="toc-h2 toc-link" data-title="Subscribe to the Generated Topic">Subscribe to the Generated Topic</a>
+                  </li>
+              </ul>
+          </li>
+          <li class="on-screen">
             <a href="#error-topics" class="toc-h1 toc-link" data-title="Error Topics">
               Error Topics
                 <span class="menu-arrow">
@@ -891,7 +905,7 @@ location,1.0,2.0,3.0
 
 <p>MQTT random word subscriptions will publish data once per minute to every client that is subscribed to the same topic.</p>
 <h1 id='weather-topics-io'>Weather Topics (IO+)</h1>
-<p>With access to weather data powered by Dark Sky, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.</p>
+<p>With access to weather data powered by Apple WeatherKit, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.</p>
 
 <p>When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.</p>
 
@@ -917,6 +931,26 @@ location,1.0,2.0,3.0
 </ul>
 
 <p>MQTT weather subscriptions will publish updated data once per minute to every client that is subscribed to a valid topic.</p>
+<h1 id='air-quality-topics-io'>Air Quality Topics (IO+)</h1>
+<p>Get real-time air quality measurements and forecasts sent directly to your devices. Air quality data is updated at most once every 20 minutes.</p>
+
+<p>When you have an IO Plus account, you can track air quality through our HTTP or MQTT APIs for up to 5 locations at a time.</p>
+
+<p>Prior to subscribing to the air quality topic, you&#39;ll need to <a href="https://io.adafruit.com/services/air_quality">generate the topics</a> to get the id.</p>
+<h2 id='subscribe-to-the-generated-topic'>Subscribe to the Generated Topic</h2>
+<ul>
+<li><code>{username}/integration/air_quality/{id}/{type}</code></li>
+</ul>
+
+<p>Where :id is the ID of the air quality record you want data for and :type is the kind of forecast data you want. Valid types are:</p>
+
+<ul>
+<li>current</li>
+<li>forecast_today</li>
+<li>forecast_tomorrow</li>
+</ul>
+
+<p>MQTT air quality subscriptions will publish updated data once per minute to every client that is subscribed to a valid topic. Data includes measurements for particulate matter (PM2.5, PM10), gases (ozone, nitrogen dioxide, sulfur dioxide, carbon monoxide), UV index, and pollen levels where available.</p>
 <h1 id='error-topics'>Error Topics</h1>
 <p>Adafruit IO provides two error reporting MQTT topics you can subscribe to:</p>
 
