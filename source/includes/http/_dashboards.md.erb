@@ -1,8 +1,12 @@
 # Dashboards
 
-Dashboards allow you to visualize data and control Adafruit IO connected projects from any modern web browser. 
-Blocks such as charts, sliders, and buttons are available to help you quickly get your IoT project up and running without the need 
+Dashboards allow you to visualize data and control Adafruit IO connected projects from any modern web browser.
+Blocks such as charts, sliders, and buttons are available to help you quickly get your IoT project up and running without the need
 for any custom code.
+
+<aside class="notice">
+Creating a fully configured dashboard via the API is a multi-step process. You cannot create a dashboard with blocks in a single request. See <a href="#building-a-dashboard-via-api">Building a Dashboard via API</a> for the full workflow.
+</aside>
 
 ## All dashboards
 
@@ -10,16 +14,28 @@ for any custom code.
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
+$ curl -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards
 ```
 
 ```python
+# pip install adafruit-io
+from Adafruit_IO import Client
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+dashboards = aio.dashboards()
 ```
 
 ```cpp
 ```
 
 ```ruby
+# gem install adafruit-io
+api = Adafruit::IO::Client.new key: 'YOUR_AIO_KEY',
+                               username: 'YOUR_USERNAME'
+
+dashboards = api.dashboards
 ```
 
 > Response Sample:
@@ -27,24 +43,39 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashbo
 ```json
 [
   {
-    "name": "string",
-    "description": "string",
-    "key": "string",
+    "id": 12345,
+    "name": "Weather Station",
+    "key": "weather-station",
+    "description": "Outdoor sensor data",
+    "visibility": "private",
+    "show_header": false,
+    "color_mode": "dark",
+    "block_borders": true,
+    "allow_overlap": false,
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z",
     "blocks": [
       {
-        "name": "string",
-        "description": "string",
-        "key": "string",
-        "visual_type": "string",
+        "id": "1234",
+        "name": "Temperature",
+        "visual_type": "gauge",
         "column": 0,
         "row": 0,
-        "size_x": 0,
-        "size_y": 0,
+        "size_x": 4,
+        "size_y": 4,
         "block_feeds": [
           {
-            "id": "string",
-            "feed": null,
-            "group": null
+            "id": "5678",
+            "feed": {
+              "id": 827982,
+              "name": "Temperature",
+              "key": "temperature"
+            },
+            "group": {
+              "id": 493,
+              "name": "Default",
+              "key": "default"
+            }
           }
         ]
       }
@@ -53,7 +84,7 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashbo
 ]
 ```
 
-An array of dashboards
+Returns an array of all dashboards for the specified user.
 
 
 ### Path Parameters
@@ -61,7 +92,6 @@ An array of dashboards
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 
 
@@ -71,48 +101,54 @@ username | string | true | a valid username string
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards</code></div>
 
 ```shell
-$ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"dashboard": {"name": "Weather Station", "description": "Outdoor sensor data"}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards
 ```
 
 ```python
+from Adafruit_IO import Client, Dashboard
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+dashboard = aio.create_dashboard(Dashboard(
+    name='Weather Station',
+    description='Outdoor sensor data'
+))
+print(dashboard.key)
 ```
 
 ```cpp
 ```
 
 ```ruby
+dashboard = api.create_dashboard(
+  name: 'Weather Station',
+  description: 'Outdoor sensor data'
+)
+puts dashboard['key']
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
-  "blocks": [
-    {
-      "name": "string",
-      "description": "string",
-      "key": "string",
-      "visual_type": "string",
-      "column": 0,
-      "row": 0,
-      "size_x": 0,
-      "size_y": 0,
-      "block_feeds": [
-        {
-          "id": "string",
-          "feed": null,
-          "group": null
-        }
-      ]
-    }
-  ]
+  "id": 12345,
+  "name": "Weather Station",
+  "key": "weather-station",
+  "description": "Outdoor sensor data",
+  "visibility": "private",
+  "show_header": false,
+  "color_mode": "dark",
+  "block_borders": true,
+  "allow_overlap": false,
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z",
+  "blocks": []
 }
 ```
 
-New Dashboard
+Creates a new empty dashboard. To add blocks, use the [Create a Block](#create-a-block) endpoint after creating the dashboard.
 
 
 ### Path Parameters
@@ -124,60 +160,105 @@ username | string | true | a valid username string
 
 ### Body Parameters
 
+The request body must contain a `dashboard` object with the following fields:
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-dashboard | object | true |
+name | string | true | display name for the dashboard (max 128 characters)
+description | string | false | a description of the dashboard
+key | string | false | URL-safe key (auto-generated from name if omitted)
+visibility | string | false | `"private"` (default) or `"public"`
+show_header | boolean | false | show a header image on the dashboard (default: false)
+color_mode | string | false | `"dark"` (default) or `"light"`
+block_borders | boolean | false | show borders around blocks (default: true)
+allow_overlap | boolean | false | allow blocks to overlap on the grid (default: false)
 
 
 
 ## Return Dashboard
 
 > HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
+$ curl -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}
 ```
 
 ```python
+dashboard = aio.dashboards('dashboard-key')
 ```
 
 ```cpp
 ```
 
 ```ruby
+dashboard = api.dashboard('dashboard-key')
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
+  "id": 12345,
+  "name": "Weather Station",
+  "key": "weather-station",
+  "description": "Outdoor sensor data",
+  "visibility": "private",
+  "show_header": false,
+  "color_mode": "dark",
+  "block_borders": true,
+  "allow_overlap": false,
+  "layouts": {
+    "xl": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "lg": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "md": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 0, "y": 4, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "sm": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 0, "y": 4, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "xs": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 0, "y": 4, "w": 8, "h": 4, "i": "1235"}
+    ]
+  },
   "blocks": [
     {
-      "name": "string",
-      "description": "string",
-      "key": "string",
-      "visual_type": "string",
-      "column": 0,
-      "row": 0,
-      "size_x": 0,
-      "size_y": 0,
+      "id": "1234",
+      "name": "Temperature",
+      "visual_type": "gauge",
       "block_feeds": [
         {
-          "id": "string",
-          "feed": null,
-          "group": null
+          "id": "5678",
+          "feed": {
+            "id": 827982,
+            "name": "Temperature",
+            "key": "temperature"
+          },
+          "group": {
+            "id": 493,
+            "name": "Default",
+            "key": "default"
+          }
         }
       ]
     }
-  ]
+  ],
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
 }
 ```
 
-Dashboard response
+Returns a single dashboard with its blocks and layout data. The `layouts` object is only included in single-dashboard responses (not in the list endpoint).
 
 
 ### Path Parameters
@@ -185,120 +266,352 @@ Dashboard response
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
 
 
 
 ## Replace a Dashboard
 
 > HTTP Request
-> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div>
 
 ```shell
-$ curl -F 'name=newdash' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
+$ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"dashboard": {"name": "Updated Name", "color_mode": "light"}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}
 ```
 
 ```python
+# Not yet available in the Python client library.
+# Use the REST API directly.
 ```
 
 ```cpp
 ```
 
 ```ruby
+updated = api.update_dashboard(
+  key: 'dashboard-key',
+  name: 'Updated Name'
+)
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
-  "blocks": [
-    {
-      "name": "string",
-      "description": "string",
-      "key": "string",
-      "visual_type": "string",
-      "column": 0,
-      "row": 0,
-      "size_x": 0,
-      "size_y": 0,
-      "block_feeds": [
-        {
-          "id": "string",
-          "feed": null,
-          "group": null
-        }
-      ]
-    }
-  ]
+  "id": 12345,
+  "name": "Updated Name",
+  "key": "weather-station",
+  "description": "Outdoor sensor data",
+  "visibility": "private",
+  "show_header": false,
+  "color_mode": "light",
+  "block_borders": true,
+  "allow_overlap": false,
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-02T00:00:00Z",
+  "blocks": []
 }
 ```
 
-Updated dashboard
+Updates an existing dashboard. Only fields you include will be changed.
 
 
 ### Path Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
 
 
 ### Body Parameters
 
-
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-dashboard | object | true |
+dashboard | object | true | a dashboard object (same fields as Create, all optional)
 
 
 ## Delete a Dashboard
 
 > HTTP Request
-> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div>
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dashboards/{id}
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}
 ```
 
 ```python
+aio.delete_dashboard('dashboard-key')
 ```
 
 ```cpp
 ```
 
 ```ruby
+api.delete_dashboard(key: 'dashboard-key')
 ```
 
 > Response Sample:
 
 ```json
-"string"
+"OK"
 ```
 
-Deleted Dashboard successfully
-
-
+Deletes the specified dashboard and all of its blocks.
 
 
 ### Path Parameters
 
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+dashboard_key | string | true | the key of the dashboard
+
+
+
+## Update Layouts
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/update_layouts</code></div>
+
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"layouts": {"lg": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"}, {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}]}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/update_layouts
+```
+
+```python
+from Adafruit_IO import Client, Layout
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+layout = Layout(lg=[
+    {'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': '1234'},
+    {'x': 4, 'y': 0, 'w': 8, 'h': 4, 'i': '1235'}
+])
+aio.update_layout('dashboard-key', layout)
+```
+
+```cpp
+```
+
+```ruby
+api.update_dashboard_layouts(
+  key: 'dashboard-key',
+  layouts: {
+    lg: [
+      { x: 0, y: 0, w: 4, h: 4, i: '1234' },
+      { x: 4, y: 0, w: 8, h: 4, i: '1235' }
+    ]
+  }
+)
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 12345,
+  "name": "Weather Station",
+  "key": "weather-station",
+  "layouts": {
+    "xl": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "lg": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "md": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "sm": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ],
+    "xs": [
+      {"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"},
+      {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}
+    ]
+  },
+  "blocks": []
+}
+```
+
+Updates the block positions and sizes across all responsive breakpoints. The response returns the full dashboard object with the updated layouts.
+
+
+### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
 
 
+### Body Parameters
+
+The request body must contain a `layouts` object. Each key is a responsive breakpoint with an array of block positions:
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+layouts | object | true | an object with breakpoint keys (`xl`, `lg`, `md`, `sm`, `xs`)
 
 
+### Breakpoints
+
+Breakpoint | Description
+---------- | -----------
+xl | extra large screens
+lg | large screens (desktop)
+md | medium screens (tablet landscape)
+sm | small screens (tablet portrait)
+xs | extra small screens (phone)
 
 
+### Block Position Fields
+
+Each entry in a breakpoint array positions one block on the grid:
+
+Field |   Type  |  Required |       Description
+----- | ------- | --------- | -----------------------
+i | string | true | the block ID (as a string)
+x | integer | true | column position (0-based)
+y | integer | true | row position (0-based)
+w | integer | true | width in grid units (minimum: 2)
+h | integer | true | height in grid units (minimum: 2)
+z | integer | false | z-index for overlapping blocks
 
 
+## Building a Dashboard via API
 
+> Step 1: Create the dashboard
 
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"dashboard": {"name": "Weather Station"}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards
+```
+
+```python
+from Adafruit_IO import Client, Dashboard, Block, Layout
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+# Step 1: Create the dashboard
+dashboard = aio.create_dashboard(Dashboard(name='Weather Station'))
+```
+
+```cpp
+```
+
+```ruby
+api = Adafruit::IO::Client.new key: 'YOUR_AIO_KEY',
+                               username: 'YOUR_USERNAME'
+
+# Step 1: Create the dashboard
+dashboard = api.create_dashboard(name: 'Weather Station')
+```
+
+> Step 2: Create blocks on the dashboard
+
+```shell
+# Create a gauge block
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "gauge", "block_feeds": [{"feed_id": "temperature"}], "properties": {"minValue": "0", "maxValue": "100", "label": "Temp"}}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/weather-station/blocks
+
+# Create a line chart block
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "line_chart", "block_feeds": [{"feed_id": "temperature"}], "properties": {"historyHours": "24", "yAxisLabel": "Temp"}}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/weather-station/blocks
+```
+
+```python
+# Step 2: Create blocks (note the block IDs from responses)
+gauge = aio.create_block(dashboard.key, Block(
+    visual_type='gauge',
+    block_feeds=[{'feed_id': 'temperature'}],
+    properties={'minValue': '0', 'maxValue': '100', 'label': 'Temp'}
+))
+
+chart = aio.create_block(dashboard.key, Block(
+    visual_type='line_chart',
+    block_feeds=[{'feed_id': 'temperature'}],
+    properties={'historyHours': '24', 'yAxisLabel': 'Temp'}
+))
+```
+
+```cpp
+```
+
+```ruby
+# Step 2: Create blocks (note the block IDs from responses)
+gauge = api.create_block(
+  dashboard_key: dashboard['key'],
+  block: {
+    visual_type: 'gauge',
+    block_feeds: [{ feed_id: 'temperature' }],
+    properties: { minValue: '0', maxValue: '100', label: 'Temp' }
+  }
+)
+
+chart = api.create_block(
+  dashboard_key: dashboard['key'],
+  block: {
+    visual_type: 'line_chart',
+    block_feeds: [{ feed_id: 'temperature' }],
+    properties: { historyHours: '24', yAxisLabel: 'Temp' }
+  }
+)
+```
+
+> Step 3: Arrange blocks on the grid
+
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"layouts": {"lg": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "{gauge_id}"}, {"x": 4, "y": 0, "w": 12, "h": 4, "i": "{chart_id}"}], "sm": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "{gauge_id}"}, {"x": 0, "y": 4, "w": 8, "h": 4, "i": "{chart_id}"}]}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/weather-station/update_layouts
+```
+
+```python
+# Step 3: Arrange blocks on the grid using their IDs
+layout = Layout(lg=[
+    {'x': 0, 'y': 0, 'w': 4, 'h': 4, 'i': str(gauge.id)},
+    {'x': 4, 'y': 0, 'w': 12, 'h': 4, 'i': str(chart.id)}
+])
+aio.update_layout(dashboard.key, layout)
+```
+
+```cpp
+```
+
+```ruby
+# Step 3: Arrange blocks on the grid using their IDs
+api.update_dashboard_layouts(
+  key: dashboard['key'],
+  layouts: {
+    lg: [
+      { x: 0, y: 0, w: 4, h: 4, i: gauge['id'].to_s },
+      { x: 4, y: 0, w: 12, h: 4, i: chart['id'].to_s }
+    ]
+  }
+)
+```
+
+Building a dashboard entirely via the API requires three separate steps:
+
+**Step 1: Create the dashboard** using `POST /dashboards`. This returns an empty dashboard with a `key` you'll use in the next steps.
+
+**Step 2: Create blocks** using `POST /dashboards/{dashboard_key}/blocks` for each block you need. Each response includes the block's `id`, which you'll need for the layout step.
+
+**Step 3: Arrange blocks** using `POST /dashboards/{dashboard_key}/update_layouts` to position blocks on the grid. Use the block `id` values from Step 2 as the `i` field in each layout entry.
+
+<aside class="notice">
+If you skip Step 3, blocks will be placed at position (0,0) with default 2x2 sizing, which means they will all stack on top of each other.
+</aside>
