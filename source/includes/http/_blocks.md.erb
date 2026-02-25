@@ -18,6 +18,12 @@ $ curl -H "X-AIO-Key: {io_key}" \
 ```
 
 ```python
+# pip install adafruit-io
+from Adafruit_IO import Client
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+blocks = aio.blocks('dashboard-key')
 ```
 
 ```cpp
@@ -94,6 +100,25 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```python
+from Adafruit_IO import Client, Block
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+block = aio.create_block('dashboard-key', Block(
+    visual_type='gauge',
+    block_feeds=[{
+        'feed_id': 'temperature',
+        'group_id': 'default'
+    }],
+    properties={
+        'minValue': '0',
+        'maxValue': '100',
+        'ringWidth': '25',
+        'label': 'Value',
+        'decimalPlaces': '2',
+        'showIcon': False
+    }
+))
 ```
 
 ```cpp
@@ -266,6 +291,24 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
+```python
+chart = aio.create_block('dashboard-key', Block(
+    visual_type='line_chart',
+    block_feeds=[{
+        'feed_id': 'temperature',
+        'group_id': 'default'
+    }],
+    properties={
+        'xAxisLabel': 'Time',
+        'yAxisLabel': 'Value',
+        'yAxisMin': '0',
+        'yAxisMax': '100',
+        'historyHours': '24',
+        'decimalPlaces': '2'
+    }
+))
+```
+
 ```ruby
 chart = api.create_block(
   dashboard_key: 'dashboard-key',
@@ -312,6 +355,20 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
+```python
+toggle = aio.create_block('dashboard-key', Block(
+    visual_type='toggle_button',
+    block_feeds=[{
+        'feed_id': 'onoff',
+        'group_id': 'default'
+    }],
+    properties={
+        'onText': 'ON',
+        'offText': 'OFF'
+    }
+))
+```
+
 ```ruby
 toggle = api.create_block(
   dashboard_key: 'dashboard-key',
@@ -348,6 +405,22 @@ release | string | value to send when a momentary button is released (momentary_
 $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     --data '{"block": {"visual_type": "slider", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"min": "0", "max": "255", "step": "1", "label": "Brightness"}, "size_x": 6, "size_y": 2}}' \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
+```
+
+```python
+slider = aio.create_block('dashboard-key', Block(
+    visual_type='slider',
+    block_feeds=[{
+        'feed_id': 'brightness',
+        'group_id': 'default'
+    }],
+    properties={
+        'min': '0',
+        'max': '255',
+        'step': '1',
+        'label': 'Brightness'
+    }
+))
 ```
 
 ```ruby
@@ -439,6 +512,7 @@ $ curl -H "X-AIO-Key: {io_key}" \
 ```
 
 ```python
+block = aio.blocks('dashboard-key', '{id}')
 ```
 
 ```cpp
@@ -512,6 +586,8 @@ $ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```python
+# Not yet available in the Python client library.
+# Use the REST API directly or delete and recreate the block.
 ```
 
 ```cpp
@@ -602,6 +678,7 @@ $ curl -X DELETE -H "X-AIO-Key: {io_key}" \
 ```
 
 ```python
+aio.delete_block('dashboard-key', '{id}')
 ```
 
 ```cpp
