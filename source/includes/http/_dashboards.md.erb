@@ -28,6 +28,14 @@ dashboards = aio.dashboards()
 ```
 
 ```cpp
+// Arduino (adafruit_io_arduino library)
+#include "AdafruitIO_WiFi.h"
+
+AdafruitIO_WiFi io("YOUR_USERNAME", "YOUR_AIO_KEY", "SSID", "PASS");
+
+// Arduino - listing all dashboards is not supported.
+// The Arduino library works with a single dashboard at a time.
+// Use the REST API (curl) to list dashboards.
 ```
 
 ```ruby
@@ -119,6 +127,12 @@ print(dashboard.key)
 ```
 
 ```cpp
+// Arduino
+AdafruitIO_Dashboard *dashboard = io.dashboard("weather-station");
+
+if (!dashboard->exists()) {
+  dashboard->create();
+}
 ```
 
 ```ruby
@@ -190,6 +204,12 @@ dashboard = aio.dashboards('dashboard-key')
 ```
 
 ```cpp
+// Arduino - retrieving dashboard details is not supported.
+// Use exists() to check if a dashboard is available.
+AdafruitIO_Dashboard *dashboard = io.dashboard("dashboard-key");
+if (dashboard->exists()) {
+  Serial.println("Dashboard found");
+}
 ```
 
 ```ruby
@@ -287,6 +307,8 @@ $ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```cpp
+// Arduino - updating dashboard settings is not supported.
+// Use the REST API (curl) to update dashboard properties.
 ```
 
 ```ruby
@@ -348,6 +370,8 @@ aio.delete_dashboard('dashboard-key')
 ```
 
 ```cpp
+// Arduino - deleting a dashboard is not supported.
+// Use the REST API (curl) to delete dashboards.
 ```
 
 ```ruby
@@ -396,6 +420,9 @@ aio.update_layout('dashboard-key', layout)
 ```
 
 ```cpp
+// Arduino - layout positions are set per-block using row, column, width, height
+// properties before calling save(). The library does not use the
+// update_layouts endpoint directly. See the Create a Block examples.
 ```
 
 ```ruby
@@ -508,6 +535,18 @@ dashboard = aio.create_dashboard(Dashboard(name='Weather Station'))
 ```
 
 ```cpp
+// Arduino (adafruit_io_arduino library)
+#include "AdafruitIO_WiFi.h"
+
+AdafruitIO_WiFi io("YOUR_USERNAME", "YOUR_AIO_KEY", "SSID", "PASS");
+
+// Step 1: Create the dashboard
+AdafruitIO_Dashboard *dashboard = io.dashboard("weather-station");
+if (!dashboard->exists()) {
+  dashboard->create();
+}
+
+AdafruitIO_Feed *temperature = io.feed("temperature");
 ```
 
 ```ruby
@@ -548,6 +587,25 @@ chart = aio.create_block(dashboard.key, Block(
 ```
 
 ```cpp
+// Step 2: Create blocks with position and size
+GaugeBlock *gauge = dashboard->addGaugeBlock(temperature);
+gauge->min = 0;
+gauge->max = 100;
+gauge->label = "Temp";
+gauge->row = 0;
+gauge->column = 0;
+gauge->width = 4;
+gauge->height = 4;
+gauge->save();
+
+ChartBlock *chart = dashboard->addChartBlock(temperature);
+chart->historyHours = 24;
+chart->yAxisLabel = "Temp";
+chart->row = 0;
+chart->column = 4;
+chart->width = 6;
+chart->height = 4;
+chart->save();
 ```
 
 ```ruby
@@ -589,6 +647,9 @@ aio.update_layout(dashboard.key, layout)
 ```
 
 ```cpp
+// Step 3: Block positions were already set via row, column, width, and
+// height properties in Step 2 before calling save(). No separate
+// layout update step is needed with the Arduino library.
 ```
 
 ```ruby

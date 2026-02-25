@@ -27,6 +27,9 @@ blocks = aio.blocks('dashboard-key')
 ```
 
 ```cpp
+// Arduino - blocks are managed via the dashboard object.
+// The Arduino library does not have a "list all blocks" method.
+// Use the REST API (curl) to retrieve existing blocks.
 ```
 
 ```ruby
@@ -122,6 +125,22 @@ block = aio.create_block('dashboard-key', Block(
 ```
 
 ```cpp
+// Arduino (adafruit_io_arduino library)
+#include "AdafruitIO_WiFi.h"
+
+AdafruitIO_WiFi io("YOUR_USERNAME", "YOUR_AIO_KEY", "SSID", "PASS");
+
+AdafruitIO_Dashboard *dashboard = io.dashboard("dashboard-key");
+AdafruitIO_Feed *temperature = io.feed("temperature");
+
+// Create a gauge block on the dashboard
+GaugeBlock *gauge = dashboard->addGaugeBlock(temperature);
+gauge->min = 0;
+gauge->max = 100;
+gauge->label = "Value";
+gauge->width = 4;
+gauge->height = 4;
+gauge->save();
 ```
 
 ```ruby
@@ -309,6 +328,19 @@ chart = aio.create_block('dashboard-key', Block(
 ))
 ```
 
+```cpp
+// Arduino
+ChartBlock *chart = dashboard->addChartBlock(temperature);
+chart->xAxisLabel = "Time";
+chart->yAxisLabel = "Value";
+chart->yAxisMin = 0;
+chart->yAxisMax = 100;
+chart->historyHours = 24;
+chart->width = 6;
+chart->height = 4;
+chart->save();
+```
+
 ```ruby
 chart = api.create_block(
   dashboard_key: 'dashboard-key',
@@ -369,6 +401,18 @@ toggle = aio.create_block('dashboard-key', Block(
 ))
 ```
 
+```cpp
+// Arduino
+AdafruitIO_Feed *onoff = io.feed("onoff");
+
+ToggleBlock *toggle = dashboard->addToggleBlock(onoff);
+toggle->onText = "ON";
+toggle->offText = "OFF";
+toggle->width = 4;
+toggle->height = 2;
+toggle->save();
+```
+
 ```ruby
 toggle = api.create_block(
   dashboard_key: 'dashboard-key',
@@ -421,6 +465,20 @@ slider = aio.create_block('dashboard-key', Block(
         'label': 'Brightness'
     }
 ))
+```
+
+```cpp
+// Arduino
+AdafruitIO_Feed *brightness = io.feed("brightness");
+
+SliderBlock *slider = dashboard->addSliderBlock(brightness);
+slider->min = 0;
+slider->max = 255;
+slider->step = 1;
+slider->label = "Brightness";
+slider->width = 4;
+slider->height = 2;
+slider->save();
 ```
 
 ```ruby
@@ -516,6 +574,9 @@ block = aio.blocks('dashboard-key', '{id}')
 ```
 
 ```cpp
+// Arduino - retrieving a single block by ID is not supported.
+// The Arduino library creates and saves blocks directly.
+// Use the REST API (curl) to retrieve block details.
 ```
 
 ```ruby
@@ -591,6 +652,9 @@ $ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```cpp
+// Arduino - updating a block by ID is not supported.
+// The Arduino library creates blocks with save().
+// Use the REST API (curl) to update existing blocks.
 ```
 
 ```ruby
@@ -682,6 +746,8 @@ aio.delete_block('dashboard-key', '{id}')
 ```
 
 ```cpp
+// Arduino - deleting a block by ID is not supported.
+// Use the REST API (curl) to delete blocks.
 ```
 
 ```ruby
