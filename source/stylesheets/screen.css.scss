@@ -515,6 +515,10 @@ html, body {
 // This is all the stuff that appears in the right half of the page
 
 .content {
+  &>div.highlight {
+    clear:none;
+  }
+
   pre, blockquote {
     background-color: $code-bg;
     color: #fff;
@@ -607,6 +611,10 @@ html, body {
 
   %right-col + %left-col {
     margin-top: $main-padding;
+  }
+
+  .highlight + p {
+    margin-top: 20px;
   }
 }
 
