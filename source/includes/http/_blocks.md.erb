@@ -24,6 +24,12 @@ $ curl -H "X-AIO-Key: {io_key}" \
 ```
 
 ```ruby
+# gem install adafruit-io
+api = Adafruit::IO::Client.new key: 'YOUR_AIO_KEY',
+                               username: 'YOUR_USERNAME'
+
+blocks = api.blocks(dashboard_key: 'dashboard-key')
+puts JSON.pretty_generate(blocks)
 ```
 
 > Response Sample:
@@ -94,6 +100,25 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```ruby
+block = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'gauge',
+    block_feeds: [
+      { feed_id: 'temperature', group_id: 'default' }
+    ],
+    properties: {
+      minValue: '0',
+      maxValue: '100',
+      ringWidth: '25',
+      label: 'Value',
+      decimalPlaces: '2',
+      showIcon: false
+    },
+    size_x: 4,
+    size_y: 4
+  }
+)
 ```
 
 > Response Sample:
@@ -241,6 +266,28 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
+```ruby
+chart = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'line_chart',
+    block_feeds: [
+      { feed_id: 'temperature', group_id: 'default' }
+    ],
+    properties: {
+      xAxisLabel: 'Time',
+      yAxisLabel: 'Value',
+      yAxisMin: '0',
+      yAxisMax: '100',
+      historyHours: '24',
+      decimalPlaces: '2'
+    },
+    size_x: 12,
+    size_y: 5
+  }
+)
+```
+
 Property | Type | Description
 -------- | ---- | -----------
 xAxisLabel | string | label for the x-axis
@@ -265,6 +312,24 @@ $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
+```ruby
+toggle = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'toggle_button',
+    block_feeds: [
+      { feed_id: 'onoff', group_id: 'default' }
+    ],
+    properties: {
+      onText: 'ON',
+      offText: 'OFF'
+    },
+    size_x: 4,
+    size_y: 2
+  }
+)
+```
+
 Property | Type | Description
 -------- | ---- | -----------
 onText | string | label text for the ON state
@@ -283,6 +348,26 @@ release | string | value to send when a momentary button is released (momentary_
 $ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
     --data '{"block": {"visual_type": "slider", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"min": "0", "max": "255", "step": "1", "label": "Brightness"}, "size_x": 6, "size_y": 2}}' \
     https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
+```
+
+```ruby
+slider = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'slider',
+    block_feeds: [
+      { feed_id: 'brightness', group_id: 'default' }
+    ],
+    properties: {
+      min: '0',
+      max: '255',
+      step: '1',
+      label: 'Brightness'
+    },
+    size_x: 6,
+    size_y: 2
+  }
+)
 ```
 
 Property | Type | Description
@@ -360,6 +445,8 @@ $ curl -H "X-AIO-Key: {io_key}" \
 ```
 
 ```ruby
+block = api.block(dashboard_key: 'dashboard-key', key: '{id}')
+puts JSON.pretty_generate(block)
 ```
 
 > Response Sample:
@@ -431,6 +518,17 @@ $ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
 ```
 
 ```ruby
+updated = api.update_block(
+  dashboard_key: 'dashboard-key',
+  key: '{id}',
+  block: {
+    properties: {
+      minValue: '0',
+      maxValue: '200',
+      label: 'Updated Label'
+    }
+  }
+)
 ```
 
 > Response Sample:
@@ -510,6 +608,7 @@ $ curl -X DELETE -H "X-AIO-Key: {io_key}" \
 ```
 
 ```ruby
+api.delete_block(dashboard_key: 'dashboard-key', key: '{id}')
 ```
 
 > Response Sample:
