@@ -542,6 +542,12 @@
                   <li>
                     <a href="#delete-a-dashboard" class="toc-h2 toc-link" data-title="Delete a Dashboard">Delete a Dashboard</a>
                   </li>
+                  <li>
+                    <a href="#update-layouts" class="toc-h2 toc-link" data-title="Update Layouts">Update Layouts</a>
+                  </li>
+                  <li>
+                    <a href="#building-a-dashboard-via-api" class="toc-h2 toc-link" data-title="Building a Dashboard via API">Building a Dashboard via API</a>
+                  </li>
               </ul>
           </li>
           <li class="on-screen">
@@ -4115,40 +4121,73 @@ delete objects in your Adafruit IO account. We store the last 1000 actions taken
 </tr>
 </tbody></table>
 <h1 id='blocks'>Blocks</h1>
-<p>Blocks are objects which can be placed on an Adafruit IO Dasboard for a user.
-Blocks IO range from input blocks (sliders and buttons) to output blocks (such as maps or other visual displays).</p>
+<p>Blocks are the visual components placed on an Adafruit IO Dashboard.
+They range from input blocks (sliders, buttons, and color pickers) to output blocks (gauges, charts, and maps).</p>
 
-<p>The <code>dashboard_key</code> can be obtained by either the response of a dashboard API call, or via the UI within IO at https://io.adafruit.com/{username}/dashboards.</p>
+<p>Each block connects to one or more feeds via <code>block_feeds</code>, and its appearance is controlled by a <code>properties</code> object whose allowed keys depend on the <code>visual_type</code>.</p>
+
+<p>The <code>dashboard_key</code> can be obtained from the response of a dashboard API call, or from the URL in the IO web app at <code>https://io.adafruit.com/{username}/dashboards</code>.</p>
 <h2 id='all-blocks'>All blocks</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code></code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># pip install adafruit-io
+</span><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">blocks</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - blocks are managed via the dashboard object.</span>
+<span class="c1">// The Arduino library does not have a "list all blocks" method.</span>
+<span class="c1">// Use the REST API (curl) to retrieve existing blocks.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># gem install adafruit-io</span>
+<span class="n">api</span> <span class="o">=</span> <span class="no">Adafruit</span><span class="o">::</span><span class="no">IO</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">new</span> <span class="ss">key: </span><span class="s1">'YOUR_AIO_KEY'</span><span class="p">,</span>
+                               <span class="ss">username: </span><span class="s1">'YOUR_USERNAME'</span>
+
+<span class="n">blocks</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">blocks</span><span class="p">(</span><span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">pretty_generate</span><span class="p">(</span><span class="n">blocks</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
     </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+      </span><span class="nl">"minValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"maxValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temp"</span><span class="w">
+    </span><span class="p">},</span><span class="w">
     </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+        </span><span class="p">},</span><span class="w">
+        </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+        </span><span class="p">}</span><span class="w">
       </span><span class="p">}</span><span class="w">
-    </span><span class="p">]</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="w">
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
-<p>An array of blocks</p>
+<p>Returns an array of all blocks on the specified dashboard.</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4168,7 +4207,7 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 </tbody></table>
 <h2 id='create-a-block'>Create a Block</h2>
@@ -4176,29 +4215,105 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code></code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "gauge", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"minValue": "0", "maxValue": "100", "ringWidth": "25", "label": "Value", "decimalPlaces": "2", "showIcon": false}, "size_x": 4, "size_y": 4}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Block</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="n">block</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'gauge'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'temperature'</span><span class="p">,</span>
+        <span class="s">'group_id'</span><span class="p">:</span> <span class="s">'default'</span>
+    <span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">'minValue'</span><span class="p">:</span> <span class="s">'0'</span><span class="p">,</span>
+        <span class="s">'maxValue'</span><span class="p">:</span> <span class="s">'100'</span><span class="p">,</span>
+        <span class="s">'ringWidth'</span><span class="p">:</span> <span class="s">'25'</span><span class="p">,</span>
+        <span class="s">'label'</span><span class="p">:</span> <span class="s">'Value'</span><span class="p">,</span>
+        <span class="s">'decimalPlaces'</span><span class="p">:</span> <span class="s">'2'</span><span class="p">,</span>
+        <span class="s">'showIcon'</span><span class="p">:</span> <span class="bp">False</span>
+    <span class="p">}</span>
+<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino (adafruit_io_arduino library)</span>
+<span class="cp">#include</span> <span class="cpf">"AdafruitIO_WiFi.h"</span><span class="cp">
+</span>
+<span class="n">AdafruitIO_WiFi</span> <span class="nf">io</span><span class="p">(</span><span class="s">"YOUR_USERNAME"</span><span class="p">,</span> <span class="s">"YOUR_AIO_KEY"</span><span class="p">,</span> <span class="s">"SSID"</span><span class="p">,</span> <span class="s">"PASS"</span><span class="p">);</span>
+
+<span class="n">AdafruitIO_Dashboard</span> <span class="o">*</span><span class="n">dashboard</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">dashboard</span><span class="p">(</span><span class="s">"dashboard-key"</span><span class="p">);</span>
+<span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"temperature"</span><span class="p">);</span>
+
+<span class="c1">// Create a gauge block on the dashboard</span>
+<span class="n">GaugeBlock</span> <span class="o">*</span><span class="n">gauge</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addGaugeBlock</span><span class="p">(</span><span class="n">temperature</span><span class="p">);</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">max</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">label</span> <span class="o">=</span> <span class="s">"Value"</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">block</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'gauge'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">feed_id: </span><span class="s1">'temperature'</span><span class="p">,</span> <span class="ss">group_id: </span><span class="s1">'default'</span> <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="ss">properties: </span><span class="p">{</span>
+      <span class="ss">minValue: </span><span class="s1">'0'</span><span class="p">,</span>
+      <span class="ss">maxValue: </span><span class="s1">'100'</span><span class="p">,</span>
+      <span class="ss">ringWidth: </span><span class="s1">'25'</span><span class="p">,</span>
+      <span class="ss">label: </span><span class="s1">'Value'</span><span class="p">,</span>
+      <span class="ss">decimalPlaces: </span><span class="s1">'2'</span><span class="p">,</span>
+      <span class="ss">showIcon: </span><span class="kp">false</span>
+    <span class="p">},</span>
+    <span class="ss">size_x: </span><span class="mi">4</span><span class="p">,</span>
+    <span class="ss">size_y: </span><span class="mi">4</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source_key"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"minValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"maxValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"ringWidth"</span><span class="p">:</span><span class="w"> </span><span class="s2">"25"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Value"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"decimalPlaces"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"showIcon"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>New Block</p>
+<p>Creates a new block on the specified dashboard. The <code>visual_type</code> field is required. Most blocks also need at least one entry in <code>block_feeds</code> to connect the block to a data feed.</p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4218,10 +4333,12 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 </tbody></table>
 <h3 id='body-parameters'>Body Parameters</h3>
+<p>The request body must contain a <code>block</code> object with the following fields:</p>
+
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -4231,10 +4348,724 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 </tr>
 </thead><tbody>
 <tr>
-<td>block</td>
-<td>object</td>
+<td>visual_type</td>
+<td>string</td>
 <td>true</td>
-<td></td>
+<td>the type of block (see Visual Types below)</td>
+</tr>
+<tr>
+<td>name</td>
+<td>string</td>
+<td>false</td>
+<td>a display name for the block</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>false</td>
+<td>a description of the block</td>
+</tr>
+<tr>
+<td>block_feeds</td>
+<td>array</td>
+<td>false</td>
+<td>array of feed connections (see Block Feeds below)</td>
+</tr>
+<tr>
+<td>properties</td>
+<td>object</td>
+<td>false</td>
+<td>visual configuration (see Properties below)</td>
+</tr>
+<tr>
+<td>column</td>
+<td>integer</td>
+<td>false</td>
+<td>grid column position</td>
+</tr>
+<tr>
+<td>row</td>
+<td>integer</td>
+<td>false</td>
+<td>grid row position</td>
+</tr>
+<tr>
+<td>size_x</td>
+<td>integer</td>
+<td>false</td>
+<td>width in grid units (default: 4)</td>
+</tr>
+<tr>
+<td>size_y</td>
+<td>integer</td>
+<td>false</td>
+<td>height in grid units (default: 4)</td>
+</tr>
+</tbody></table>
+<h3 id='visual-types'>Visual Types</h3>
+<p>The <code>visual_type</code> field must be one of the following values:</p>
+
+<table><thead>
+<tr>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>toggle_button</td>
+<td>binary on/off toggle control</td>
+</tr>
+<tr>
+<td>slider</td>
+<td>adjustable numerical slider</td>
+</tr>
+<tr>
+<td>momentary_button</td>
+<td>press-and-release button</td>
+</tr>
+<tr>
+<td>gauge</td>
+<td>circular gauge display</td>
+</tr>
+<tr>
+<td>line_chart</td>
+<td>line chart for historical data</td>
+</tr>
+<tr>
+<td>text</td>
+<td>single-line text display</td>
+</tr>
+<tr>
+<td>color_picker</td>
+<td>color selection wheel</td>
+</tr>
+<tr>
+<td>map</td>
+<td>geographic map with markers</td>
+</tr>
+<tr>
+<td>stream</td>
+<td>scrolling data stream</td>
+</tr>
+<tr>
+<td>image</td>
+<td>image display</td>
+</tr>
+<tr>
+<td>remote_control</td>
+<td>directional pad remote control</td>
+</tr>
+<tr>
+<td>multiline_text</td>
+<td>multi-line text display</td>
+</tr>
+<tr>
+<td>rich_text</td>
+<td>rich formatted text (static content)</td>
+</tr>
+<tr>
+<td>icon</td>
+<td>icon indicator display</td>
+</tr>
+<tr>
+<td>indicator</td>
+<td>status indicator (on/off with colors)</td>
+</tr>
+<tr>
+<td>number_pad</td>
+<td>numeric keypad input</td>
+</tr>
+<tr>
+<td>selector</td>
+<td>dropdown or radio button selector</td>
+</tr>
+<tr>
+<td>dashboard_link</td>
+<td>link to another dashboard</td>
+</tr>
+<tr>
+<td>battery</td>
+<td>battery level indicator</td>
+</tr>
+<tr>
+<td>divider</td>
+<td>visual separator</td>
+</tr>
+<tr>
+<td>line_gauge</td>
+<td>horizontal line gauge</td>
+</tr>
+</tbody></table>
+<h3 id='block-feeds'>Block Feeds</h3>
+<p>Each entry in the <code>block_feeds</code> array connects the block to a feed:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>feed_id</td>
+<td>string or integer</td>
+<td>true</td>
+<td>the feed to connect — accepts a numeric feed ID (<code>827982</code>), a feed key string (<code>&quot;temperature&quot;</code>), or a group-qualified key (<code>&quot;group-key.feed-key&quot;</code>)</td>
+</tr>
+<tr>
+<td>group_id</td>
+<td>integer</td>
+<td>false</td>
+<td>the numeric ID of the feed&#39;s group (defaults to the user&#39;s default group)</td>
+</tr>
+</tbody></table>
+<h3 id='properties'>Properties</h3>
+<p>The <code>properties</code> object controls the visual appearance and behavior of the block. Available keys vary by <code>visual_type</code>. All property values are strings unless otherwise noted.</p>
+
+<p><strong>Common Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>label</td>
+<td>string</td>
+<td>display label for the block</td>
+</tr>
+<tr>
+<td>showName</td>
+<td>boolean</td>
+<td>show the block name</td>
+</tr>
+<tr>
+<td>showGroupName</td>
+<td>boolean</td>
+<td>show the group name</td>
+</tr>
+<tr>
+<td>showTimestamp</td>
+<td>boolean</td>
+<td>show the last updated timestamp</td>
+</tr>
+<tr>
+<td>decimalPlaces</td>
+<td>string</td>
+<td>number of decimal places to display</td>
+</tr>
+<tr>
+<td>fontSize</td>
+<td>string</td>
+<td>font size for text display</td>
+</tr>
+<tr>
+<td>fontColor</td>
+<td>string</td>
+<td>font color</td>
+</tr>
+</tbody></table>
+
+<p><strong>Gauge Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>minValue</td>
+<td>string</td>
+<td>minimum gauge value</td>
+</tr>
+<tr>
+<td>maxValue</td>
+<td>string</td>
+<td>maximum gauge value</td>
+</tr>
+<tr>
+<td>ringWidth</td>
+<td>string</td>
+<td>width of the gauge ring</td>
+</tr>
+<tr>
+<td>minWarning</td>
+<td>string</td>
+<td>value at which to show a low warning</td>
+</tr>
+<tr>
+<td>maxWarning</td>
+<td>string</td>
+<td>value at which to show a high warning</td>
+</tr>
+<tr>
+<td>showIcon</td>
+<td>boolean</td>
+<td>show an icon on the gauge</td>
+</tr>
+</tbody></table>
+
+<p><strong>Chart Properties:</strong></p>
+
+<blockquote>
+<p>Line Chart Block Example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "line_chart", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"xAxisLabel": "Time", "yAxisLabel": "Value", "yAxisMin": "0", "yAxisMax": "100", "historyHours": "24", "decimalPlaces": "2"}, "size_x": 12, "size_y": 5}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">chart</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'line_chart'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'temperature'</span><span class="p">,</span>
+        <span class="s">'group_id'</span><span class="p">:</span> <span class="s">'default'</span>
+    <span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">'xAxisLabel'</span><span class="p">:</span> <span class="s">'Time'</span><span class="p">,</span>
+        <span class="s">'yAxisLabel'</span><span class="p">:</span> <span class="s">'Value'</span><span class="p">,</span>
+        <span class="s">'yAxisMin'</span><span class="p">:</span> <span class="s">'0'</span><span class="p">,</span>
+        <span class="s">'yAxisMax'</span><span class="p">:</span> <span class="s">'100'</span><span class="p">,</span>
+        <span class="s">'historyHours'</span><span class="p">:</span> <span class="s">'24'</span><span class="p">,</span>
+        <span class="s">'decimalPlaces'</span><span class="p">:</span> <span class="s">'2'</span>
+    <span class="p">}</span>
+<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino</span>
+<span class="n">ChartBlock</span> <span class="o">*</span><span class="n">chart</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addChartBlock</span><span class="p">(</span><span class="n">temperature</span><span class="p">);</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">xAxisLabel</span> <span class="o">=</span> <span class="s">"Time"</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">yAxisLabel</span> <span class="o">=</span> <span class="s">"Value"</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">yAxisMin</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">yAxisMax</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">historyHours</span> <span class="o">=</span> <span class="mi">24</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">chart</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'line_chart'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">feed_id: </span><span class="s1">'temperature'</span><span class="p">,</span> <span class="ss">group_id: </span><span class="s1">'default'</span> <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="ss">properties: </span><span class="p">{</span>
+      <span class="ss">xAxisLabel: </span><span class="s1">'Time'</span><span class="p">,</span>
+      <span class="ss">yAxisLabel: </span><span class="s1">'Value'</span><span class="p">,</span>
+      <span class="ss">yAxisMin: </span><span class="s1">'0'</span><span class="p">,</span>
+      <span class="ss">yAxisMax: </span><span class="s1">'100'</span><span class="p">,</span>
+      <span class="ss">historyHours: </span><span class="s1">'24'</span><span class="p">,</span>
+      <span class="ss">decimalPlaces: </span><span class="s1">'2'</span>
+    <span class="p">},</span>
+    <span class="ss">size_x: </span><span class="mi">12</span><span class="p">,</span>
+    <span class="ss">size_y: </span><span class="mi">5</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>xAxisLabel</td>
+<td>string</td>
+<td>label for the x-axis</td>
+</tr>
+<tr>
+<td>yAxisLabel</td>
+<td>string</td>
+<td>label for the y-axis</td>
+</tr>
+<tr>
+<td>yAxisMin</td>
+<td>string</td>
+<td>minimum y-axis value</td>
+</tr>
+<tr>
+<td>yAxisMax</td>
+<td>string</td>
+<td>maximum y-axis value</td>
+</tr>
+<tr>
+<td>yAxisScale</td>
+<td>string</td>
+<td>y-axis scale type</td>
+</tr>
+<tr>
+<td>historyHours</td>
+<td>string</td>
+<td>number of hours of data to display</td>
+</tr>
+<tr>
+<td>rawDataOnly</td>
+<td>string</td>
+<td>show raw data without smoothing</td>
+</tr>
+<tr>
+<td>steppedLine</td>
+<td>string</td>
+<td>use stepped line style</td>
+</tr>
+<tr>
+<td>gridLines</td>
+<td>string</td>
+<td>show grid lines</td>
+</tr>
+<tr>
+<td>lineWidth</td>
+<td>string</td>
+<td>width of chart lines</td>
+</tr>
+<tr>
+<td>feedKeyLegend</td>
+<td>boolean</td>
+<td>use the feed key (e.g. <code>group.feed</code>) as the chart legend label instead of the feed name</td>
+</tr>
+</tbody></table>
+
+<p><strong>Toggle &amp; Button Properties:</strong></p>
+
+<blockquote>
+<p>Toggle Button Block Example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "toggle_button", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"onText": "ON", "offText": "OFF"}, "size_x": 4, "size_y": 2}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">toggle</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'toggle_button'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'onoff'</span><span class="p">,</span>
+        <span class="s">'group_id'</span><span class="p">:</span> <span class="s">'default'</span>
+    <span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">'onText'</span><span class="p">:</span> <span class="s">'ON'</span><span class="p">,</span>
+        <span class="s">'offText'</span><span class="p">:</span> <span class="s">'OFF'</span>
+    <span class="p">}</span>
+<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino</span>
+<span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">onoff</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"onoff"</span><span class="p">);</span>
+
+<span class="n">ToggleBlock</span> <span class="o">*</span><span class="n">toggle</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addToggleBlock</span><span class="p">(</span><span class="n">onoff</span><span class="p">);</span>
+<span class="n">toggle</span><span class="o">-&gt;</span><span class="n">onText</span> <span class="o">=</span> <span class="s">"ON"</span><span class="p">;</span>
+<span class="n">toggle</span><span class="o">-&gt;</span><span class="n">offText</span> <span class="o">=</span> <span class="s">"OFF"</span><span class="p">;</span>
+<span class="n">toggle</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">toggle</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">toggle</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">toggle</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'toggle_button'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">feed_id: </span><span class="s1">'onoff'</span><span class="p">,</span> <span class="ss">group_id: </span><span class="s1">'default'</span> <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="ss">properties: </span><span class="p">{</span>
+      <span class="ss">onText: </span><span class="s1">'ON'</span><span class="p">,</span>
+      <span class="ss">offText: </span><span class="s1">'OFF'</span>
+    <span class="p">},</span>
+    <span class="ss">size_x: </span><span class="mi">4</span><span class="p">,</span>
+    <span class="ss">size_y: </span><span class="mi">2</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>onText</td>
+<td>string</td>
+<td>label text for the ON state</td>
+</tr>
+<tr>
+<td>offText</td>
+<td>string</td>
+<td>label text for the OFF state</td>
+</tr>
+<tr>
+<td>onValue</td>
+<td>string</td>
+<td>value to send when turned on</td>
+</tr>
+<tr>
+<td>offValue</td>
+<td>string</td>
+<td>value to send when turned off</td>
+</tr>
+<tr>
+<td>onColor</td>
+<td>string</td>
+<td>color when on</td>
+</tr>
+<tr>
+<td>offColor</td>
+<td>string</td>
+<td>color when off</td>
+</tr>
+<tr>
+<td>release</td>
+<td>string</td>
+<td>value to send when a momentary button is released (momentary_button only, leave blank to send nothing on release)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Slider Properties:</strong></p>
+
+<blockquote>
+<p>Slider Block Example</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "slider", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"min": "0", "max": "255", "step": "1", "label": "Brightness"}, "size_x": 6, "size_y": 2}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">slider</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'slider'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span>
+        <span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'brightness'</span><span class="p">,</span>
+        <span class="s">'group_id'</span><span class="p">:</span> <span class="s">'default'</span>
+    <span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span>
+        <span class="s">'min'</span><span class="p">:</span> <span class="s">'0'</span><span class="p">,</span>
+        <span class="s">'max'</span><span class="p">:</span> <span class="s">'255'</span><span class="p">,</span>
+        <span class="s">'step'</span><span class="p">:</span> <span class="s">'1'</span><span class="p">,</span>
+        <span class="s">'label'</span><span class="p">:</span> <span class="s">'Brightness'</span>
+    <span class="p">}</span>
+<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino</span>
+<span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">brightness</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"brightness"</span><span class="p">);</span>
+
+<span class="n">SliderBlock</span> <span class="o">*</span><span class="n">slider</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addSliderBlock</span><span class="p">(</span><span class="n">brightness</span><span class="p">);</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">max</span> <span class="o">=</span> <span class="mi">255</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">step</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">label</span> <span class="o">=</span> <span class="s">"Brightness"</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+<span class="n">slider</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">slider</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'slider'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">feed_id: </span><span class="s1">'brightness'</span><span class="p">,</span> <span class="ss">group_id: </span><span class="s1">'default'</span> <span class="p">}</span>
+    <span class="p">],</span>
+    <span class="ss">properties: </span><span class="p">{</span>
+      <span class="ss">min: </span><span class="s1">'0'</span><span class="p">,</span>
+      <span class="ss">max: </span><span class="s1">'255'</span><span class="p">,</span>
+      <span class="ss">step: </span><span class="s1">'1'</span><span class="p">,</span>
+      <span class="ss">label: </span><span class="s1">'Brightness'</span>
+    <span class="p">},</span>
+    <span class="ss">size_x: </span><span class="mi">6</span><span class="p">,</span>
+    <span class="ss">size_y: </span><span class="mi">2</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>min</td>
+<td>string</td>
+<td>minimum slider value</td>
+</tr>
+<tr>
+<td>max</td>
+<td>string</td>
+<td>maximum slider value</td>
+</tr>
+<tr>
+<td>step</td>
+<td>string</td>
+<td>increment step size</td>
+</tr>
+<tr>
+<td>orientation</td>
+<td>string</td>
+<td>slider orientation</td>
+</tr>
+<tr>
+<td>handle</td>
+<td>string</td>
+<td>handle style</td>
+</tr>
+</tbody></table>
+
+<p><strong>Indicator &amp; Icon Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>icon</td>
+<td>string</td>
+<td>icon name</td>
+</tr>
+<tr>
+<td>lowIcon</td>
+<td>string</td>
+<td>icon for low state</td>
+</tr>
+<tr>
+<td>highIcon</td>
+<td>string</td>
+<td>icon for high state</td>
+</tr>
+<tr>
+<td>conditions</td>
+<td>string</td>
+<td>conditions for state changes</td>
+</tr>
+<tr>
+<td>lowConditions</td>
+<td>string</td>
+<td>conditions for low state</td>
+</tr>
+<tr>
+<td>mediumConditions</td>
+<td>string</td>
+<td>conditions for medium state</td>
+</tr>
+<tr>
+<td>highColor</td>
+<td>string</td>
+<td>color for high state</td>
+</tr>
+<tr>
+<td>mediumColor</td>
+<td>string</td>
+<td>color for medium state</td>
+</tr>
+<tr>
+<td>lowColor</td>
+<td>string</td>
+<td>color for low state</td>
+</tr>
+</tbody></table>
+
+<p><strong>Display Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>text</td>
+<td>string</td>
+<td>static text content</td>
+</tr>
+<tr>
+<td>value</td>
+<td>string</td>
+<td>static value</td>
+</tr>
+<tr>
+<td>static</td>
+<td>boolean</td>
+<td>when true, display a fixed value instead of the latest feed value (used by text, multiline_text, and icon blocks)</td>
+</tr>
+<tr>
+<td>preformatted</td>
+<td>string</td>
+<td>use preformatted text</td>
+</tr>
+<tr>
+<td>backgroundColor</td>
+<td>string</td>
+<td>background color (dark theme)</td>
+</tr>
+<tr>
+<td>backgroundColorLight</td>
+<td>string</td>
+<td>background color (light theme)</td>
+</tr>
+<tr>
+<td>fillColor</td>
+<td>string</td>
+<td>fill color</td>
+</tr>
+<tr>
+<td>tile</td>
+<td>string</td>
+<td>tile image (dark theme)</td>
+</tr>
+<tr>
+<td>tileLight</td>
+<td>string</td>
+<td>tile image (light theme)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Map Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>showLocation</td>
+<td>string</td>
+<td>show location information</td>
+</tr>
+<tr>
+<td>showNumbers</td>
+<td>string</td>
+<td>show numerical values on map</td>
+</tr>
+<tr>
+<td>historyHours</td>
+<td>string</td>
+<td>hours of location history to display</td>
+</tr>
+</tbody></table>
+
+<p><strong>Stream Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>errors</td>
+<td>string</td>
+<td>show system errors and throttle messages in the stream (<code>&quot;yes&quot;</code> or <code>&quot;no&quot;</code>, default: <code>&quot;yes&quot;</code>)</td>
+</tr>
+</tbody></table>
+
+<p><strong>Dashboard Link Properties:</strong></p>
+
+<table><thead>
+<tr>
+<th>Property</th>
+<th>Type</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>dashboards</td>
+<td>string</td>
+<td>JSON array of dashboard objects to display as links</td>
 </tr>
 </tbody></table>
 <h2 id='returns-block'>Returns Block</h2>
@@ -4242,29 +5073,53 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code></code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">block</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">blocks</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="s">'{id}'</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - retrieving a single block by ID is not supported.</span>
+<span class="c1">// The Arduino library creates and saves blocks directly.</span>
+<span class="c1">// Use the REST API (curl) to retrieve block details.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">block</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">block</span><span class="p">(</span><span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span> <span class="ss">key: </span><span class="s1">'{id}'</span><span class="p">)</span>
+<span class="nb">puts</span> <span class="no">JSON</span><span class="p">.</span><span class="nf">pretty_generate</span><span class="p">(</span><span class="n">block</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
   </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source_key"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"minValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"maxValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"100"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temp"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Block response</p>
+<p>Returns a single block by its ID.</p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4284,13 +5139,13 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 <tr>
 <td>id</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the ID of the block</td>
 </tr>
 </tbody></table>
 <h2 id='replace-a-block'>Replace A Block</h2>
@@ -4298,29 +5153,66 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <p>HTTP Request
 <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code></code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> PUT <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"properties": {"minValue": "0", "maxValue": "200", "label": "Updated Label"}}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Not yet available in the Python client library.
+# Use the REST API directly or delete and recreate the block.
+</span></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - updating a block by ID is not supported.</span>
+<span class="c1">// The Arduino library creates blocks with save().</span>
+<span class="c1">// Use the REST API (curl) to update existing blocks.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">updated</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">update_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">key: </span><span class="s1">'{id}'</span><span class="p">,</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">properties: </span><span class="p">{</span>
+      <span class="ss">minValue: </span><span class="s1">'0'</span><span class="p">,</span>
+      <span class="ss">maxValue: </span><span class="s1">'200'</span><span class="p">,</span>
+      <span class="ss">label: </span><span class="s1">'Updated Label'</span>
+    <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
   </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
   </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source_key"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"source"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"properties"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"minValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"0"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"maxValue"</span><span class="p">:</span><span class="w"> </span><span class="s2">"200"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"label"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated Label"</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+      </span><span class="p">},</span><span class="w">
+      </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+      </span><span class="p">}</span><span class="w">
     </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Updated block</p>
+<p>Updates an existing block. Any fields you include will be updated; fields you omit remain unchanged.</p>
+
+<p><strong>Note:</strong> If you include <code>block_feeds</code> in an update, the existing feed connections are replaced entirely with the new values.</p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4340,13 +5232,13 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 <tr>
 <td>id</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the ID of the block</td>
 </tr>
 </tbody></table>
 <h3 id='body-parameters-2'>Body Parameters</h3>
@@ -4362,7 +5254,7 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>block</td>
 <td>object</td>
 <td>true</td>
-<td></td>
+<td>a block object (same fields as Create, all optional)</td>
 </tr>
 </tbody></table>
 <h2 id='delete-a-block'>Delete a Block</h2>
@@ -4370,13 +5262,19 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <p>HTTP Request
 <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code></code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> DELETE <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/blocks/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">aio</span><span class="p">.</span><span class="n">delete_block</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="s">'{id}'</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - deleting a block by ID is not supported.</span>
+<span class="c1">// Use the REST API (curl) to delete blocks.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">api</span><span class="p">.</span><span class="nf">delete_block</span><span class="p">(</span><span class="ss">dashboard_key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span> <span class="ss">key: </span><span class="s1">'{id}'</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="s2">"OK"</span><span class="w">
 </span></code></pre></div>
-<p>Deleted Block successfully</p>
+<p>Deletes the specified block from the dashboard.</p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4396,49 +5294,88 @@ Blocks IO range from input blocks (sliders and buttons) to output blocks (such a
 <td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 <tr>
 <td>id</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the ID of the block</td>
 </tr>
 </tbody></table>
 <h1 id='dashboards'>Dashboards</h1>
-<p>Dashboards allow you to visualize data and control Adafruit IO connected projects from any modern web browser. 
-Blocks such as charts, sliders, and buttons are available to help you quickly get your IoT project up and running without the need 
+<p>Dashboards allow you to visualize data and control Adafruit IO connected projects from any modern web browser.
+Blocks such as charts, sliders, and buttons are available to help you quickly get your IoT project up and running without the need
 for any custom code.</p>
+
+<aside class="notice">
+Creating a fully configured dashboard via the API is a multi-step process. You cannot create a dashboard with blocks in a single request. See <a href="#building-a-dashboard-via-api">Building a Dashboard via API</a> for the full workflow.
+</aside>
 <h2 id='all-dashboards'>All dashboards</h2>
 <blockquote>
 <p>HTTP Request
 <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># pip install adafruit-io
+</span><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="n">dashboards</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">dashboards</span><span class="p">()</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino (adafruit_io_arduino library)</span>
+<span class="cp">#include</span> <span class="cpf">"AdafruitIO_WiFi.h"</span><span class="cp">
+</span>
+<span class="n">AdafruitIO_WiFi</span> <span class="nf">io</span><span class="p">(</span><span class="s">"YOUR_USERNAME"</span><span class="p">,</span> <span class="s">"YOUR_AIO_KEY"</span><span class="p">,</span> <span class="s">"SSID"</span><span class="p">,</span> <span class="s">"PASS"</span><span class="p">);</span>
+
+<span class="c1">// Arduino - listing all dashboards is not supported.</span>
+<span class="c1">// The Arduino library works with a single dashboard at a time.</span>
+<span class="c1">// Use the REST API (curl) to list dashboards.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># gem install adafruit-io</span>
+<span class="n">api</span> <span class="o">=</span> <span class="no">Adafruit</span><span class="o">::</span><span class="no">IO</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">new</span> <span class="ss">key: </span><span class="s1">'YOUR_AIO_KEY'</span><span class="p">,</span>
+                               <span class="ss">username: </span><span class="s1">'YOUR_USERNAME'</span>
+
+<span class="n">dashboards</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">dashboards</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">[</span><span class="w">
   </span><span class="p">{</span><span class="w">
-    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-    </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Weather Station"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather-station"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outdoor sensor data"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"visibility"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"show_header"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"color_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dark"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"block_borders"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"allow_overlap"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+    </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
     </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
       </span><span class="p">{</span><span class="w">
-        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
         </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
         </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-        </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
+        </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w">
         </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
           </span><span class="p">{</span><span class="w">
-            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-            </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+            </span><span class="p">},</span><span class="w">
+            </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+              </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+              </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+            </span><span class="p">}</span><span class="w">
           </span><span class="p">}</span><span class="w">
         </span><span class="p">]</span><span class="w">
       </span><span class="p">}</span><span class="w">
@@ -4446,7 +5383,7 @@ for any custom code.</p>
   </span><span class="p">}</span><span class="w">
 </span><span class="p">]</span><span class="w">
 </span></code></pre></div>
-<p>An array of dashboards</p>
+<p>Returns an array of all dashboards for the specified user.</p>
 <h3 id='path-parameters'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4468,37 +5405,49 @@ for any custom code.</p>
 <p>HTTP Request
 <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-F</span> <span class="s1">'name=newdash'</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"dashboard": {"name": "Weather Station", "description": "Outdoor sensor data"}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Dashboard</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="n">dashboard</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_dashboard</span><span class="p">(</span><span class="n">Dashboard</span><span class="p">(</span>
+    <span class="n">name</span><span class="o">=</span><span class="s">'Weather Station'</span><span class="p">,</span>
+    <span class="n">description</span><span class="o">=</span><span class="s">'Outdoor sensor data'</span>
+<span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">dashboard</span><span class="p">.</span><span class="n">key</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino</span>
+<span class="n">AdafruitIO_Dashboard</span> <span class="o">*</span><span class="n">dashboard</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">dashboard</span><span class="p">(</span><span class="s">"weather-station"</span><span class="p">);</span>
+
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">exists</span><span class="p">())</span> <span class="p">{</span>
+  <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">();</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">dashboard</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_dashboard</span><span class="p">(</span>
+  <span class="ss">name: </span><span class="s1">'Weather Station'</span><span class="p">,</span>
+  <span class="ss">description: </span><span class="s1">'Outdoor sensor data'</span>
+<span class="p">)</span>
+<span class="nb">puts</span> <span class="n">dashboard</span><span class="p">[</span><span class="s1">'key'</span><span class="p">]</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Weather Station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather-station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outdoor sensor data"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visibility"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"show_header"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"color_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dark"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"block_borders"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"allow_overlap"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>New Dashboard</p>
+<p>Creates a new empty dashboard. To add blocks, use the <a href="#create-a-block">Create a Block</a> endpoint after creating the dashboard.</p>
 <h3 id='path-parameters-2'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4516,6 +5465,8 @@ for any custom code.</p>
 </tr>
 </tbody></table>
 <h3 id='body-parameters'>Body Parameters</h3>
+<p>The request body must contain a <code>dashboard</code> object with the following fields:</p>
+
 <table><thead>
 <tr>
 <th>Parameter</th>
@@ -4525,48 +5476,132 @@ for any custom code.</p>
 </tr>
 </thead><tbody>
 <tr>
-<td>dashboard</td>
-<td>object</td>
+<td>name</td>
+<td>string</td>
 <td>true</td>
-<td></td>
+<td>display name for the dashboard (max 128 characters)</td>
+</tr>
+<tr>
+<td>description</td>
+<td>string</td>
+<td>false</td>
+<td>a description of the dashboard</td>
+</tr>
+<tr>
+<td>key</td>
+<td>string</td>
+<td>false</td>
+<td>URL-safe key (auto-generated from name if omitted)</td>
+</tr>
+<tr>
+<td>visibility</td>
+<td>string</td>
+<td>false</td>
+<td><code>&quot;private&quot;</code> (default) or <code>&quot;public&quot;</code></td>
+</tr>
+<tr>
+<td>show_header</td>
+<td>boolean</td>
+<td>false</td>
+<td>show a header image on the dashboard (default: false)</td>
+</tr>
+<tr>
+<td>color_mode</td>
+<td>string</td>
+<td>false</td>
+<td><code>&quot;dark&quot;</code> (default) or <code>&quot;light&quot;</code></td>
+</tr>
+<tr>
+<td>block_borders</td>
+<td>boolean</td>
+<td>false</td>
+<td>show borders around blocks (default: true)</td>
+</tr>
+<tr>
+<td>allow_overlap</td>
+<td>boolean</td>
+<td>false</td>
+<td>allow blocks to overlap on the grid (default: false)</td>
 </tr>
 </tbody></table>
 <h2 id='return-dashboard'>Return Dashboard</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+<div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">dashboard</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">dashboards</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - retrieving dashboard details is not supported.</span>
+<span class="c1">// Use exists() to check if a dashboard is available.</span>
+<span class="n">AdafruitIO_Dashboard</span> <span class="o">*</span><span class="n">dashboard</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">dashboard</span><span class="p">(</span><span class="s">"dashboard-key"</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">exists</span><span class="p">())</span> <span class="p">{</span>
+  <span class="n">Serial</span><span class="p">.</span><span class="n">println</span><span class="p">(</span><span class="s">"Dashboard found"</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">dashboard</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">dashboard</span><span class="p">(</span><span class="s1">'dashboard-key'</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Weather Station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather-station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outdoor sensor data"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visibility"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"show_header"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"color_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"dark"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"block_borders"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"allow_overlap"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"layouts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"xl"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"lg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"md"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"sm"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"xs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
   </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
     </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+      </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"gauge"</span><span class="p">,</span><span class="w">
       </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
         </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
+          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"5678"</span><span class="p">,</span><span class="w">
+          </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">827982</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Temperature"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"temperature"</span><span class="w">
+          </span><span class="p">},</span><span class="w">
+          </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+            </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">493</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Default"</span><span class="p">,</span><span class="w">
+            </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"default"</span><span class="w">
+          </span><span class="p">}</span><span class="w">
         </span><span class="p">}</span><span class="w">
       </span><span class="p">]</span><span class="w">
     </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="p">],</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Dashboard response</p>
+<p>Returns a single dashboard with its blocks and layout data. The <code>layouts</code> object is only included in single-dashboard responses (not in the list endpoint).</p>
 <h3 id='path-parameters-3'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4583,48 +5618,48 @@ for any custom code.</p>
 <td>a valid username string</td>
 </tr>
 <tr>
-<td>id</td>
+<td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 </tbody></table>
 <h2 id='replace-a-dashboard'>Replace a Dashboard</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+<div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-F</span> <span class="s1">'name=newdash'</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> PUT <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"dashboard": {"name": "Updated Name", "color_mode": "light"}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Not yet available in the Python client library.
+# Use the REST API directly.
+</span></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - updating dashboard settings is not supported.</span>
+<span class="c1">// Use the REST API (curl) to update dashboard properties.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">updated</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">update_dashboard</span><span class="p">(</span>
+  <span class="ss">key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">name: </span><span class="s1">'Updated Name'</span>
+<span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
 <div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
-  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-  </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-    </span><span class="p">{</span><span class="w">
-      </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"visual_type"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"column"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"row"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"size_y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-      </span><span class="nl">"block_feeds"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
-        </span><span class="p">{</span><span class="w">
-          </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"feed"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="p">,</span><span class="w">
-          </span><span class="nl">"group"</span><span class="p">:</span><span class="w"> </span><span class="kc">null</span><span class="w">
-        </span><span class="p">}</span><span class="w">
-      </span><span class="p">]</span><span class="w">
-    </span><span class="p">}</span><span class="w">
-  </span><span class="p">]</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Updated Name"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather-station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"description"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Outdoor sensor data"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"visibility"</span><span class="p">:</span><span class="w"> </span><span class="s2">"private"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"show_header"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"color_mode"</span><span class="p">:</span><span class="w"> </span><span class="s2">"light"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"block_borders"</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"allow_overlap"</span><span class="p">:</span><span class="w"> </span><span class="kc">false</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"created_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-01T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"updated_at"</span><span class="p">:</span><span class="w"> </span><span class="s2">"2024-01-02T00:00:00Z"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
 </span><span class="p">}</span><span class="w">
 </span></code></pre></div>
-<p>Updated dashboard</p>
+<p>Updates an existing dashboard. Only fields you include will be changed.</p>
 <h3 id='path-parameters-4'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4641,10 +5676,10 @@ for any custom code.</p>
 <td>a valid username string</td>
 </tr>
 <tr>
-<td>id</td>
+<td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 </tbody></table>
 <h3 id='body-parameters-2'>Body Parameters</h3>
@@ -4660,22 +5695,27 @@ for any custom code.</p>
 <td>dashboard</td>
 <td>object</td>
 <td>true</td>
-<td></td>
+<td>a dashboard object (same fields as Create, all optional)</td>
 </tr>
 </tbody></table>
 <h2 id='delete-a-dashboard'>Delete a Dashboard</h2>
 <blockquote>
 <p>HTTP Request
-<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{id}</code></div></p>
+<div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}</code></div></p>
 </blockquote>
-<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span><span class="nb">id</span><span class="o">}</span>
-</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code></code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code></code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code></code></pre></div>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> DELETE <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="n">aio</span><span class="p">.</span><span class="n">delete_dashboard</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - deleting a dashboard is not supported.</span>
+<span class="c1">// Use the REST API (curl) to delete dashboards.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">api</span><span class="p">.</span><span class="nf">delete_dashboard</span><span class="p">(</span><span class="ss">key: </span><span class="s1">'dashboard-key'</span><span class="p">)</span>
+</code></pre></div>
 <blockquote>
 <p>Response Sample:</p>
 </blockquote>
-<div class="highlight"><pre class="highlight json tab-json"><code><span class="s2">"string"</span><span class="w">
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="s2">"OK"</span><span class="w">
 </span></code></pre></div>
-<p>Deleted Dashboard successfully</p>
+<p>Deletes the specified dashboard and all of its blocks.</p>
 <h3 id='path-parameters-5'>Path Parameters</h3>
 <table><thead>
 <tr>
@@ -4692,12 +5732,321 @@ for any custom code.</p>
 <td>a valid username string</td>
 </tr>
 <tr>
-<td>id</td>
+<td>dashboard_key</td>
 <td>string</td>
 <td>true</td>
-<td></td>
+<td>the key of the dashboard</td>
 </tr>
 </tbody></table>
+<h2 id='update-layouts'>Update Layouts</h2>
+<blockquote>
+<p>HTTP Request
+<div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/update_layouts</code></div></p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"layouts": {"lg": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "1234"}, {"x": 4, "y": 0, "w": 8, "h": 4, "i": "1235"}]}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/<span class="o">{</span>dashboard_key<span class="o">}</span>/update_layouts
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Layout</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">lg</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'w'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'h'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'i'</span><span class="p">:</span> <span class="s">'1234'</span><span class="p">},</span>
+    <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'w'</span><span class="p">:</span> <span class="mi">8</span><span class="p">,</span> <span class="s">'h'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'i'</span><span class="p">:</span> <span class="s">'1235'</span><span class="p">}</span>
+<span class="p">])</span>
+<span class="n">aio</span><span class="p">.</span><span class="n">update_layout</span><span class="p">(</span><span class="s">'dashboard-key'</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino - layout positions are set per-block using row, column, width, height</span>
+<span class="c1">// properties before calling save(). The library does not use the</span>
+<span class="c1">// update_layouts endpoint directly. See the Create a Block examples.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">api</span><span class="p">.</span><span class="nf">update_dashboard_layouts</span><span class="p">(</span>
+  <span class="ss">key: </span><span class="s1">'dashboard-key'</span><span class="p">,</span>
+  <span class="ss">layouts: </span><span class="p">{</span>
+    <span class="ss">lg: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">x: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">y: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">w: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">h: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">i: </span><span class="s1">'1234'</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="ss">x: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">y: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">w: </span><span class="mi">8</span><span class="p">,</span> <span class="ss">h: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">i: </span><span class="s1">'1235'</span> <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Response Sample:</p>
+</blockquote>
+<div class="highlight"><pre class="highlight json tab-json"><code><span class="p">{</span><span class="w">
+  </span><span class="nl">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">12345</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Weather Station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"key"</span><span class="p">:</span><span class="w"> </span><span class="s2">"weather-station"</span><span class="p">,</span><span class="w">
+  </span><span class="nl">"layouts"</span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+    </span><span class="nl">"xl"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"lg"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"md"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"sm"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">],</span><span class="w">
+    </span><span class="nl">"xs"</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1234"</span><span class="p">},</span><span class="w">
+      </span><span class="p">{</span><span class="nl">"x"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"y"</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="nl">"w"</span><span class="p">:</span><span class="w"> </span><span class="mi">8</span><span class="p">,</span><span class="w"> </span><span class="nl">"h"</span><span class="p">:</span><span class="w"> </span><span class="mi">4</span><span class="p">,</span><span class="w"> </span><span class="nl">"i"</span><span class="p">:</span><span class="w"> </span><span class="s2">"1235"</span><span class="p">}</span><span class="w">
+    </span><span class="p">]</span><span class="w">
+  </span><span class="p">},</span><span class="w">
+  </span><span class="nl">"blocks"</span><span class="p">:</span><span class="w"> </span><span class="p">[]</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre></div>
+<p>Updates the block positions and sizes across all responsive breakpoints. The response returns the full dashboard object with the updated layouts.</p>
+<h3 id='path-parameters-6'>Path Parameters</h3>
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>username</td>
+<td>string</td>
+<td>true</td>
+<td>a valid username string</td>
+</tr>
+<tr>
+<td>dashboard_key</td>
+<td>string</td>
+<td>true</td>
+<td>the key of the dashboard</td>
+</tr>
+</tbody></table>
+<h3 id='body-parameters-3'>Body Parameters</h3>
+<p>The request body must contain a <code>layouts</code> object. Each key is a responsive breakpoint with an array of block positions:</p>
+
+<table><thead>
+<tr>
+<th>Parameter</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>layouts</td>
+<td>object</td>
+<td>true</td>
+<td>an object with breakpoint keys (<code>xl</code>, <code>lg</code>, <code>md</code>, <code>sm</code>, <code>xs</code>)</td>
+</tr>
+</tbody></table>
+<h3 id='breakpoints'>Breakpoints</h3>
+<table><thead>
+<tr>
+<th>Breakpoint</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>xl</td>
+<td>extra large screens</td>
+</tr>
+<tr>
+<td>lg</td>
+<td>large screens (desktop)</td>
+</tr>
+<tr>
+<td>md</td>
+<td>medium screens (tablet landscape)</td>
+</tr>
+<tr>
+<td>sm</td>
+<td>small screens (tablet portrait)</td>
+</tr>
+<tr>
+<td>xs</td>
+<td>extra small screens (phone)</td>
+</tr>
+</tbody></table>
+<h3 id='block-position-fields'>Block Position Fields</h3>
+<p>Each entry in a breakpoint array positions one block on the grid:</p>
+
+<table><thead>
+<tr>
+<th>Field</th>
+<th>Type</th>
+<th>Required</th>
+<th>Description</th>
+</tr>
+</thead><tbody>
+<tr>
+<td>i</td>
+<td>string</td>
+<td>true</td>
+<td>the block ID (as a string)</td>
+</tr>
+<tr>
+<td>x</td>
+<td>integer</td>
+<td>true</td>
+<td>column position (0-based)</td>
+</tr>
+<tr>
+<td>y</td>
+<td>integer</td>
+<td>true</td>
+<td>row position (0-based)</td>
+</tr>
+<tr>
+<td>w</td>
+<td>integer</td>
+<td>true</td>
+<td>width in grid units (minimum: 2)</td>
+</tr>
+<tr>
+<td>h</td>
+<td>integer</td>
+<td>true</td>
+<td>height in grid units (minimum: 2)</td>
+</tr>
+<tr>
+<td>z</td>
+<td>integer</td>
+<td>false</td>
+<td>z-index for overlapping blocks</td>
+</tr>
+</tbody></table>
+<h2 id='building-a-dashboard-via-api'>Building a Dashboard via API</h2>
+<blockquote>
+<p>Step 1: Create the dashboard</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"dashboard": {"name": "Weather Station"}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="kn">from</span> <span class="nn">Adafruit_IO</span> <span class="kn">import</span> <span class="n">Client</span><span class="p">,</span> <span class="n">Dashboard</span><span class="p">,</span> <span class="n">Block</span><span class="p">,</span> <span class="n">Layout</span>
+
+<span class="n">aio</span> <span class="o">=</span> <span class="n">Client</span><span class="p">(</span><span class="s">'YOUR_USERNAME'</span><span class="p">,</span> <span class="s">'YOUR_AIO_KEY'</span><span class="p">)</span>
+
+<span class="c1"># Step 1: Create the dashboard
+</span><span class="n">dashboard</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_dashboard</span><span class="p">(</span><span class="n">Dashboard</span><span class="p">(</span><span class="n">name</span><span class="o">=</span><span class="s">'Weather Station'</span><span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Arduino (adafruit_io_arduino library)</span>
+<span class="cp">#include</span> <span class="cpf">"AdafruitIO_WiFi.h"</span><span class="cp">
+</span>
+<span class="n">AdafruitIO_WiFi</span> <span class="nf">io</span><span class="p">(</span><span class="s">"YOUR_USERNAME"</span><span class="p">,</span> <span class="s">"YOUR_AIO_KEY"</span><span class="p">,</span> <span class="s">"SSID"</span><span class="p">,</span> <span class="s">"PASS"</span><span class="p">);</span>
+
+<span class="c1">// Step 1: Create the dashboard</span>
+<span class="n">AdafruitIO_Dashboard</span> <span class="o">*</span><span class="n">dashboard</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">dashboard</span><span class="p">(</span><span class="s">"weather-station"</span><span class="p">);</span>
+<span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">exists</span><span class="p">())</span> <span class="p">{</span>
+  <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">create</span><span class="p">();</span>
+<span class="p">}</span>
+
+<span class="n">AdafruitIO_Feed</span> <span class="o">*</span><span class="n">temperature</span> <span class="o">=</span> <span class="n">io</span><span class="p">.</span><span class="n">feed</span><span class="p">(</span><span class="s">"temperature"</span><span class="p">);</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="n">api</span> <span class="o">=</span> <span class="no">Adafruit</span><span class="o">::</span><span class="no">IO</span><span class="o">::</span><span class="no">Client</span><span class="p">.</span><span class="nf">new</span> <span class="ss">key: </span><span class="s1">'YOUR_AIO_KEY'</span><span class="p">,</span>
+                               <span class="ss">username: </span><span class="s1">'YOUR_USERNAME'</span>
+
+<span class="c1"># Step 1: Create the dashboard</span>
+<span class="n">dashboard</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_dashboard</span><span class="p">(</span><span class="ss">name: </span><span class="s1">'Weather Station'</span><span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Step 2: Create blocks on the dashboard</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="c"># Create a gauge block</span>
+<span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "gauge", "block_feeds": [{"feed_id": "temperature"}], "properties": {"minValue": "0", "maxValue": "100", "label": "Temp"}}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/weather-station/blocks
+
+<span class="c"># Create a line chart block</span>
+<span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"block": {"visual_type": "line_chart", "block_feeds": [{"feed_id": "temperature"}], "properties": {"historyHours": "24", "yAxisLabel": "Temp"}}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/weather-station/blocks
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Step 2: Create blocks (note the block IDs from responses)
+</span><span class="n">gauge</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="n">dashboard</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'gauge'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span><span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'temperature'</span><span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s">'minValue'</span><span class="p">:</span> <span class="s">'0'</span><span class="p">,</span> <span class="s">'maxValue'</span><span class="p">:</span> <span class="s">'100'</span><span class="p">,</span> <span class="s">'label'</span><span class="p">:</span> <span class="s">'Temp'</span><span class="p">}</span>
+<span class="p">))</span>
+
+<span class="n">chart</span> <span class="o">=</span> <span class="n">aio</span><span class="p">.</span><span class="n">create_block</span><span class="p">(</span><span class="n">dashboard</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">Block</span><span class="p">(</span>
+    <span class="n">visual_type</span><span class="o">=</span><span class="s">'line_chart'</span><span class="p">,</span>
+    <span class="n">block_feeds</span><span class="o">=</span><span class="p">[{</span><span class="s">'feed_id'</span><span class="p">:</span> <span class="s">'temperature'</span><span class="p">}],</span>
+    <span class="n">properties</span><span class="o">=</span><span class="p">{</span><span class="s">'historyHours'</span><span class="p">:</span> <span class="s">'24'</span><span class="p">,</span> <span class="s">'yAxisLabel'</span><span class="p">:</span> <span class="s">'Temp'</span><span class="p">}</span>
+<span class="p">))</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Step 2: Create blocks with position and size</span>
+<span class="n">GaugeBlock</span> <span class="o">*</span><span class="n">gauge</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addGaugeBlock</span><span class="p">(</span><span class="n">temperature</span><span class="p">);</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">min</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">max</span> <span class="o">=</span> <span class="mi">100</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">label</span> <span class="o">=</span> <span class="s">"Temp"</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">column</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">gauge</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+
+<span class="n">ChartBlock</span> <span class="o">*</span><span class="n">chart</span> <span class="o">=</span> <span class="n">dashboard</span><span class="o">-&gt;</span><span class="n">addChartBlock</span><span class="p">(</span><span class="n">temperature</span><span class="p">);</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">historyHours</span> <span class="o">=</span> <span class="mi">24</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">yAxisLabel</span> <span class="o">=</span> <span class="s">"Temp"</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">row</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">column</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">width</span> <span class="o">=</span> <span class="mi">6</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">height</span> <span class="o">=</span> <span class="mi">4</span><span class="p">;</span>
+<span class="n">chart</span><span class="o">-&gt;</span><span class="n">save</span><span class="p">();</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># Step 2: Create blocks (note the block IDs from responses)</span>
+<span class="n">gauge</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="n">dashboard</span><span class="p">[</span><span class="s1">'key'</span><span class="p">],</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'gauge'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[{</span> <span class="ss">feed_id: </span><span class="s1">'temperature'</span> <span class="p">}],</span>
+    <span class="ss">properties: </span><span class="p">{</span> <span class="ss">minValue: </span><span class="s1">'0'</span><span class="p">,</span> <span class="ss">maxValue: </span><span class="s1">'100'</span><span class="p">,</span> <span class="ss">label: </span><span class="s1">'Temp'</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+
+<span class="n">chart</span> <span class="o">=</span> <span class="n">api</span><span class="p">.</span><span class="nf">create_block</span><span class="p">(</span>
+  <span class="ss">dashboard_key: </span><span class="n">dashboard</span><span class="p">[</span><span class="s1">'key'</span><span class="p">],</span>
+  <span class="ss">block: </span><span class="p">{</span>
+    <span class="ss">visual_type: </span><span class="s1">'line_chart'</span><span class="p">,</span>
+    <span class="ss">block_feeds: </span><span class="p">[{</span> <span class="ss">feed_id: </span><span class="s1">'temperature'</span> <span class="p">}],</span>
+    <span class="ss">properties: </span><span class="p">{</span> <span class="ss">historyHours: </span><span class="s1">'24'</span><span class="p">,</span> <span class="ss">yAxisLabel: </span><span class="s1">'Temp'</span> <span class="p">}</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<blockquote>
+<p>Step 3: Arrange blocks on the grid</p>
+</blockquote>
+<div class="highlight"><pre class="highlight shell tab-shell"><code><span class="nv">$ </span>curl <span class="nt">-X</span> POST <span class="nt">-H</span> <span class="s2">"Content-Type: application/json"</span> <span class="nt">-H</span> <span class="s2">"X-AIO-Key: {io_key}"</span> <span class="se">\</span>
+    <span class="nt">--data</span> <span class="s1">'{"layouts": {"lg": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "{gauge_id}"}, {"x": 4, "y": 0, "w": 12, "h": 4, "i": "{chart_id}"}], "sm": [{"x": 0, "y": 0, "w": 4, "h": 4, "i": "{gauge_id}"}, {"x": 0, "y": 4, "w": 8, "h": 4, "i": "{chart_id}"}]}}'</span> <span class="se">\</span>
+    https://io.adafruit.com/api/v2/<span class="o">{</span>username<span class="o">}</span>/dashboards/weather-station/update_layouts
+</code></pre></div><div class="highlight"><pre class="highlight python tab-python"><code><span class="c1"># Step 3: Arrange blocks on the grid using their IDs
+</span><span class="n">layout</span> <span class="o">=</span> <span class="n">Layout</span><span class="p">(</span><span class="n">lg</span><span class="o">=</span><span class="p">[</span>
+    <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'w'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'h'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'i'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">gauge</span><span class="p">.</span><span class="nb">id</span><span class="p">)},</span>
+    <span class="p">{</span><span class="s">'x'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'y'</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span> <span class="s">'w'</span><span class="p">:</span> <span class="mi">12</span><span class="p">,</span> <span class="s">'h'</span><span class="p">:</span> <span class="mi">4</span><span class="p">,</span> <span class="s">'i'</span><span class="p">:</span> <span class="nb">str</span><span class="p">(</span><span class="n">chart</span><span class="p">.</span><span class="nb">id</span><span class="p">)}</span>
+<span class="p">])</span>
+<span class="n">aio</span><span class="p">.</span><span class="n">update_layout</span><span class="p">(</span><span class="n">dashboard</span><span class="p">.</span><span class="n">key</span><span class="p">,</span> <span class="n">layout</span><span class="p">)</span>
+</code></pre></div><div class="highlight"><pre class="highlight cpp tab-cpp"><code><span class="c1">// Step 3: Block positions were already set via row, column, width, and</span>
+<span class="c1">// height properties in Step 2 before calling save(). No separate</span>
+<span class="c1">// layout update step is needed with the Arduino library.</span>
+</code></pre></div><div class="highlight"><pre class="highlight ruby tab-ruby"><code><span class="c1"># Step 3: Arrange blocks on the grid using their IDs</span>
+<span class="n">api</span><span class="p">.</span><span class="nf">update_dashboard_layouts</span><span class="p">(</span>
+  <span class="ss">key: </span><span class="n">dashboard</span><span class="p">[</span><span class="s1">'key'</span><span class="p">],</span>
+  <span class="ss">layouts: </span><span class="p">{</span>
+    <span class="ss">lg: </span><span class="p">[</span>
+      <span class="p">{</span> <span class="ss">x: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">y: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">w: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">h: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">i: </span><span class="n">gauge</span><span class="p">[</span><span class="s1">'id'</span><span class="p">].</span><span class="nf">to_s</span> <span class="p">},</span>
+      <span class="p">{</span> <span class="ss">x: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">y: </span><span class="mi">0</span><span class="p">,</span> <span class="ss">w: </span><span class="mi">12</span><span class="p">,</span> <span class="ss">h: </span><span class="mi">4</span><span class="p">,</span> <span class="ss">i: </span><span class="n">chart</span><span class="p">[</span><span class="s1">'id'</span><span class="p">].</span><span class="nf">to_s</span> <span class="p">}</span>
+    <span class="p">]</span>
+  <span class="p">}</span>
+<span class="p">)</span>
+</code></pre></div>
+<p>Building a dashboard entirely via the API requires three separate steps:</p>
+
+<p><strong>Step 1: Create the dashboard</strong> using <code>POST /dashboards</code>. This returns an empty dashboard with a <code>key</code> you&#39;ll use in the next steps.</p>
+
+<p><strong>Step 2: Create blocks</strong> using <code>POST /dashboards/{dashboard_key}/blocks</code> for each block you need. Each response includes the block&#39;s <code>id</code>, which you&#39;ll need for the layout step.</p>
+
+<p><strong>Step 3: Arrange blocks</strong> using <code>POST /dashboards/{dashboard_key}/update_layouts</code> to position blocks on the grid. Use the block <code>id</code> values from Step 2 as the <code>i</code> field in each layout entry.</p>
+
+<aside class="notice">
+If you skip Step 3, blocks will be placed at position (0,0) with default 2x2 sizing, which means they will all stack on top of each other.
+</aside>
 <h1 id='permissions'>Permissions</h1>
 <p>Each Adafruit IO user contains permissions which can be set and modified.</p>
 <h2 id='get-all-permissions'>Get All Permissions</h2>
