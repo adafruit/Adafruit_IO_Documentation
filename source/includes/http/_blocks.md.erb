@@ -1,9 +1,11 @@
 # Blocks
 
-Blocks are objects which can be placed on an Adafruit IO Dasboard for a user.
-Blocks IO range from input blocks (sliders and buttons) to output blocks (such as maps or other visual displays).
+Blocks are the visual components placed on an Adafruit IO Dashboard.
+They range from input blocks (sliders, buttons, and color pickers) to output blocks (gauges, charts, and maps).
 
-The `dashboard_key` can be obtained by either the response of a dashboard API call, or via the UI within IO at https://io.adafruit.com/{username}/dashboards.
+Each block connects to one or more feeds via `block_feeds`, and its appearance is controlled by a `properties` object whose allowed keys depend on the `visual_type`.
+
+The `dashboard_key` can be obtained from the response of a dashboard API call, or from the URL in the IO web app at `https://io.adafruit.com/{username}/dashboards`.
 
 ## All blocks
 
@@ -11,15 +13,32 @@ The `dashboard_key` can be obtained by either the response of a dashboard API ca
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div>
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
 ```python
+# pip install adafruit-io
+from Adafruit_IO import Client
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+blocks = aio.blocks('dashboard-key')
 ```
 
 ```cpp
+// Arduino - blocks are managed via the dashboard object.
+// The Arduino library does not have a "list all blocks" method.
+// Use the REST API (curl) to retrieve existing blocks.
 ```
 
 ```ruby
+# gem install adafruit-io
+api = Adafruit::IO::Client.new key: 'YOUR_AIO_KEY',
+                               username: 'YOUR_USERNAME'
+
+blocks = api.blocks(dashboard_key: 'dashboard-key')
+puts JSON.pretty_generate(blocks)
 ```
 
 > Response Sample:
@@ -27,26 +46,40 @@ The `dashboard_key` can be obtained by either the response of a dashboard API ca
 ```json
 [
   {
-    "name": "string",
-    "description": "string",
-    "key": "string",
-    "visual_type": "string",
+    "id": "1234",
+    "name": "Temperature",
+    "visual_type": "gauge",
     "column": 0,
     "row": 0,
-    "size_x": 0,
-    "size_y": 0,
+    "size_x": 4,
+    "size_y": 4,
+    "properties": {
+      "minValue": "0",
+      "maxValue": "100",
+      "label": "Temp"
+    },
     "block_feeds": [
       {
-        "id": "string",
-        "feed": null,
-        "group": null
+        "id": "5678",
+        "feed": {
+          "id": 827982,
+          "name": "Temperature",
+          "key": "temperature"
+        },
+        "group": {
+          "id": 493,
+          "name": "Default",
+          "key": "default"
+        }
       }
-    ]
+    ],
+    "created_at": "2024-01-01T00:00:00Z",
+    "updated_at": "2024-01-01T00:00:00Z"
   }
 ]
 ```
 
-An array of blocks
+Returns an array of all blocks on the specified dashboard.
 
 
 ### Path Parameters
@@ -54,7 +87,7 @@ An array of blocks
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_key | string | true |
+dashboard_key | string | true | the key of the dashboard
 
 
 
@@ -64,40 +97,116 @@ dashboard_key | string | true |
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks</code></div>
 
 ```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "gauge", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"minValue": "0", "maxValue": "100", "ringWidth": "25", "label": "Value", "decimalPlaces": "2", "showIcon": false}, "size_x": 4, "size_y": 4}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
 ```
 
 ```python
+from Adafruit_IO import Client, Block
+
+aio = Client('YOUR_USERNAME', 'YOUR_AIO_KEY')
+
+block = aio.create_block('dashboard-key', Block(
+    visual_type='gauge',
+    block_feeds=[{
+        'feed_id': 'temperature',
+        'group_id': 'default'
+    }],
+    properties={
+        'minValue': '0',
+        'maxValue': '100',
+        'ringWidth': '25',
+        'label': 'Value',
+        'decimalPlaces': '2',
+        'showIcon': False
+    }
+))
 ```
 
 ```cpp
+// Arduino (adafruit_io_arduino library)
+#include "AdafruitIO_WiFi.h"
+
+AdafruitIO_WiFi io("YOUR_USERNAME", "YOUR_AIO_KEY", "SSID", "PASS");
+
+AdafruitIO_Dashboard *dashboard = io.dashboard("dashboard-key");
+AdafruitIO_Feed *temperature = io.feed("temperature");
+
+// Create a gauge block on the dashboard
+GaugeBlock *gauge = dashboard->addGaugeBlock(temperature);
+gauge->min = 0;
+gauge->max = 100;
+gauge->label = "Value";
+gauge->width = 4;
+gauge->height = 4;
+gauge->save();
 ```
 
 ```ruby
+block = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'gauge',
+    block_feeds: [
+      { feed_id: 'temperature', group_id: 'default' }
+    ],
+    properties: {
+      minValue: '0',
+      maxValue: '100',
+      ringWidth: '25',
+      label: 'Value',
+      decimalPlaces: '2',
+      showIcon: false
+    },
+    size_x: 4,
+    size_y: 4
+  }
+)
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
-  "visual_type": "string",
-  "column": 0,
-  "row": 0,
-  "size_x": 0,
-  "size_y": 0,
+  "id": "1234",
+  "name": null,
+  "visual_type": "gauge",
+  "column": null,
+  "row": null,
+  "size_x": 4,
+  "size_y": 4,
+  "source_key": null,
+  "source": null,
+  "properties": {
+    "minValue": "0",
+    "maxValue": "100",
+    "ringWidth": "25",
+    "label": "Value",
+    "decimalPlaces": "2",
+    "showIcon": false
+  },
   "block_feeds": [
     {
-      "id": "string",
-      "feed": null,
-      "group": null
+      "id": "5678",
+      "feed": {
+        "id": 827982,
+        "name": "Temperature",
+        "key": "temperature"
+      },
+      "group": {
+        "id": 493,
+        "name": "Default",
+        "key": "default"
+      }
     }
-  ]
+  ],
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
 }
 ```
 
-New Block
+Creates a new block on the specified dashboard. The `visual_type` field is required. Most blocks also need at least one entry in `block_feeds` to connect the block to a data feed.
 
 
 ### Path Parameters
@@ -105,14 +214,348 @@ New Block
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_key | string | true |
+dashboard_key | string | true | the key of the dashboard
 
 
 ### Body Parameters
 
+The request body must contain a `block` object with the following fields:
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-block | object | true |
+visual_type | string | true | the type of block (see Visual Types below)
+name | string | false | a display name for the block
+description | string | false | a description of the block
+block_feeds | array | false | array of feed connections (see Block Feeds below)
+properties | object | false | visual configuration (see Properties below)
+column | integer | false | grid column position
+row | integer | false | grid row position
+size_x | integer | false | width in grid units (default: 4)
+size_y | integer | false | height in grid units (default: 4)
+
+
+### Visual Types
+
+The `visual_type` field must be one of the following values:
+
+Type | Description
+---- | -----------
+toggle_button | binary on/off toggle control
+slider | adjustable numerical slider
+momentary_button | press-and-release button
+gauge | circular gauge display
+line_chart | line chart for historical data
+text | single-line text display
+color_picker | color selection wheel
+map | geographic map with markers
+stream | scrolling data stream
+image | image display
+remote_control | directional pad remote control
+multiline_text | multi-line text display
+rich_text | rich formatted text (static content)
+icon | icon indicator display
+indicator | status indicator (on/off with colors)
+number_pad | numeric keypad input
+selector | dropdown or radio button selector
+dashboard_link | link to another dashboard
+battery | battery level indicator
+divider | visual separator
+line_gauge | horizontal line gauge
+
+
+### Block Feeds
+
+Each entry in the `block_feeds` array connects the block to a feed:
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+feed_id | string or integer | true | the feed to connect — accepts a numeric feed ID (`827982`), a feed key string (`"temperature"`), or a group-qualified key (`"group-key.feed-key"`)
+group_id | integer | false | the numeric ID of the feed's group (defaults to the user's default group)
+
+
+### Properties
+
+The `properties` object controls the visual appearance and behavior of the block. Available keys vary by `visual_type`. All property values are strings unless otherwise noted.
+
+**Common Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+label | string | display label for the block
+showName | boolean | show the block name
+showGroupName | boolean | show the group name
+showTimestamp | boolean | show the last updated timestamp
+decimalPlaces | string | number of decimal places to display
+fontSize | string | font size for text display
+fontColor | string | font color
+
+**Gauge Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+minValue | string | minimum gauge value
+maxValue | string | maximum gauge value
+ringWidth | string | width of the gauge ring
+minWarning | string | value at which to show a low warning
+maxWarning | string | value at which to show a high warning
+showIcon | boolean | show an icon on the gauge
+
+**Chart Properties:**
+
+> Line Chart Block Example
+
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "line_chart", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"xAxisLabel": "Time", "yAxisLabel": "Value", "yAxisMin": "0", "yAxisMax": "100", "historyHours": "24", "decimalPlaces": "2"}, "size_x": 12, "size_y": 5}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
+```
+
+```python
+chart = aio.create_block('dashboard-key', Block(
+    visual_type='line_chart',
+    block_feeds=[{
+        'feed_id': 'temperature',
+        'group_id': 'default'
+    }],
+    properties={
+        'xAxisLabel': 'Time',
+        'yAxisLabel': 'Value',
+        'yAxisMin': '0',
+        'yAxisMax': '100',
+        'historyHours': '24',
+        'decimalPlaces': '2'
+    }
+))
+```
+
+```cpp
+// Arduino
+ChartBlock *chart = dashboard->addChartBlock(temperature);
+chart->xAxisLabel = "Time";
+chart->yAxisLabel = "Value";
+chart->yAxisMin = 0;
+chart->yAxisMax = 100;
+chart->historyHours = 24;
+chart->width = 6;
+chart->height = 4;
+chart->save();
+```
+
+```ruby
+chart = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'line_chart',
+    block_feeds: [
+      { feed_id: 'temperature', group_id: 'default' }
+    ],
+    properties: {
+      xAxisLabel: 'Time',
+      yAxisLabel: 'Value',
+      yAxisMin: '0',
+      yAxisMax: '100',
+      historyHours: '24',
+      decimalPlaces: '2'
+    },
+    size_x: 12,
+    size_y: 5
+  }
+)
+```
+
+Property | Type | Description
+-------- | ---- | -----------
+xAxisLabel | string | label for the x-axis
+yAxisLabel | string | label for the y-axis
+yAxisMin | string | minimum y-axis value
+yAxisMax | string | maximum y-axis value
+yAxisScale | string | y-axis scale type
+historyHours | string | number of hours of data to display
+rawDataOnly | string | show raw data without smoothing
+steppedLine | string | use stepped line style
+gridLines | string | show grid lines
+lineWidth | string | width of chart lines
+feedKeyLegend | boolean | use the feed key (e.g. `group.feed`) as the chart legend label instead of the feed name
+
+**Toggle & Button Properties:**
+
+> Toggle Button Block Example
+
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "toggle_button", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"onText": "ON", "offText": "OFF"}, "size_x": 4, "size_y": 2}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
+```
+
+```python
+toggle = aio.create_block('dashboard-key', Block(
+    visual_type='toggle_button',
+    block_feeds=[{
+        'feed_id': 'onoff',
+        'group_id': 'default'
+    }],
+    properties={
+        'onText': 'ON',
+        'offText': 'OFF'
+    }
+))
+```
+
+```cpp
+// Arduino
+AdafruitIO_Feed *onoff = io.feed("onoff");
+
+ToggleBlock *toggle = dashboard->addToggleBlock(onoff);
+toggle->onText = "ON";
+toggle->offText = "OFF";
+toggle->width = 4;
+toggle->height = 2;
+toggle->save();
+```
+
+```ruby
+toggle = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'toggle_button',
+    block_feeds: [
+      { feed_id: 'onoff', group_id: 'default' }
+    ],
+    properties: {
+      onText: 'ON',
+      offText: 'OFF'
+    },
+    size_x: 4,
+    size_y: 2
+  }
+)
+```
+
+Property | Type | Description
+-------- | ---- | -----------
+onText | string | label text for the ON state
+offText | string | label text for the OFF state
+onValue | string | value to send when turned on
+offValue | string | value to send when turned off
+onColor | string | color when on
+offColor | string | color when off
+release | string | value to send when a momentary button is released (momentary_button only, leave blank to send nothing on release)
+
+**Slider Properties:**
+
+> Slider Block Example
+
+```shell
+$ curl -X POST -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"visual_type": "slider", "block_feeds": [{"feed_id": "{feed_id}", "group_id": "{group_id}"}], "properties": {"min": "0", "max": "255", "step": "1", "label": "Brightness"}, "size_x": 6, "size_y": 2}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks
+```
+
+```python
+slider = aio.create_block('dashboard-key', Block(
+    visual_type='slider',
+    block_feeds=[{
+        'feed_id': 'brightness',
+        'group_id': 'default'
+    }],
+    properties={
+        'min': '0',
+        'max': '255',
+        'step': '1',
+        'label': 'Brightness'
+    }
+))
+```
+
+```cpp
+// Arduino
+AdafruitIO_Feed *brightness = io.feed("brightness");
+
+SliderBlock *slider = dashboard->addSliderBlock(brightness);
+slider->min = 0;
+slider->max = 255;
+slider->step = 1;
+slider->label = "Brightness";
+slider->width = 4;
+slider->height = 2;
+slider->save();
+```
+
+```ruby
+slider = api.create_block(
+  dashboard_key: 'dashboard-key',
+  block: {
+    visual_type: 'slider',
+    block_feeds: [
+      { feed_id: 'brightness', group_id: 'default' }
+    ],
+    properties: {
+      min: '0',
+      max: '255',
+      step: '1',
+      label: 'Brightness'
+    },
+    size_x: 6,
+    size_y: 2
+  }
+)
+```
+
+Property | Type | Description
+-------- | ---- | -----------
+min | string | minimum slider value
+max | string | maximum slider value
+step | string | increment step size
+orientation | string | slider orientation
+handle | string | handle style
+
+**Indicator & Icon Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+icon | string | icon name
+lowIcon | string | icon for low state
+highIcon | string | icon for high state
+conditions | string | conditions for state changes
+lowConditions | string | conditions for low state
+mediumConditions | string | conditions for medium state
+highColor | string | color for high state
+mediumColor | string | color for medium state
+lowColor | string | color for low state
+
+**Display Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+text | string | static text content
+value | string | static value
+static | boolean | when true, display a fixed value instead of the latest feed value (used by text, multiline_text, and icon blocks)
+preformatted | string | use preformatted text
+backgroundColor | string | background color (dark theme)
+backgroundColorLight | string | background color (light theme)
+fillColor | string | fill color
+tile | string | tile image (dark theme)
+tileLight | string | tile image (light theme)
+
+**Map Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+showLocation | string | show location information
+showNumbers | string | show numerical values on map
+historyHours | string | hours of location history to display
+
+**Stream Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+errors | string | show system errors and throttle messages in the stream (`"yes"` or `"no"`, default: `"yes"`)
+
+**Dashboard Link Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+dashboards | string | JSON array of dashboard objects to display as links
 
 
 
@@ -122,40 +565,64 @@ block | object | true |
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
+$ curl -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}
 ```
 
 ```python
+block = aio.blocks('dashboard-key', '{id}')
 ```
 
 ```cpp
+// Arduino - retrieving a single block by ID is not supported.
+// The Arduino library creates and saves blocks directly.
+// Use the REST API (curl) to retrieve block details.
 ```
 
 ```ruby
+block = api.block(dashboard_key: 'dashboard-key', key: '{id}')
+puts JSON.pretty_generate(block)
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
-  "visual_type": "string",
+  "id": "1234",
+  "name": "Temperature",
+  "visual_type": "gauge",
   "column": 0,
   "row": 0,
-  "size_x": 0,
-  "size_y": 0,
+  "size_x": 4,
+  "size_y": 4,
+  "source_key": null,
+  "source": null,
+  "properties": {
+    "minValue": "0",
+    "maxValue": "100",
+    "label": "Temp"
+  },
   "block_feeds": [
     {
-      "id": "string",
-      "feed": null,
-      "group": null
+      "id": "5678",
+      "feed": {
+        "id": 827982,
+        "name": "Temperature",
+        "key": "temperature"
+      },
+      "group": {
+        "id": 493,
+        "name": "Default",
+        "key": "default"
+      }
     }
-  ]
+  ],
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
 }
 ```
 
-Block response
+Returns a single block by its ID.
 
 
 ### Path Parameters
@@ -163,8 +630,8 @@ Block response
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_key | string | true |
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
+id | string | true | the ID of the block
 
 
 
@@ -174,40 +641,77 @@ id | string | true |
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
+$ curl -X PUT -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    --data '{"block": {"properties": {"minValue": "0", "maxValue": "200", "label": "Updated Label"}}}' \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}
 ```
 
 ```python
+# Not yet available in the Python client library.
+# Use the REST API directly or delete and recreate the block.
 ```
 
 ```cpp
+// Arduino - updating a block by ID is not supported.
+// The Arduino library creates blocks with save().
+// Use the REST API (curl) to update existing blocks.
 ```
 
 ```ruby
+updated = api.update_block(
+  dashboard_key: 'dashboard-key',
+  key: '{id}',
+  block: {
+    properties: {
+      minValue: '0',
+      maxValue: '200',
+      label: 'Updated Label'
+    }
+  }
+)
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string",
-  "description": "string",
-  "key": "string",
-  "visual_type": "string",
+  "id": "1234",
+  "name": "Temperature",
+  "visual_type": "gauge",
   "column": 0,
   "row": 0,
-  "size_x": 0,
-  "size_y": 0,
+  "size_x": 4,
+  "size_y": 4,
+  "source_key": null,
+  "source": null,
+  "properties": {
+    "minValue": "0",
+    "maxValue": "200",
+    "label": "Updated Label"
+  },
   "block_feeds": [
     {
-      "id": "string",
-      "feed": null,
-      "group": null
+      "id": "5678",
+      "feed": {
+        "id": 827982,
+        "name": "Temperature",
+        "key": "temperature"
+      },
+      "group": {
+        "id": 493,
+        "name": "Default",
+        "key": "default"
+      }
     }
-  ]
+  ],
+  "created_at": "2024-01-01T00:00:00Z",
+  "updated_at": "2024-01-01T00:00:00Z"
 }
 ```
 
-Updated block
+Updates an existing block. Any fields you include will be updated; fields you omit remain unchanged.
+
+**Note:** If you include `block_feeds` in an update, the existing feed connections are replaced entirely with the new values.
 
 
 ### Path Parameters
@@ -215,15 +719,15 @@ Updated block
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_key | string | true |
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
+id | string | true | the ID of the block
 
 
 ### Body Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-block | object | true |
+block | object | true | a block object (same fields as Create, all optional)
 
 
 
@@ -233,24 +737,30 @@ block | object | true |
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}</code></div>
 
 ```shell
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/blocks/{id}
 ```
 
 ```python
+aio.delete_block('dashboard-key', '{id}')
 ```
 
 ```cpp
+// Arduino - deleting a block by ID is not supported.
+// Use the REST API (curl) to delete blocks.
 ```
 
 ```ruby
+api.delete_block(dashboard_key: 'dashboard-key', key: '{id}')
 ```
 
 > Response Sample:
 
 ```json
-"string"
+"OK"
 ```
 
-Deleted Block successfully
+Deletes the specified block from the dashboard.
 
 
 ### Path Parameters
@@ -258,7 +768,7 @@ Deleted Block successfully
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-dashboard_key | string | true |
-id | string | true |
+dashboard_key | string | true | the key of the dashboard
+id | string | true | the ID of the block
 
 
