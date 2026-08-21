@@ -1,14 +1,15 @@
-ruby '>= 3.2.2'
+ruby '>= 3.4'
 source 'https://rubygems.org'
 
-# Middleman
+gem 'activesupport', '~> 8.1'
+gem 'cgi'
 gem 'ffi', '~> 1.16.3'
-gem 'middleman', '~> 4.5.0'
+gem 'middleman', '~> 4.6.3'
 gem 'middleman-autoprefixer', '~> 3.0.0'
 gem 'middleman-sprockets', '~> 4.1.1'
 gem 'middleman-syntax', '~> 3.2.0'
 gem 'nokogiri', '~> 1.19.4'
-gem 'rack', '~> 2.2.23'
+gem 'rack', '~> 3.2'
 gem 'redcarpet', '~> 3.6.0'
 gem 'rouge', '~> 3.30.0'
 
