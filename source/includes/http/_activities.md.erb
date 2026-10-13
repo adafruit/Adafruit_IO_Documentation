@@ -116,3 +116,34 @@ end_time | string | false | End time for filtering, returns records created befo
 limit | integer | false | Limit the number of records returned (default: 100, maximum: 1000).
 
 
+## Delete All Activities
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/activities</code></div>
+
+```shell
+curl -X DELETE -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/activities
+```
+
+> Response Sample:
+
+```json
+{
+  "status": "ok"
+}
+```
+
+Deletes every activity record for your account, for all object types.
+
+<aside class="warning">
+This cannot be undone. All of your activity history is removed at once, and there is no way to delete only some records.
+</aside>
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+
+Returns `200` on success, or `422` if the records could not be deleted.

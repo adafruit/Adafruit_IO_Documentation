@@ -493,6 +493,48 @@ h | integer | true | height in grid units (a value of 0 is raised to 2)
 z | integer | false | z-index for overlapping blocks
 
 
+## Upload a Dashboard Header Image
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dashboards/{dashboard_key}/upload_header</code></div>
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" \
+    -F "file=@header.jpg" \
+    https://io.adafruit.com/api/v2/{username}/dashboards/{dashboard_key}/upload_header
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 12345,
+  "name": "Weather Station",
+  "key": "weather-station",
+  "show_header": true,
+  "header_image_url": "https://.../header.jpg"
+}
+```
+
+Uploads an image to use as the dashboard's header, and returns the full dashboard with `header_image_url` set. Send the request as `multipart/form-data`. The header is only displayed when the dashboard's `show_header` setting is true. Uploading a new image replaces the previous one.
+
+Only IO+ accounts can upload header images; other accounts get a `403`. Only image files are accepted (the file's content type must be `image/*`, such as JPEG, PNG or GIF), and a file of another type is rejected with a `400`. No file size limit is enforced by the API, but keep images reasonably small. There is no API call to remove a header image once it's set.
+
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string
+dashboard_key | string | true | the key of the dashboard
+
+### Body Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+file | file | true | the image file, sent as a multipart form field named `file`
+
+
+
 ## Building a Dashboard via API
 
 > Step 1: Create the dashboard
