@@ -8,6 +8,10 @@ A data `value` may be at most 1024 bytes (1 KB) when the feed's history is on, a
 
 Data points belong to feeds, so every Data API call starts with a Feed URL.
 
+Feeds can be addressed in any `{feed_key}` position by their key (for example `temperature`), by their numeric feed ID, or as `group_key.feed_key` to select a feed within a specific group.
+
+Data reads default to JSON. Many read endpoints can also return CSV or plain text when the URL ends in `.csv` or `.txt` (or the `Accept` header asks for it). Endpoints that list data (`GET .../data` and `GET .../data/{id}`) can return GeoJSON when the request sends `Content-Type: application/geojson`; the response is an array of GeoJSON `Feature` objects (or a single `Feature` for one data point), and an optional `callback` query parameter wraps the result for JSONP. Records without a location are returned without a `geometry`.
+
 Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
 
 ## Create Data
@@ -478,6 +482,66 @@ feed_key  | string  | true      | a valid feed key
 
 
 
+## Get Last Value
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/last_value</code></div>
+
+```shell
+# plain text value of the most recent data point
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/last_value
+
+# the most recent data point as JSON
+$ curl -H "X-AIO-Key: {io_key}" "https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/last_value?type=json"
+
+# value,lat,lon,ele as CSV
+$ curl -H "X-AIO-Key: {io_key}" "https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/last_value?type=csv"
+```
+
+> Response Sample (no `type`, `text/plain`):
+
+```text
+22.5
+```
+
+> Response Sample (`type=json`):
+
+```json
+{
+  "id": "0F2ZQ4XJ6M3K8N1E7B9D5C0V4T",
+  "value": "22.5",
+  "feed_id": 1234,
+  "feed_key": "temperature",
+  "created_at": "2026-01-01T12:00:00Z",
+  "created_epoch": 1767268800,
+  "expiration": "2026-01-31T12:00:00Z"
+}
+```
+
+> Response Sample (`type=csv`, `text/plain`):
+
+```text
+22.5,40.7,-74.0,10.0
+```
+
+Returns the most recent value in the feed without paging through the data list. This is the same value you receive when subscribing to the feed's `/get` MQTT topic. Unlike `first`, `next` and `previous`, it works with read-only access, so it can also be used on public feeds.
+
+With no `type` (or any unrecognized `type`) the response is the bare value as plain text. If the feed has never received data the response is a `404`.
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+username  | string  | true      | a valid username string
+feed_key  | string  | true      | a valid feed key
+
+### Query Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+type      | string  | false     | `json` returns the data record as JSON; `csv` returns `value,lat,lon,ele` (lat, lon and ele are blank when not set). Anything else returns the value only.
+
+
 ## Get Data Point
 
 > HTTP Request
@@ -608,6 +672,104 @@ id | string | true |
 
 
 
+## Download Feed Data
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/download.csv</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/download.json</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/data/download/status</code></div>
+
+```shell
+# request a CSV export of all data in the feed (use download.json for JSON)
+$ curl -X POST -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/download.csv
+
+# check progress and get a download link
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data/download/status
+```
+
+> Response Sample (POST):
+
+```json
+{
+  "status": "ok"
+}
+```
+
+> Response Sample (GET status):
+
+```json
+{
+  "feed_id": 1234,
+  "generated_at": "2026-01-01T12:05:00Z",
+  "limited": true,
+  "timeout": "540",
+  "downloads": [
+    {
+      "url": "https://example.com/downloads/data.csv?expires=1767269160",
+      "description": "Temperature CSV requested by {username}",
+      "token": "a1b2c3d4e5f6",
+      "state": "completed",
+      "progress_percentage": 100.0,
+      "file_size": "1.2 MB",
+      "started_at": "2026-01-01T12:00:05Z",
+      "completed_at": "2026-01-01T12:00:41Z"
+    }
+  ]
+}
+```
+
+Requests an export of the complete data history of a feed you own. The export is built in the background, so the `POST` only queues it and returns `{"status": "ok"}`. The file format is chosen by the URL extension, `.csv` or `.json`; a request without one is not accepted.
+
+To get the file, poll the status endpoint. It lists the feed's five most recent downloads. Each entry has a `state` (`building`, `completed`, or `error`), a `progress_percentage`, and a `url` for the file. The `url` expires after about a minute, so request the status again whenever you need a fresh link.
+
+Only one download can be requested per feed every 10 minutes. A second request inside that window returns a `429` with an error message, plus these headers:
+
+Header | Description
+------ | -----------
+X-RateLimit-LimitSeconds | the length of the cooldown window, in seconds
+X-RateLimit-Timeout | seconds remaining until another download can be requested
+
+The status response reports the same cooldown: `limited` is `true` and `timeout` holds the seconds remaining while the cooldown is active. This is separate from the data rate limit, see Rate Limiting.
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+username  | string  | true      | your username; downloads are only available for your own feeds
+feed_key  | string  | true      | a valid feed key
+
+
+## Download All Account Data
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/download</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/download/status</code></div>
+
+```shell
+# request an export of all your data
+$ curl -X POST -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/download
+
+# check progress and get a download link
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/download/status
+```
+
+> Response Sample (POST):
+
+```json
+{
+  "status": "ok"
+}
+```
+
+Queues an export of all of your account's data. It works like the feed download above: the `POST` returns `{"status": "ok"}`, and the status endpoint (same response format, without `feed_id`) lists your five most recent account downloads with their `state`, `progress_percentage` and expiring `url`. Only one account download can be requested every 24 hours; a request during the cooldown returns a `429` with the `X-RateLimit-LimitSeconds` and `X-RateLimit-Timeout` headers.
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+username  | string  | true      | your username
+
+
 ## Create Group Data
 
 > HTTP Request
@@ -735,7 +897,7 @@ Parameter |   Type  |  Required |       Description
 
 
 
-## Create Data in a Group's Feed
+## Create Batch Data in a Group's Feed
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch</code></div>

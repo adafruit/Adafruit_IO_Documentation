@@ -4,6 +4,8 @@ Feeds are the core of the Adafruit IO system. The feed holds metadata about the 
 
 You will need to create one feed for each unique source of data you send to Adafruit IO.
 
+Anywhere a `{feed_key}` is expected you can use the feed's key (for example `temperature`), its numeric feed ID, or `group_key.feed_key` to address the feed within a specific group.
+
 You can create, read, update, or delete feeds. Creating, updating, and deleting feeds does not count against your data rate limit; only creating, updating, and deleting data does.
 
 There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
@@ -109,6 +111,26 @@ Parameter |   Type  |  Required |       Description
 username | string | true | a valid username string
 
 
+
+## Public Feeds
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds?public=true</code></div>
+
+```shell
+# list only the public feeds of a user (no key needed)
+$ curl https://io.adafruit.com/api/v2/{username}/feeds?public=true
+
+# read a public feed and its data
+$ curl https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
+$ curl https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+```
+
+Feeds with `visibility` set to `public` can be read by anyone, with or without an `X-AIO-Key`. This covers the feed itself, its details, and reading its data (`data`, `data/{id}`, `data/chart`, `data/last_value`, `data/retain`, `data/last`). Public reads are subject to the same rate limiting as other requests, see Rate Limiting. Creating, updating or deleting always requires the owner's key. `first`, `next` and `previous` need write access, so they are not available on someone else's public feed.
+
+`GET /{username}/feeds` returns the full feed list only when you request your own feeds. If you request another user's feeds, or add `public=true` to your own, the response contains only public feeds and leaves out owner-only fields such as `status`, `status_notify` and `status_timeout`. Private feeds are never listed or readable by other users, and are reported as not found.
+
+Public groups work the same way: `GET /{username}/groups/{group_key}` can be read without a key when the group is public, and `GET /{username}/groups?public=true` (key required) lists only public groups.
 
 ## Create Feed
 

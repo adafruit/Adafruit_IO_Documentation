@@ -1023,3 +1023,83 @@ Parameter |   Type  |  Required |       Description
 group_key | string | true |
 username | string | true | a valid username string
 
+
+
+## Get Group Last Values
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/data/last_value</code></div>
+
+```shell
+# CSV lines of feed_key,value for every feed in the group
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/data/last_value
+
+# JSON object of feed key to most recent value
+$ curl -H "X-AIO-Key: {io_key}" "https://io.adafruit.com/api/v2/{username}/groups/{group_key}/data/last_value?type=json"
+```
+
+> Response Sample (no `type` or `type=csv`, `text/plain`):
+
+```text
+temperature,22.5
+humidity,48
+```
+
+> Response Sample (`type=json`):
+
+```json
+{
+  "feeds": {
+    "temperature": "22.5",
+    "humidity": "48"
+  }
+}
+```
+
+Returns the most recent value of every feed in the group in one request. Feeds are keyed as `group_key.feed_key` when the group is not your default group. Feeds with no data yet have an empty value in CSV and `null` in JSON. Requires an `X-AIO-Key` and read access to the group.
+
+### Path Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+username  | string  | true      | a valid username string
+group_key | string  | true      | a valid group key
+
+### Query Parameters
+
+Parameter | Type    | Required  | Description
+--------- | ------- | --------- | -----------------------
+type      | string  | false     | `json` returns a JSON object; anything else (including `csv`) returns `feed_key,value` CSV lines.
+
+
+## Group-Scoped Feed Endpoints
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}</code></div>
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}</code></div>
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/details</code></div>
+
+```shell
+# get a feed within a group
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds/{feed_key}
+
+# update a feed within a group
+$ curl -X PUT -H "Content-Type: application/json" -d '{"feed": {"description": "Living room"}}' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds/{feed_key}
+
+# delete the feed
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/groups/{group_key}/feeds/{feed_key}
+```
+
+A feed can be reached through its group as well as directly. These endpoints behave exactly like <a href="#get-feed">Get Feed</a>, <a href="#update-feed">Update Feed</a>, <a href="#delete-feed">Delete Feed</a> and <a href="#get-feed-details">Get Feed Details</a>, with the same parameters and responses; the only difference is that the feed key in the response is scoped to the group. Updating and deleting require that you own the feed. Note that `DELETE` deletes the feed itself (and its data), not just its membership in the group; use <a href="#remove-feed-from-group">Remove Feed from Group</a> to only take it out of the group.
+
+The feed's data is available the same way, and behaves exactly like the <a href="#data">Data</a> endpoints for a feed:
+
+Method | Path
+------ | ----
+GET, POST | `/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data`
+POST | `/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/batch`
+GET, PUT, PATCH, DELETE | `/api/v2/{username}/groups/{group_key}/feeds/{feed_key}/data/{id}`
+
+Reading a public group works without a key, see <a href="#public-feeds">Public Feeds</a>.
+
