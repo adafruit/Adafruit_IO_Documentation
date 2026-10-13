@@ -10,7 +10,7 @@ Most of the systems connecting to Adafruit IO are simple, automated devices and 
 
 If you exceed a rate limit, a notice will be sent to the `(username)/throttle` topic. If your account is temporarily banned, a notice will be sent to the `{username}/errors` topic. While developing your project, you should always keep subscriptions to the error topics open so you can see when you're getting close to the Adafruit IO rate limits and when you've been blocked.
 
-This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below your data rate limit: 0.5 data points/second for free accounts and 1 data point/second for IO+ accounts, scaled up by any boost.
+This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below your data rate limit: 30 data points per minute (an average of 0.5 per second) for free accounts and 60 per minute (1 per second) for IO+ accounts. Each Data Rate Boost adds 10 data points per minute.
 
 
 ## Rate Limit Bans
