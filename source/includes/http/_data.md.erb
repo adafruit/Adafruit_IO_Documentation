@@ -10,7 +10,7 @@ Data points belong to feeds, so every Data API call starts with a Feed URL.
 
 Feeds can be addressed in any `{feed_key}` position by their key (for example `temperature`), by their numeric feed ID, or as `group_key.feed_key` to select a feed within a specific group.
 
-Data reads default to JSON. Many read endpoints can also return CSV or plain text when the URL ends in `.csv` or `.txt` (or the `Accept` header asks for it). Endpoints that list data (`GET .../data` and `GET .../data/{id}`) can return GeoJSON when the request sends `Content-Type: application/geojson`; the response is an array of GeoJSON `Feature` objects (or a single `Feature` for one data point), and an optional `callback` query parameter wraps the result for JSONP. Records without a location are returned without a `geometry`.
+Data reads default to JSON. Many read endpoints can also return CSV or plain text when the URL ends in `.csv` or `.txt` (or the `Accept` header asks for it). Endpoints that list data (`GET .../data` and `GET .../data/{id}`) can return GeoJSON when the request sends `Accept: application/geojson` (`Content-Type: application/geojson` also works); the response is an array of GeoJSON `Feature` objects (or a single `Feature` for one data point), and an optional `callback` query parameter wraps the result for JSONP. Records without a location are returned without a `geometry`.
 
 Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
 
