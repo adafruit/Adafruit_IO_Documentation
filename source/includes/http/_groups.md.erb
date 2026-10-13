@@ -499,7 +499,7 @@ $ curl -F 'name=Group' -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/ap
 }
 ```
 
-Updated group
+Returns the updated group. A feed can't be removed from its last group (400, "Feed only exists in this group"); delete the feed instead. The feed itself is not deleted.
 
 
 ### Path Parameters
@@ -539,10 +539,20 @@ $ curl -H "X-AIO-Key: {your_aio_key}" https://io.adafruit.com/api/v2/{username}/
 > Response Sample:
 
 ```json
-"string"
+{
+  "id": 0,
+  "key": "string",
+  "name": "string",
+  "description": "string",
+  "feeds": []
+}
 ```
 
-Deleted Group successfully
+Returns the deleted group.
+
+<aside class="warning">
+Deleting a group also deletes every feed that no longer belongs to any group, along with its data. Feeds that are also in another group are kept. The default group (key <code>default</code>) cannot be deleted; trying to returns a 400 error.
+</aside>
 
 
 ### Path Parameters
@@ -772,7 +782,7 @@ $ curl -F 'feed_key={feed_key}' -H "X-AIO-Key: {your_aio_key}" https://io.adafru
 }
 ```
 
-Returns updated group.
+Returns updated group. Returns 400 if the feed's source group is the same as the target group, or if the group already includes the feed. Returns 404 if the feed is not found in the source group. You can only add your own feeds.
 
 
 ### Path Parameters
@@ -787,7 +797,7 @@ username | string | true | a valid username string
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false |
+feed_key | string | true | Key of the feed to add. Use `group_key.feed_key` to name the group the feed currently comes from; otherwise the feed is taken from your default group. Can be sent as a query parameter or in the request body.
 
 
 
@@ -906,7 +916,7 @@ username | string | true | a valid username string
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed_key | string | false |
+feed_key | string | true | Key of the feed to remove. Can be sent as a query parameter or in the request body.
 
 
 

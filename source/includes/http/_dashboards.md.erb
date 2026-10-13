@@ -61,38 +61,12 @@ dashboards = api.dashboards
     "block_borders": true,
     "allow_overlap": false,
     "created_at": "2024-01-01T00:00:00Z",
-    "updated_at": "2024-01-01T00:00:00Z",
-    "blocks": [
-      {
-        "id": "1234",
-        "name": "Temperature",
-        "visual_type": "gauge",
-        "column": 0,
-        "row": 0,
-        "size_x": 4,
-        "size_y": 4,
-        "block_feeds": [
-          {
-            "id": "5678",
-            "feed": {
-              "id": 827982,
-              "name": "Temperature",
-              "key": "temperature"
-            },
-            "group": {
-              "id": 493,
-              "name": "Default",
-              "key": "default"
-            }
-          }
-        ]
-      }
-    ]
+    "updated_at": "2024-01-01T00:00:00Z"
   }
 ]
 ```
 
-Returns an array of all dashboards for the specified user.
+Returns an array of all dashboards for the specified user. Blocks are not included in the list; get them with the single dashboard endpoint or the blocks endpoints.
 
 
 ### Path Parameters
@@ -381,10 +355,14 @@ api.delete_dashboard(key: 'dashboard-key')
 > Response Sample:
 
 ```json
-"OK"
+{
+  "id": 12345,
+  "name": "Weather Station",
+  "key": "weather-station"
+}
 ```
 
-Deletes the specified dashboard and all of its blocks.
+Deletes the specified dashboard and all of its blocks. Returns the deleted dashboard.
 
 
 ### Path Parameters
@@ -487,7 +465,7 @@ The request body must contain a `layouts` object. Each key is a responsive break
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-layouts | object | true | an object with breakpoint keys (`xl`, `lg`, `md`, `sm`, `xs`)
+layouts | object | true | an object with breakpoint keys (`xl`, `lg`, `md`, `sm`, `xs`). Only the breakpoints you send are saved, so send every breakpoint you want to keep.
 
 
 ### Breakpoints
@@ -510,8 +488,8 @@ Field |   Type  |  Required |       Description
 i | string | true | the block ID (as a string)
 x | integer | true | column position (0-based)
 y | integer | true | row position (0-based)
-w | integer | true | width in grid units (minimum: 2)
-h | integer | true | height in grid units (minimum: 2)
+w | integer | true | width in grid units (a value of 0 is raised to 2)
+h | integer | true | height in grid units (a value of 0 is raised to 2)
 z | integer | false | z-index for overlapping blocks
 
 
@@ -665,14 +643,14 @@ api.update_dashboard_layouts(
 )
 ```
 
-Building a dashboard entirely via the API requires three separate steps:
+Building a dashboard entirely via the API takes up to three steps:
 
 **Step 1: Create the dashboard** using `POST /dashboards`. This returns an empty dashboard with a `key` you'll use in the next steps.
 
 **Step 2: Create blocks** using `POST /dashboards/{dashboard_key}/blocks` for each block you need. Each response includes the block's `id`, which you'll need for the layout step.
 
-**Step 3: Arrange blocks** using `POST /dashboards/{dashboard_key}/update_layouts` to position blocks on the grid. Use the block `id` values from Step 2 as the `i` field in each layout entry.
+**Step 3 (optional): Arrange blocks** using `POST /dashboards/{dashboard_key}/update_layouts` to position blocks on the grid. Use the block `id` values from Step 2 as the `i` field in each layout entry.
 
 <aside class="notice">
-If you skip Step 3, blocks will be placed at position (0,0) with default 2x2 sizing, which means they will all stack on top of each other.
+If you skip Step 3, each new block is automatically placed at the left edge, below the blocks already on the dashboard, with a default size of 2x2 (unless you gave it `size_x` and `size_y`).
 </aside>

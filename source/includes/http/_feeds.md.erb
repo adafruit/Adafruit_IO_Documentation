@@ -4,9 +4,9 @@ Feeds are the core of the Adafruit IO system. The feed holds metadata about the 
 
 You will need to create one feed for each unique source of data you send to Adafruit IO.
 
-You can create, read, update, or delete feeds. Every **CREATE**, **UPDATE**, or **DELETE** action on a feed record counts against your rate limit.
+You can create, read, update, or delete feeds. Creating, updating, and deleting feeds does not count against your data rate limit; only creating, updating, and deleting data does.
 
-There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see **feeds/{feed_key}/batch** and **groups/{groupname}/data** endpoints.
+There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
 
 ## All Feeds
 
@@ -233,7 +233,7 @@ group_key | string | false |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true |
+feed | object | true | Feed settings. `name` is required on create and may be at most 128 characters. `license` may be at most 255 characters. `status_timeout` must be one of `10`, `30`, `60`, `1440`, `4320`, or `10080` (minutes).
 
 
 
@@ -463,7 +463,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true |
+feed | object | true | Feed settings. `name` is required on create and may be at most 128 characters. `license` may be at most 255 characters. `status_timeout` must be one of `10`, `30`, `60`, `1440`, `4320`, or `10080` (minutes).
 
 
 
@@ -507,7 +507,7 @@ feed_key | string | true | a valid feed key
 
 
 
-## Get Feed
+## Get Feed Details
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/details</code></div>

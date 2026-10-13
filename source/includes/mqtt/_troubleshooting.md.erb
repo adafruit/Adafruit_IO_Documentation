@@ -8,22 +8,22 @@ The two [MQTT error topics](#error-topics) produce alerts, warnings, and error m
 
 We try to be descriptive enough that you can figure out what went wrong, but there are a few categories of error messages you may run into. We list an example message for each category of error, yours will look different but most are in the form:
 
-`CLIENT_ID IP_ADDRESS MQTT_ACTION MQTT_TOPIC ...message`
+<code>CLIENT_ID IP_ADDRESS MQTT_ACTION to topic `MQTT_TOPIC` ...message</code>
 
 
 ### Exceeded Rate Limit
 
 On `{username}/throttle`:
 
-When MQTT packets are arriving too quickly (SUBSCRIBE only, warning):
+When subscribing to other users' shared feeds too quickly (SUBSCRIBE only, warning):
 
-<%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds only 5 attempts remaining in the next 60 seconds, please slow your request rate' %>
+<%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE to topic `other_username/feeds/shared-feed` only 5 attempts remaining in the next 60 seconds, please slow your request rate' %>
 
 When publishing data too quickly (warning): <%= error_message 'test_username data rate limit reached, 21 seconds until throttle released' %>
 
 On `{username}/errors`:
 
-When MQTT packets are arriving too quickly (SUBSCRIBE only, error):  <%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE time/seconds made too many requests, wait before reconnecting' %>
+When subscribing to other users' shared feeds too quickly (SUBSCRIBE only, error):  <%= error_message 'io-badstuff-23111 172.18.0.1 SUBSCRIBE to topic `other_username/feeds/shared-feed` made too many requests, wait before reconnecting' %>
 
 After a certain number of throttle warning messages have been sent: <%= error_message 'enforcement limit reached, your account is banned for 30 seconds' %>
 
@@ -32,38 +32,38 @@ After a certain number of throttle warning messages have been sent: <%= error_me
 
 There are several variations of invalid MQTT topic errors. All error messages will be published on the `{username}/errors` topic.
 
-When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <%= error_message 'io-badstuff-12558 172.18.0.1 SUBSCRIBE LWT/$SYS/obe/pixel/adafruit.server/sessions-005 rejected, not a valid resource topic' %>
+When making a PUBLISH or SUBSCRIBE request for an MQTT topic not recognized by Adafruit IO: <%= error_message 'io-badstuff-12558 172.18.0.1 SUBSCRIBE to topic `other_username/groups/something` rejected, not a valid resource topic' %>
 
-Sometimes invalid MQTT topics or topics that don't fit the `{username}/{type}/{key}/{format}` pattern can look like a different error to IO. The most common is seeing an error message like this when PUBLISHING: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH ,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,, rejected, only shared feeds may be published to' %>
+Sometimes invalid MQTT topics or topics that don't fit the `{username}/{type}/{key}/{format}` pattern can look like a different error to IO. The most common is seeing an error message like this when PUBLISHING: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH to topic `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` rejected, topic is not a recognized format' %>
 
-Or: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH  rejected, only shared feeds may be published to' %>
+Or: <%= error_message 'io-mqtt-149edf5e 172.18.0.1 PUBLISH to topic `` rejected, topic is not a recognized format' %>
 
-In each case, IO is showing the topic your code specified in between "PUBLISH" and "rejected." In the first example, the given topic was `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` and in the second example, the given topic was an empty string, ` `. Both examples probably mean there was an error in the sketch that caused the MQTT topic to become corrupted in memory before publishing data.
+In each case, IO is showing the topic your code specified in between "to topic" and "rejected." In the first example, the given topic was `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` and in the second example, the given topic was an empty string, ` `. Both examples probably mean there was an error in the sketch that caused the MQTT topic to become corrupted in memory before publishing data.
 
 A good idea if you're getting _any_ error messages when publishing or subscribing from a new sketch is to print out the MQTT topic you're using to the serial console (`Serial.println` in Arduino, `print()` in CircuitPython) in your sketch before you publish or subscribe just to make sure the data you're sending is the data you think you're sending.
 
-The meaning of the error message, "rejected, only shared feeds may be published to", is that IO saw a username other than the one you authenticated with in the `{username}` part of an MQTT topic and something other than "feeds" or "f" in the `{type}` part of an MQTT topic. Because the topic part of the MQTT packet IO received was, `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` IO couldn't find a username or a type in the string, so it had to reject the PUBLISH message.
+The meaning of the error message, "rejected, topic is not a recognized format", is that IO saw a username other than the one you authenticated with in the `{username}` part of an MQTT topic and the rest of the topic didn't look like `{username}/{type}/{key}`. (If the topic does fit that pattern but `{type}` isn't "feeds" or "f", the message is instead "rejected, in {username}/{type}/{key} topics for shared resources, {type} must be \"feeds\"".) Because the topic part of the MQTT packet IO received was, `,,21,9,,,33,, OK -72.223332,12.100,0.17,28.1,1,,` IO couldn't find a username or a type in the string, so it had to reject the PUBLISH message and disconnect your client.
 
 
 ### MQTT action flood
 
 On `{username}/errors`:
 
-When subscribing or publishing to resources faster than IO can verify that you have permission to access them: <%= error_message 'io-badstuff-94864 172.18.0.1 SUBSCRIBE time/seconds request flood, disconnecting' %>
+When subscribing or publishing to resources faster than IO can verify that you have permission to access them: <%= error_message 'io-badstuff-94864 172.18.0.1 SUBSCRIBE to topic `other_username/feeds/something` request flood, disconnecting' %>
 
 
 ### Resource not available
 
 On `{username}/errors`:
 
-When you don't have permission to access a shared resource: <%= error_message 'io-badstuff-29349 172.18.0.1 SUBSCRIBE other_username/feeds/something.fake-11 rejected, resource not available or not authorized' %>
+When you don't have permission to access a shared resource: <%= error_message 'io-badstuff-29349 172.18.0.1 SUBSCRIBE to topic `other_username/feeds/something.fake-11` rejected, resource not available or not authorized' %>
 
 
 ### Action attempted while banned
 
 On `{username}/errors`:
 
-When attempting to publish or subscribe after your account has been temporarily banned: <%= error_message 'io-mqtt-0d63acfb 172.18.0.1 PUBLISH test_username/feeds/example.counter-3 rejected, user is temporarily blocked' %>
+When attempting to publish or subscribe after your account has been temporarily banned: <%= error_message 'io-mqtt-0d63acfb 172.18.0.1 PUBLISH to topic `test_username/feeds/example.counter-3` rejected, user is temporarily blocked' %>
 
 
 ## Writing Safe MQTT Code

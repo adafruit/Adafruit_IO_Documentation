@@ -2,11 +2,13 @@
 
 Data is at the heart of Adafruit IO. Everything your device measures and records becomes a data point on an Adafruit IO <a href="#feeds">Feed</a>.
 
-You can create, read, update, or delete data records. Every **CREATE**, **UPDATE**, or **DELETE** action on a data record counts against your rate limit.
+You can create, read, update, or delete data records. Every **CREATE**, **UPDATE**, or **DELETE** action on a data record counts against your data rate limit (points per minute), which is shared between HTTP and MQTT.
+
+A data `value` may be at most 1024 bytes (1 KB) when the feed's history is on, and at most 524288 bytes (512 KB) when history is off. Larger values are rejected with a 422 error.
 
 Data points belong to feeds, so every Data API call starts with a Feed URL.
 
-Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see **feeds/{feed_key}/batch** and **groups/{groupname}/data** endpoints.
+Note that there are endpoints for submitting multiple data points to a feed, and multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
 
 ## Create Data
 
@@ -76,7 +78,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-<b>Request Body</b> | object | true | Data record (datum) including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string).
+<b>Request Body</b> | object | true | Data record (datum) including a `value` field (required) and optionally including: `lat`, `lon`, `ele` (latitude, longitude, and elevation values), and `created_at` (a date/time string). `created_at` may be in the past but not in the future. Data retention is counted from the time of upload, not from `created_at`.
 
 
 
@@ -132,9 +134,9 @@ feed_key  | string  | true      | a valid feed key
 
 Parameter  | Type       | Required  | Description
 ---------  | -------    | --------- | -----------------------
-start_time | string     | false     | Start time for filtering, returns records created after given time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
+start_time | string     | false     | Start time for filtering, returns records created after given time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations). If `end_time` is not given, you get the oldest `limit` records after `start_time` (still listed newest first); pass `end_time` as well to page through a time range.
 end_time   | string     | false     | End time for filtering, returns records created before give time. Use [ISO8601 formatted dates](https://en.wikipedia.org/wiki/ISO_8601#Combined_date_and_time_representations).
-limit      | integer    | false     | Limit the number of records returned.
+limit      | integer    | false     | Limit the number of records returned. Default is 100, maximum is 1000.
 include    | csv string | false     | List of Data record fields to include in response records. Acceptable values are: `value`, `lat`, `lon`, `ele`, `id`, and `created_at`.
 before     | string     | false     | System generated token used to produce the next page of data. See [The Link Header](#the-link-header) for details.
 
@@ -177,7 +179,7 @@ $ curl -H "X-AIO-Key: {io_key}" 'https://io.adafruit.com/api/v2/{username}/feeds
     "hours": 1440,
     "field": "avg"
   },
-  "columns": ["date", "avg"],
+  "columns": ["date", "value"],
   "data": [
     [ "2019-03-01T14:00:00Z", "62.579827586206896" ],
     [ "2019-03-02T18:00:00Z", "64.94642857142857" ],
@@ -240,7 +242,7 @@ aio.send_batch_data(feed_name.key, data_list)
 <%= partial 'responses/data' %>
 
 
-New data
+New data. Feeds with history turned off can't receive batches (400). Each record in the batch counts against your data rate limit, and if there aren't enough operations left for the whole batch, it is rejected with a 429 and nothing is saved. The value size limit and the `created_at` rules from [Create Data](#create-data) apply to every record.
 
 
 ### Path Parameters
@@ -612,6 +614,9 @@ id | string | true |
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/groups/{group_key}/data</code></div>
 
 ```shell
+$ curl -H "Content-Type: application/json" -H "X-AIO-Key: {io_key}" \
+    -d '{"feeds": [{"key": "temperature", "value": "22.5"}, {"key": "humidity", "value": "48"}]}' \
+    https://io.adafruit.com/api/v2/{username}/groups/{group_key}/data
 ```
 
 ```python
@@ -625,10 +630,10 @@ id | string | true |
 
 > Response Sample:
 
-<%= partial 'responses/datum' %>
+<%= partial 'responses/data' %>
 
 
-New data
+An array of the new data points, one per feed. Feeds that don't exist in the group yet are created automatically. Feeds your key can't write to are skipped without an error. Each feed counts as one action against your data rate. If the whole request doesn't fit in your remaining rate, nothing is saved and a `429` is returned.
 
 
 ### Path Parameters
@@ -643,9 +648,11 @@ group_key | string | true |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-group_feed_data | object | true | A record with the `feeds` property, containing a collection of records with `key` and `value` properties.
+feeds | array | true | A collection of records with `key` and `value` properties.
+created_at | string | false | Timestamp applied to every data point.
+location | object | false | `{ lat: number, lon: number, ele: number }` applied to every data point.
 
-Example for `group_feed_data` in the body is as follows: `{ feeds: [ { key: string, value: string }, ... ], created_at: string (optional), location: { lat: number, lon: number, ele: number } (optional)}`
+Example body: `{ "feeds": [ { "key": "temperature", "value": "22.5" } ], "created_at": "2026-01-01T00:00:00Z", "location": { "lat": 40.7, "lon": -74.0, "ele": 10 } }`
 
 
 

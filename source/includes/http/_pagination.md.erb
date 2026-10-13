@@ -1,11 +1,11 @@
 
 # Pagination
 
-Adafruit IO’s API returns at most 1000 data points at a time. To get more data if your feed is over 1000 data points, you’ll need to “paginate” the data.
+Adafruit IO’s API returns 100 data points by default and at most 1000 at a time. To get more data if your feed is over that many data points, you’ll need to “paginate” the data.
 
 What does this mean?
 
-When you perform <a href="#get-all-data-for-the-given-feed">an HTTP data GET query</a>, the results are always sorted newest-to-oldest and include 5 `X-Pagination-*` headers and [the Link header field](https://tools.ietf.org/html/rfc5988#section-5) in the response. You can see an example of the headers on the right.
+When you perform <a href="#get-all-data-for-the-given-feed">an HTTP data GET query</a>, the results are sorted newest-to-oldest (see the note on `start_time` below) and include 5 `X-Pagination-*` headers and [the Link header field](https://tools.ietf.org/html/rfc5988#section-5) in the response. You can see an example of the headers on the right.
 
 ## Pagination Headers
 
@@ -19,19 +19,19 @@ Link: <https://io.adafruit.com/api/v2/abachman/feeds/humidity/data?end_time=2019
 ```
 
 * **Count** (`X-Pagination-Count`) is the number of data points in the current request.
-* **Limit** (`X-Pagination-Limit`) is either the requested limit if it was included as a parameter or 1000, whichever is less.
+* **Limit** (`X-Pagination-Limit`) is the requested limit if it was included as a parameter (at most 1000), otherwise 100.
 * **Total** (`X-Pagination-Total`) is the total number of data points in the feed for the given `start_time` and `end_time`. *Note, this value may be up to 5 minutes behind real time.*
 * **Start** (`X-Pagination-Start`) is an ISO-8601 formatted date value based on the `start_time` parameter in the original request, if one was given.
 * **End** (`X-Pagination-End`) is an ISO-8601 formatted date value based either on the `end_time` parameter from the original request or the time when the original request was made.
 * **Link** is a set of one or more URLs that point you to related resources.
 
-Whenever **Limit** and **Count** are both 1000 and **Total** is more than 1000, that’s evidence that more data is available. That's where the **Link** (`Link`) header comes in.
+Whenever **Limit** and **Count** are equal and **Total** is more than **Count**, that’s evidence that more data is available. That's where the **Link** (`Link`) header comes in.
 
 ## The Link Header
 
-For Adafruit IO **Link** always contains at least one URL inside angle brackets, that's the link to the page of data you are currently looking at. In the example above, the first URL is `https://io.adafruit.com/api/v2/abachman/feeds/example.counter-1/data?end_time=2019-05-02+22%3A33%3A22+UTC&limit=250`. The first URL given in the **Link** header can be used to request the same data set again in the future. Even if your original request didn't include any parameters, the **Link** URL will include a `start_time` parameter that reflects the time at which you made the request. This is how we can make sure you can request the same data repeatedly.
+For Adafruit IO **Link** always contains at least one URL inside angle brackets, that's the link to the page of data you are currently looking at. In the example above, the first URL is `https://io.adafruit.com/api/v2/abachman/feeds/example.counter-1/data?end_time=2019-05-02+22%3A33%3A22+UTC&limit=250`. The first URL given in the **Link** header can be used to request the same data set again in the future. Even if your original request didn't include any parameters, the **Link** URL will include an `end_time` parameter that reflects the time at which you made the request. This is how we can make sure you can request the same data repeatedly.
 
-The example **Link** value above also includes a *next* section: `rel="next", <https://io.adafruit.com/api/v2/abachman/feeds/example.counter-1/data?before=eyJ0aW1lX2lkIjoiMEU0V0RWSk1SNlgxNUgxV0FSR0c2SzFIRUgiLCJmZWVkX2lkIjoiNzMuMCJ9&end_time=2019-05-02+22%3A33%3A22+UTC&limit=250>`. The `rel="next"` part means the URL that follows is a link to the *next page* of data. As long as there is more data available, the **Link** header will include a `rel="next"` URL. It updates on each request, so you can page through data by making a request, parsing the **Link** header to get a next URL, and then using that URL to make another request. If your initial request includes `end_time`, `start_time`, or `limit` parameters, those parameters will be included in the `rel="next"` URL. Note that since data request are always sorted by descending `created_at` date (newest first, oldest last), the next page of data is always the next older page of data.
+The example **Link** value above also includes a *next* section: `rel="next", <https://io.adafruit.com/api/v2/abachman/feeds/example.counter-1/data?before=eyJ0aW1lX2lkIjoiMEU0V0RWSk1SNlgxNUgxV0FSR0c2SzFIRUgiLCJmZWVkX2lkIjoiNzMuMCJ9&end_time=2019-05-02+22%3A33%3A22+UTC&limit=250>`. The `rel="next"` part is written right after the first URL, but it marks the URL that follows it as the *next page* of data (standard Link header parsers may not read it this way, so split the header on the comma instead). As long as there is more data available, the **Link** header will include a `rel="next"` URL. It updates on each request, so you can page through data by making a request, parsing the **Link** header to get a next URL, and then using that URL to make another request. If your initial request includes `end_time`, `start_time`, or `limit` parameters, those parameters will be included in the `rel="next"` URL. Data is sorted by descending `created_at` date (newest first, oldest last), so the next page of data is the next older page. The exception is a request with `start_time` but no `end_time`: it returns the oldest `limit` records after `start_time`, so include `end_time` whenever you paginate.
 
 When visualized on a timeline, the concept of pagination looks like this:
 
