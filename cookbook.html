@@ -385,11 +385,11 @@
 <h1 id='image-data'>Image Data</h1>
 <p>Using an <em>Image Block</em> on an Adafruit IO, you can automatically display a Base64 image data string on your dashboard by sending a Base64 image data string to an Adafruit IO feed. By dragging and dropping an image onto the block in your browser, you can also send image data on the same feed.</p>
 <h2 id='design-considerations'>Design Considerations</h2>
-<p>There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data.</p>
+<p>There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 512KB, or 524288 bytes, of data.</p>
 
 <p>When using the drag-and-drop feature of Adafruit IO dashboards or feed pages, image conversion from binary to Base64 happens inside the browser. That means no image pre-compression or optimization and additional size boost due to the conversion from binary to Base64.</p>
 
-<p>You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  <a href="https://io.adafruit.com/blog/images/2016-12-14-power-switch.png">the .png image used for testing</a>  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.</p>
+<p>You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  <a href="https://io.adafruit.com/blog/images/2016-12-14-power-switch.png">the .png image used for testing</a>  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is well within the limit for feeds with history turned off.</p>
 
 <p><img src="https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png" alt="base64imagepreview" /></p>
 
@@ -430,7 +430,7 @@ optim_stream.seek(0)
 # convert image binary data to base64 string
 value = base64.b64encode(optim_stream.read())
 
-if len(value) &gt; 102400:
+if len(value) &gt; 524288:
     print("image file too big!")
     return
 
