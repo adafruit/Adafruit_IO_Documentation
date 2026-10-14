@@ -1,18 +1,59 @@
 # Actions
 
-Actions are a way to do something when a certain situation occurs. There are two kinds of actions supported at this time: Scheduled and Reactive.
+Actions let Adafruit IO do something for you when a situation occurs: for example, send an email when a temperature feed goes above a value, publish to another feed every morning, or post to a webhook. An action starts with a **trigger** (new data arriving on a feed that matches a condition, or a time schedule) and then runs a series of blocks that can read feed values, do logic and math, and send an email, SMS, webhook request, or feed value.
 
-Scheduled actions repeatedly perform an action after a scheduled interval.
+Actions are built visually with blocks in the **Actions** editor at [io.adafruit.com](https://io.adafruit.com). Create and edit actions there. The API lets you list, inspect, rename, start/stop, and delete them, and you can also create one by posting an action definition you've copied from an existing action.
 
-Reactive actions are much more advanced, and can integrate basic logic. At a basic level, they check if a feed value is somehow comparable to a value or to even another feed. If so, you’ll be able to send an email notification, post a webhook or even publish a message to another feed.  For example, you can set up a reactive action to notify you when the temperature falls below a certain value.  When paired with Feed Notification you can easily keep track of the health of your feed and also when something’s gone wrong.
+<aside class="notice">
+The older Actions API (<code>/{username}/actions</code> and <code>/{username}/triggers</code>) is deprecated and is not documented here. Use <code>/{username}/dynamic_actions</code>.
+</aside>
+
+### The Action Object
+
+Field | Type | Description
+----- | ---- | -----------
+id | integer | the action's id, used in the paths below
+name | string | the action's name
+description | string | a description of the action
+run_status | string | `started` (the action runs when triggered), `stopped` (it doesn't), or `alerted` (it was stopped automatically after 5 failed runs in a row)
+validation_status | string | `invalidated` (waiting to be checked), `validating`, `valid`, or `invalid`. Only `valid` actions run.
+bytecode_validation_errors | array | reasons the action is `invalid`, if any
+bytecode | object | the action's definition (see below)
+schedules | array | the schedules found in the action's triggers, as cron-style strings
+watched_feeds | array | feeds whose new data triggers the action
+delay_seconds | integer | seconds the action waits after being triggered before it runs
+block_count | integer | number of blocks used, or `-1` if the action isn't valid
+heavy_block_count | integer | number of blocks that send something out (feed value, email, SMS, webhook), or `-1` if the action isn't valid
+run_count | integer | number of times the action has run
+failure_count | integer | number of consecutive failed runs
+last_run_at | string | time of the most recent run
+last_run_log | string | log from recent runs
+last_run_output | object | output from the most recent run
+last_check_at | string | time of the most recent trigger check
+last_check_log | string | log from recent trigger checks
+last_check_output | object | result of the most recent trigger check
+created_at | string | creation time
+updated_at | string | last update time
+
+The `bytecode` object is the action's definition, saved by the Actions editor. It has a `version`, `settings`, a list of `triggers`, and a list of `expressions` (the blocks that run when a trigger fires). It is meant to be written by the editor, so the easiest way to get a valid one is to read it from an action you built there.
+
+### Limits
+
+* An action can have at most 100 blocks, and at most 20 of them can be "heavy" blocks (set feed value, email, SMS, webhook). Actions over these limits are marked `invalid` and never run.
+* An action runs at most once every 5 seconds. Triggers that arrive sooner are skipped.
+* A single run is stopped if it takes longer than 10 seconds.
+* After 5 failed runs in a row, the action's `run_status` becomes `alerted` and it stops running. Editing its `bytecode` resets this.
+* The SMS block is limited to 25 messages per day. The email block requires a verified email address.
+* Changing an action's `bytecode` resets it to `stopped` if it was `alerted`, and it must be validated again before it will run.
+* Actions publish and read feed data like any other client, so feed data rate limits still apply. See Rate Limiting.
 
 ## Get All Actions
 
 > HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions</code></div>
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dynamic_actions</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dynamic_actions
 ```
 
 > Response Sample:
@@ -20,145 +61,191 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/action
 ```json
 [
   {
-    "name": "string"
+    "id": 42,
+    "name": "High temperature alert",
+    "description": "Email me when it gets hot",
+    "run_status": "started",
+    "validation_status": "valid",
+    "bytecode_validation_errors": [],
+    "schedules": [],
+    "watched_feeds": [],
+    "delay_seconds": 0,
+    "block_count": 6,
+    "heavy_block_count": 1,
+    "run_count": 12,
+    "failure_count": 0,
+    "last_run_at": "2026-10-12T14:03:11.000Z",
+    "created_at": "2026-10-01T16:20:44.000Z",
+    "updated_at": "2026-10-12T14:03:11.000Z",
+    "bytecode": { "version": "1.0.0-beta.1", "settings": {}, "triggers": [], "expressions": [] }
   }
 ]
 ```
 
-An array of actions
+An array of your actions, ordered by id. Some fields are trimmed in the sample.
 
+### Path Parameters
+
+Parameter |   Type  |  Required |       Description
+--------- | ------- | --------- | -----------------------
+username | string | true | a valid username string, must be the user who owns the AIO key
+
+
+
+## Get Action
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/dynamic_actions/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dynamic_actions/{id}
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 42,
+  "name": "High temperature alert",
+  "description": "Email me when it gets hot",
+  "run_status": "started",
+  "validation_status": "valid",
+  "bytecode_validation_errors": [],
+  "run_count": 12,
+  "failure_count": 0,
+  "last_run_at": "2026-10-12T14:03:11.000Z",
+  "last_run_output": {},
+  "bytecode": { "version": "1.0.0-beta.1", "settings": {}, "triggers": [], "expressions": [] }
+}
+```
+
+A single action, including its definition and the logs from its recent runs. Use this to find out why an action isn't running (check `run_status`, `validation_status`, `bytecode_validation_errors`, and `last_run_log`). Some fields are trimmed in the sample.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
+id | integer | true | the action's id
 
 
 
 ## Create Action
 
 > HTTP Request
-> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/actions</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/dynamic_actions</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions
+$ curl -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"dynamic_action": {"name": "My action", "description": "Does a thing"}}' \
+  https://io.adafruit.com/api/v2/{username}/dynamic_actions
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string"
+  "id": 43,
+  "name": "My action",
+  "description": "Does a thing",
+  "run_status": "stopped",
+  "validation_status": "invalidated",
+  "bytecode": { "version": "1.0.0-beta.1", "settings": {}, "triggers": [], "expressions": [] }
 }
 ```
 
-New Action
+Creates an action. New actions are `stopped` until you set `run_status` to `started`. If the request is invalid you'll get a `400` with an `error` array of messages.
 
+The `bytecode` is the Blockly-based definition the Actions editor produces, so building one by hand isn't practical. Create actions in the Actions editor.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-
 
 ### Body Parameters
 
+All parameters go inside a `dynamic_action` object.
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-trigger | object | true |
+name | string | false | the action's name
+description | string | false | a description of the action
+run_status | string | false | `started` or `stopped`
+bytecode | object | false | the action's definition: an object with `version`, `settings`, `triggers` and `expressions`. Anything else is rejected.
 
 
 
-## Return Action
+## Update Action
 
 > HTTP Request
-> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/dynamic_actions/{id}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
+$ curl -X PUT -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"dynamic_action": {"run_status": "stopped"}}' \
+  https://io.adafruit.com/api/v2/{username}/dynamic_actions/{id}
 ```
 
 > Response Sample:
 
 ```json
 {
-  "name": "string"
+  "id": 42,
+  "name": "High temperature alert",
+  "run_status": "stopped",
+  "validation_status": "valid"
 }
 ```
 
-Action response
-
+Updates an action and returns it. Send only the fields you want to change. Use it to rename an action, or to start (`"run_status": "started"`) and stop (`"run_status": "stopped"`) it. Changing `bytecode` makes the action `invalidated` until it is checked again (this happens automatically in a moment), and an action only runs once `validation_status` is `valid`. Fields are trimmed in the sample.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true |
-
-
-
-## Replace Action
-
-> HTTP Request
-> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
-
-```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
-```
-
-> Response Sample:
-
-```json
-{
-  "name": "string"
-}
-```
-
-Updated action
-
-
-### Path Parameters
-
-Parameter |   Type  |  Required |       Description
---------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-id | string | true |
-
+id | integer | true | the action's id
 
 ### Body Parameters
 
+All parameters go inside a `dynamic_action` object.
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-trigger | object | true |
+name | string | false | the action's name
+description | string | false | a description of the action
+run_status | string | false | `started` or `stopped`
+bytecode | object | false | the action's definition, see Create Action
 
 
 
 ## Delete Action
 
 > HTTP Request
-> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/actions/{id}</code></div>
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/dynamic_actions/{id}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/actions/{id}
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/dynamic_actions/{id}
 ```
 
 > Response Sample:
 
 ```json
-"string"
+{
+  "id": 42,
+  "name": "High temperature alert"
+}
 ```
 
-Deleted Action successfully
-
+Deletes the action and its run history, and returns the deleted action (trimmed in the sample).
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
-id | string | true |
+id | integer | true | the action's id
 
 

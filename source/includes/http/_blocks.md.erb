@@ -228,10 +228,10 @@ name | string | false | a display name for the block
 description | string | false | a description of the block
 block_feeds | array | false | array of feed connections (see Block Feeds below)
 properties | object | false | visual configuration (see Properties below)
-column | integer | false | grid column position
-row | integer | false | grid row position
-size_x | integer | false | width in grid units (default: 4)
-size_y | integer | false | height in grid units (default: 4)
+column | integer | false | grid column position (ignored when the block is created; new blocks are placed automatically)
+row | integer | false | grid row position (ignored when the block is created; new blocks are placed automatically)
+size_x | integer | false | width in grid units (if omitted, the block is laid out 2 units wide)
+size_y | integer | false | height in grid units (if omitted, the block is laid out 2 units tall)
 
 
 ### Visual Types
@@ -270,12 +270,12 @@ Each entry in the `block_feeds` array connects the block to a feed:
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 feed_id | string or integer | true | the feed to connect — accepts a numeric feed ID (`827982`), a feed key string (`"temperature"`), or a group-qualified key (`"group-key.feed-key"`)
-group_id | integer | false | the numeric ID of the feed's group (defaults to the user's default group)
+group_id | integer or string | false | the feed's group: a numeric group ID when `feed_id` is numeric, or a group key when `feed_id` is a feed key (defaults to the default group). Feeds you can't read are silently skipped.
 
 
 ### Properties
 
-The `properties` object controls the visual appearance and behavior of the block. Available keys vary by `visual_type`. All property values are strings unless otherwise noted.
+The `properties` object controls the visual appearance and behavior of the block. Available keys vary by `visual_type`. All property values are strings unless otherwise noted. Property names that a block type does not support are silently dropped, as are non-scalar values.
 
 **Common Properties:**
 
@@ -374,8 +374,19 @@ historyHours | string | number of hours of data to display
 rawDataOnly | string | show raw data without smoothing
 steppedLine | string | use stepped line style
 gridLines | string | show grid lines
-lineWidth | string | width of chart lines
 feedKeyLegend | boolean | use the feed key (e.g. `group.feed`) as the chart legend label instead of the feed name
+
+**Divider Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+lineWidth | string | width of the divider line in pixels (`1` to `8`)
+
+**Line Gauge & Battery Properties:**
+
+Property | Type | Description
+-------- | ---- | -----------
+showNumbers | boolean | show the feed value as a percentage
 
 **Toggle & Button Properties:**
 
@@ -527,28 +538,32 @@ lowColor | string | color for low state
 
 Property | Type | Description
 -------- | ---- | -----------
-text | string | static text content
+text | string | text to display; for rich_text blocks this can be a template such as `{{feeds.feed-key.value}}`
 value | string | static value
 static | boolean | when true, display a fixed value instead of the latest feed value (used by text, multiline_text, and icon blocks)
 preformatted | string | use preformatted text
 backgroundColor | string | background color (dark theme)
 backgroundColorLight | string | background color (light theme)
 fillColor | string | fill color
-tile | string | tile image (dark theme)
-tileLight | string | tile image (light theme)
 
 **Map Properties:**
 
 Property | Type | Description
 -------- | ---- | -----------
-showLocation | string | show location information
-showNumbers | string | show numerical values on map
+tile | string | map type in dark mode: `street` or `sat`
+tileLight | string | map type in light mode: `street` or `sat`
+showPaths | string | draw path lines (`yes` or `no`)
+showLegend | string | show the legend (`yes` or `no`)
+allowPublish | string | allow publishing locations from the map (`yes` or `no`)
+feedColor0 - feedColor4 | string | marker color for the feed at that position in `block_feeds`
+feedMarker0 - feedMarker4 | string | marker style for the feed at that position in `block_feeds`
 historyHours | string | hours of location history to display
 
 **Stream Properties:**
 
 Property | Type | Description
 -------- | ---- | -----------
+showLocation | string | show location data (`yes` or `no`, default: `"no"`)
 errors | string | show system errors and throttle messages in the stream (`"yes"` or `"no"`, default: `"yes"`)
 
 **Dashboard Link Properties:**
@@ -757,10 +772,14 @@ api.delete_block(dashboard_key: 'dashboard-key', key: '{id}')
 > Response Sample:
 
 ```json
-"OK"
+{
+  "id": "1234",
+  "name": "Temperature",
+  "visual_type": "gauge"
+}
 ```
 
-Deletes the specified block from the dashboard.
+Deletes the specified block from the dashboard. Returns the deleted block.
 
 
 ### Path Parameters

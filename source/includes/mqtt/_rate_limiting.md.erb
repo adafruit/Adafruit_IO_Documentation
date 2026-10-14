@@ -1,19 +1,21 @@
 # MQTT API Rate Limiting
 
-Adafruit IO's MQTT server imposes a rate limit to prevent excessive load on the service.  If a user performs too many **publish** actions in a short period of time then some of the requests will be rejected and an error message will be published on [your /throttle topic](#error-topics). The current rate limit is at most 30 requests per minute for free accounts, 60 per minute with an IO+ account, and expandable via Adafruit IO+ Boost applied to your account.
+Adafruit IO's MQTT server imposes a rate limit to prevent excessive load on the service.  If a user performs too many **publish** actions in a short period of time then some of the requests will be rejected and an error message will be published on [your /throttle topic](#error-topics). The current rate limit is at most 30 data points per minute for free accounts, 60 per minute with an IO+ account, and expandable via Adafruit IO+ Boost applied to your account. This is the same data rate limit used by the HTTP API, and each MQTT publish to a feed counts as one data point. A publish to a group topic counts as one data point for every feed in the payload, so publishing to a group with 5 feeds uses 5 of your 30 points for that minute. Messages to a `/get` topic also count.
 
-We also limit a few other actions on Adafruit IO's MQTT broker. If you send, within a minute, more than: 100 MQTT SUBSCRIBE requests, 10 _failed_ MQTT SUBSCRIBE requests, or 10 _failed_ MQTT PUBLISH requests; or you send enough messages after passing the rate limit; or you attempt to log in more than 20 times within a minute, your account will be temporarily banned from the MQTT broker.
+We also limit a few other actions on Adafruit IO's MQTT broker. Your account will be temporarily banned from the MQTT broker if, within a minute, a client has more than 10 _rejected_ MQTT SUBSCRIBE or PUBLISH requests, or if you send 20 or more messages while already over the data rate limit within 5 seconds, or if a client sends subscribe or publish requests faster than Adafruit IO can check them. Any rejected MQTT PUBLISH request disconnects the client immediately. Subscribing to other users' shared feeds is limited to 120 permission checks per minute; you will get a warning on your `{username}/throttle` topic when only 5 remain. Subscriptions to your own topics and the `time` topics are not part of this limit.
+
+If you attempt to connect more than 20 times within a minute from the same IP address with the same username, further connection attempts are refused (the broker answers with a CONNACK "not authorized" return code) until the minute is up. Refused connection attempts do not cause a ban.
 
 Most of the systems connecting to Adafruit IO are simple, automated devices and MQTT client scripts. A runaway ESP8266 sending MQTT SUBSCRIBE packets inside the main `loop()` function of an Arduino sketch can send about 500 packets per minute. It wouldn't take many poorly written clients connecting to our MQTT broker to crash the service for everyone if we didn't add rate limits to every action.
 
 If you exceed a rate limit, a notice will be sent to the `(username)/throttle` topic. If your account is temporarily banned, a notice will be sent to the `{username}/errors` topic. While developing your project, you should always keep subscriptions to the error topics open so you can see when you're getting close to the Adafruit IO rate limits and when you've been blocked.
 
-This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below 2 requests/second.
+This limit applies to all connections so if you have multiple devices or clients publishing data be sure to delay their updates enough that the total rate is below your data rate limit: 30 data points per minute (an average of 0.5 per second) for free accounts and 60 per minute (1 per second) for IO+ accounts. Each Data Rate Boost adds 10 data points per minute.
 
 
 ## Rate Limit Bans
 
-Temporary MQTT bans start at 30 seconds and scale as a multiple of the number of bans within the last hour up to one hour maximum. For example, 10 rejected MQTT SUBSCRIBE requests will trigger a temporary ban of 30 seconds, that's 1 ban. If it's a device that automatically wakes up, connects to Adafruit IO, and sends a stream of rejected SUBSCRIBE packets, it will be banned again. The second ban results in 60 seconds offline, the third is 90 seconds, and so on.
+Temporary MQTT bans start at 30 seconds and scale as a multiple of the number of bans within the last hour up to one hour maximum. For example, going over 10 rejected MQTT SUBSCRIBE requests in a minute will trigger a temporary ban of 30 seconds, that's 1 ban. If it's a device that automatically wakes up, connects to Adafruit IO, and sends a stream of rejected SUBSCRIBE packets, it will be banned again. The second ban results in 60 seconds offline, the third is 90 seconds, and so on.
 
 You can visit your Adafruit IO monitor page any time
 

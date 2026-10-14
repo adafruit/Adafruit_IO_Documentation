@@ -2,6 +2,12 @@
 
 Tokens are used for authenticating an Adafruit IO user. See the _Authentication_ page for more information about this.
 
+<aside class="warning">
+Tokens cannot be created, updated, or deleted individually. <code>POST /tokens</code> <strong>regenerates your Adafruit IO key</strong>: it creates a new key and immediately deactivates all of your previous keys, and any existing connections using the old keys are disconnected. Every device, script, or integration using the old key will stop working until you give it the new key.
+</aside>
+
+Only one key is active at a time. <code>DELETE</code>, <code>PUT</code>, and <code>PATCH</code> requests to the tokens endpoints always return <code>400 Bad Request</code>.
+
 ## Get All Tokens
 
 > HTTP Request
@@ -25,12 +31,26 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 ```json
 [
   {
-    "token": "string"
+    "id": 123,
+    "key": "aio_xxxx00xxxxxxxxxxxxxxxxxxxxxxxx",
+    "name": null,
+    "status": "active",
+    "master": true,
+    "readable": true,
+    "createable": true,
+    "updateable": true,
+    "deleteable": true,
+    "expiration": null,
+    "feed_id": null,
+    "qr_code": "data:image/png;base64,...",
+    "user_id": 456,
+    "created_at": "2026-01-01T00:00:00.000Z",
+    "updated_at": "2026-01-01T00:00:00.000Z"
   }
 ]
 ```
 
-An array of tokens
+An array of your active tokens. Inactive (replaced) keys are not returned.
 
 
 
@@ -44,13 +64,13 @@ username | string | true | a valid username string
 
 
 
-## Create Token
+## Regenerate Token
 
 > HTTP Request
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/tokens</code></div>
 
 ```shell
-$ curl -F 'token=uniqueToken' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
+$ curl -X POST -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 ```
 
 ```python
@@ -66,11 +86,25 @@ $ curl -F 'token=uniqueToken' -H "X-AIO-Key: {io_key}" https://io.adafruit.com/a
 
 ```json
 {
-  "token": "string"
+  "id": 123,
+  "key": "aio_xxxx00xxxxxxxxxxxxxxxxxxxxxxxx",
+  "name": null,
+  "status": "active",
+  "master": true,
+  "readable": true,
+  "createable": true,
+  "updateable": true,
+  "deleteable": true,
+  "expiration": null,
+  "feed_id": null,
+  "qr_code": "data:image/png;base64,...",
+  "user_id": 456,
+  "created_at": "2026-01-01T00:00:00.000Z",
+  "updated_at": "2026-01-01T00:00:00.000Z"
 }
 ```
 
-New Token
+The new token, returned with status `201 Created`. **All previous keys are now inactive.**
 
 
 
@@ -85,7 +119,7 @@ username | string | true | a valid username string
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-token | object | true |
+token | object | false | optional settings for the new key: `master`, `expiration`, `feed_id`. Omit the body to create a normal full-access key.
 
 
 
@@ -111,11 +145,25 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 
 ```json
 {
-  "token": "string"
+  "id": 123,
+  "key": "aio_xxxx00xxxxxxxxxxxxxxxxxxxxxxxx",
+  "name": null,
+  "status": "active",
+  "master": true,
+  "readable": true,
+  "createable": true,
+  "updateable": true,
+  "deleteable": true,
+  "expiration": null,
+  "feed_id": null,
+  "qr_code": "data:image/png;base64,...",
+  "user_id": 456,
+  "created_at": "2026-01-01T00:00:00.000Z",
+  "updated_at": "2026-01-01T00:00:00.000Z"
 }
 ```
 
-Token response
+The token, if it is active. Returns `404` for an inactive (replaced) key.
 
 
 
@@ -129,7 +177,7 @@ id | string | true |
 
 
 
-## Delete Token
+## Delete Token (not available)
 
 > HTTP Request
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/tokens/{id}</code></div>
@@ -150,10 +198,12 @@ $ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/tokens
 > Response Sample:
 
 ```json
-"string"
+{
+  "error": "request failed - Token destroy API isn't available."
+}
 ```
 
-Deleted Token successfully
+Tokens cannot be deleted. This endpoint always returns `400 Bad Request`. Regenerate your key with `POST` instead.
 
 
 ### Path Parameters

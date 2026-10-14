@@ -1,66 +1,662 @@
 # Services
 
-Adafruit IO provides access to several connected services. The current services offered are [IFTTT](https://io.adafruit.com/services/ifttt), [Zapier](https://io.adafruit.com/services/zapier), [Weather](https://io.adafruit.com/services/weather), [Air Quality](https://io.adafruit.com/services/air_quality), [Randomizer](https://io.adafruit.com/services/words) and [Time](https://io.adafruit.com/services/time).
+Adafruit IO provides a few integrated services that you can use with your AIO key: [Weather](#weather), [Air Quality](#air-quality), [Randomizer](#randomizer), [Messages (SMS)](#messages-sms), [Time](#time), and an [Image Formatter](#image-formatter).
 
-Each of these services is unique in that you may need to do some setup at the links above prior to utilizing the service via the Adafruit IO HTTP API.
+Weather, Air Quality, Randomizer and Messages work by creating an *integration record*. Once a record exists, Adafruit IO publishes its data to MQTT topics, and you can also read it over HTTP with the endpoints below. These endpoints are for scripts and devices using an AIO key, and requests from other websites (cross-origin browser requests) are rejected.
+
+IFTTT is set up from the [IFTTT](https://io.adafruit.com/services/ifttt) service page and the Adafruit IO service on ifttt.com, not through this API. There is no Zapier integration.
 
 ## Time
 
-The Adafruit IO time service does not replace a time-synchronization service like NTP, but it can help you figure out your local time on an Internet of Things device that doesn't have a built in clock.
+The Adafruit IO time service does not replace a time-synchronization service like NTP, but it can help you figure out your local time on an Internet of Things device that doesn't have a built in clock. Time is also published on [MQTT time topics](mqtt.html#time-topics).
 
-Detailed documentation on the usage of the time API is found within [Adafruit IO on the time services page](https://io.adafruit.com/services/time).
+### Unauthenticated Time
 
-## Randomizer
+These endpoints don't need an AIO key and return plain text (not JSON), always in UTC.
 
-Create random data streams that can generate colors, words, numbers, or pick a value from a custom data set and send it directly to your devices.
+#### Get Time in Seconds
 
-The four available data types are:
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/time/seconds</code></div>
 
-* Pronounceable nonsense words
-* Colors (RGB values, HSL values, CSS hex, or CSS color name)
-* Numbers
-* Preset (sample from a given set of values)
+```shell
+$ curl https://io.adafruit.com/api/v2/time/seconds
+```
 
-Detailed documentation on the usage and setup of the randomizer API is found within [Adafruit IO on the randomizer services page](https://io.adafruit.com/services/words).
+> Response Sample:
 
-## Weather
+```text
+1760368123
+```
 
-With access to weather data powered by Apple WeatherKit, you can get hyper-local forecasts sent directly to your devices. Weather data is updated at most once every 20 minutes.
+Current Unix time in whole seconds.
 
-When you have an IO Plus account, you can track the weather through our HTTP or MQTT APIs for up to 5 locations at a time.
+#### Get Time in Milliseconds
 
-Detailed documentation on the usage and setup of the weather API is found within [Adafruit IO on the weather services page](https://io.adafruit.com/services/weather).
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/time/millis</code></div>
 
-## Air Quality
+```shell
+$ curl https://io.adafruit.com/api/v2/time/millis
+```
 
-Get real-time air quality measurements and forecasts sent directly to your devices. Air quality data is updated at most once every 20 minutes.
+> Response Sample:
 
-When you have an IO Plus account, you can track air quality through our HTTP or MQTT APIs for up to 5 locations at a time.
+```text
+1760368123456
+```
 
-Detailed documentation on the usage and setup of the air quality API is found within [Adafruit IO on the air quality services page](https://io.adafruit.com/services/air_quality).
+Current Unix time in milliseconds.
 
-### Get all air quality integration records without their current forecast values.
+#### Get Time in ISO-8601
 
-* `GET /api/v2/{username}/integrations/air_quality`
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/time/ISO-8601</code></div>
 
-### Create a new air quality integration record.
+```shell
+$ curl https://io.adafruit.com/api/v2/time/ISO-8601
+```
+
+> Response Sample:
+
+```text
+2026-10-13T14:28:43Z
+```
+
+Current UTC time as an ISO-8601 string.
+
+#### Get Time (JSON or Text)
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/utilities/time</code></div>
+
+```shell
+$ curl -H "Accept: application/json" https://io.adafruit.com/api/v2/utilities/time
+```
+
+> Response Sample:
 
 ```json
 {
-    "location": "latitude, longitude",
-    "name": "Unique friendly name",
-    "provider": "open_meteo"
+  "iso8601": "2026-10-13T14:28:43Z",
+  "rfc822": "Tue, 13 Oct 2026 14:28:43 +0000",
+  "millis": 1760368123
 }
 ```
 
-* `POST /api/v2/{username}/integrations/air_quality`
+Returns the current UTC time in three formats. Request JSON with `Accept: application/json` (or a `.json` extension). Request text with `Accept: text/plain` (or a `.txt` extension), which returns a single value chosen by the `output` query parameter: `iso8601`, `rfc822`, or, if `output` is omitted, the `millis` value. Note that the `millis` value is Unix time in **seconds**, not milliseconds. Use `/api/v2/time/millis` for milliseconds.
 
-Request body should be a JSON record in the form shown, where `provider` is either `open_meteo` (global coverage) or `airnow` (US only, official EPA data).
+### Query Parameters
 
-### Get the specified air quality record with current air quality conditions and hourly forecast data including PM2.5, PM10, ozone, nitrogen dioxide, and other pollutants.
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+output | string | false | Text responses only: `iso8601` or `rfc822`. Defaults to the `millis` value.
 
-* `GET /api/v2/{username}/integrations/air_quality/{id}`
+### Time in Your Time Zone
 
-### Permanently delete the specified air quality integration.
+These endpoints need your AIO key. They return the current time in a time zone, which is picked in this order: the `tz` parameter, then a lookup from your request's IP address, then UTC.
 
-* `DELETE /api/v2/{username}/integrations/air_quality/{id}`
+#### List Time Zones and Links
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/time</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/time?tz=America/New_York
+```
+
+> Response Sample:
+
+```json
+{
+  "zones": ["Africa/Abidjan", "Africa/Accra", "..."],
+  "timezone": "America/New_York",
+  "time": "2026-10-13T10:28:43-04:00",
+  "links": {
+    "strftime": "https://io.adafruit.com/api/v2/{username}/integrations/time/strftime",
+    "clock": "https://io.adafruit.com/api/v2/{username}/integrations/time/clock",
+    "struct": "https://io.adafruit.com/api/v2/{username}/integrations/time/struct"
+  }
+}
+```
+
+Lists every valid time zone name, the time zone in use, and the current time there.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Query Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+tz | string | false | A time zone name such as `America/New_York`. An invalid name returns a `400` that lists every valid name.
+
+#### Get Time as ISO-8601 (Clock)
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/time/clock</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/time/clock?tz=America/New_York
+```
+
+> Response Sample:
+
+```text
+2026-10-13T10:28:43-04:00
+```
+
+Plain text ISO-8601 time with the zone offset. Accepts `tz`.
+
+#### Get Time as a Struct
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/time/struct</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/time/struct?tz=America/New_York
+```
+
+> Response Sample:
+
+```json
+{"year":2026,"mon":10,"mday":13,"hour":10,"min":28,"sec":43,"wday":2,"yday":286,"isdst":1}
+```
+
+Broken-down time. `wday` is 0 for Sunday through 6 for Saturday, `yday` starts at 1, and `isdst` is 1 during daylight saving time and 0 otherwise. Accepts `tz`.
+
+#### Get Formatted Time (strftime)
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/time/strftime</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" "https://io.adafruit.com/api/v2/{username}/integrations/time/strftime?tz=America/New_York&string=%25Y-%25m-%25d%20%25H:%25M"
+```
+
+> Response Sample:
+
+```text
+2026-10-13 10:28
+```
+
+Plain text time formatted with a [strftime](https://ruby-doc.org/core/Time.html#method-i-strftime) format string. A missing, invalid or too long format returns a `422`.
+
+### Query Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+string | string | true | The format string, at most 64 characters. Remember to URL-encode `%`.
+tz | string | false | A time zone name such as `America/New_York`.
+
+## Randomizer
+
+Randomizer records generate random words, numbers, colors, or a pick from a list of values you choose. Each record is also published on the [randomizer MQTT topic](mqtt.html#randomizer-topics). The randomizer is available on Free and IO+ accounts, with up to 20 enabled records per user.
+
+Values change in 30 second time slices: the same record returns the same value within a slice, and two records with the same settings and `seed` produce the same values. Each `GET` of a single record generates a value.
+
+### List Randomizer Records
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/words</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/words
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 42,
+    "value_type": "number",
+    "value": 5731,
+    "seed": "Jx3Rk9pQzLw2mT7a",
+    "time_slice": 1760368110,
+    "links": {
+      "mqtt": "{username}/integration/words/42",
+      "self": "https://io.adafruit.com/api/v2/{username}/integrations/words/42"
+    },
+    "value_minimum": 1000,
+    "value_maximum": 9999
+  }
+]
+```
+
+Lists your enabled randomizer records, each with a newly generated `value`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Create a Randomizer Record
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/integrations/words</code></div>
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" -d '{"word": {"value_type": "number", "value_minimum": 1000, "value_maximum": 9999}}' https://io.adafruit.com/api/v2/{username}/integrations/words
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 42,
+  "value_type": "number",
+  "value": 5731,
+  "seed": "Jx3Rk9pQzLw2mT7a",
+  "time_slice": 1760368110,
+  "links": {
+    "mqtt": "{username}/integration/words/42",
+    "self": "https://io.adafruit.com/api/v2/{username}/integrations/words/42"
+  },
+  "value_minimum": 1000,
+  "value_maximum": 9999
+}
+```
+
+Creates a record. Send the parameters below inside a `word` object. Invalid input returns a `422` with the errors.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Body Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+value_type | string | true | `word`, `number`, `color`, or `preset`.
+seed | string | false | Seed for the generator. A random one is created if omitted.
+value_minimum | integer | false | `number`: lowest value. `word`: minimum word length. Zero or greater.
+value_maximum | integer | false | `number`: highest value. `word`: maximum word length (default 16). Zero or greater. With no minimum or maximum, `number` returns a decimal between 0 and 1.
+value_mode | integer | color only | Color format: `0` RGB, `1` HSL, `2` CSS hex, `3` CSS color name.
+collection | array or string | preset only | The values to choose from, as an array or a comma-separated string.
+
+### Get a Randomizer Record
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/words/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/words/42
+```
+
+Returns one record in the same format as Create, with a newly generated `value`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the randomizer record.
+
+### Delete a Randomizer Record
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/integrations/words/{id}</code></div>
+
+```shell
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/words/42
+```
+
+Permanently deletes the record and returns it.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the randomizer record.
+
+## Weather
+
+Weather data comes from Apple WeatherKit. **Requires IO+**, with up to 5 enabled weather records per account. Data for a record is cached and refreshed at most once every 20 minutes. The same data is published to the [weather MQTT topics](mqtt.html#weather-topics-io), so reading it over HTTP is optional.
+
+A record is identified by a numeric `id`. Its `links.mqtt` field lists the MQTT topic for each forecast: `current`, `forecast_minutes_5`, `forecast_minutes_30`, `forecast_hours_1`, `forecast_hours_2`, `forecast_hours_6`, `forecast_hours_12`, `forecast_hours_24`, `forecast_days_1`, `forecast_days_2`, and `forecast_days_5`.
+
+### List Weather Records
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/weather</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/weather
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 7,
+    "location": "40.7128,-74.006",
+    "name": "Home",
+    "last_request_at": "2026-10-13T14:10:02.000Z",
+    "last_request_status": "200",
+    "links": {
+      "mqtt": {
+        "current": "{username}/integration/weather/7/current",
+        "forecast_hours_1": "{username}/integration/weather/7/forecast_hours_1"
+      },
+      "self": "https://io.adafruit.com/api/v2/{username}/integrations/weather/7"
+    }
+  }
+]
+```
+
+Lists your enabled weather records without forecast values (the `mqtt` map is shortened here). **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Create a Weather Record
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/integrations/weather</code></div>
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" -d '{"weather": {"location": "40.7128,-74.0060", "name": "Home"}}' https://io.adafruit.com/api/v2/{username}/integrations/weather
+```
+
+Returns the new record in the format shown above. Send the parameters below inside a `weather` object. **Requires IO+.** Free accounts get a `403`. A bad location, a duplicate `name`, or going over the 5 record limit returns a `422`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Body Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+location | string | true | `latitude,longitude` in decimal degrees.
+name | string | false | A friendly name, unique among your weather records.
+
+### Get a Weather Record
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/weather/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/weather/7
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 7,
+  "location": "40.7128,-74.006",
+  "name": "Home",
+  "last_request_at": "2026-10-13T14:10:02.000Z",
+  "last_request_status": "200",
+  "current": {"temperature": 18.4, "conditionCode": "PartlyCloudy", "humidity": 0.62, "...": "..."},
+  "forecast_hours_1": {"temperature": 17.9, "...": "..."},
+  "links": {"mqtt": {"current": "{username}/integration/weather/7/current"}, "self": "https://io.adafruit.com/api/v2/{username}/integrations/weather/7"}
+}
+```
+
+Returns the record with the current conditions and each forecast (shortened above). The forecast objects are WeatherKit data and are `null` when no data is available. Responses can be up to 20 minutes old. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the weather record.
+
+### Delete a Weather Record
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/integrations/weather/{id}</code></div>
+
+```shell
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/weather/7
+```
+
+Permanently deletes the record and returns it. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the weather record.
+
+## Air Quality
+
+Get real-time air quality measurements and forecasts. **Requires IO+**, with up to 5 enabled air quality records per account. Data for a record is cached and refreshed at most once every 20 minutes. The same data is published to the [air quality MQTT topics](mqtt.html#air-quality-topics-io): `current`, `forecast_today` and `forecast_tomorrow`.
+
+### List Air Quality Records
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/air_quality</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/air_quality
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 3,
+    "location": "40.7128,-74.006",
+    "name": "Home",
+    "last_request_at": "2026-10-13T14:10:02.000Z",
+    "last_request_status": "200",
+    "provider": "open_meteo",
+    "links": {
+      "mqtt": {
+        "current": "{username}/integration/air_quality/3/current",
+        "forecast_today": "{username}/integration/air_quality/3/forecast_today",
+        "forecast_tomorrow": "{username}/integration/air_quality/3/forecast_tomorrow"
+      },
+      "self": "https://io.adafruit.com/api/v2/{username}/integrations/air_quality/3"
+    }
+  }
+]
+```
+
+Lists your enabled air quality records without their current forecast values. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Create an Air Quality Record
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/integrations/air_quality</code></div>
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" -d '{"air_quality": {"location": "40.7128,-74.0060", "name": "Home", "provider": "open_meteo"}}' https://io.adafruit.com/api/v2/{username}/integrations/air_quality
+```
+
+Returns the new record in the format shown above. Send the parameters below inside an `air_quality` object. **Requires IO+.** Free accounts get a `403`. A bad location, duplicate `name`, invalid `provider`, or going over the 5 record limit returns a `422`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Body Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+location | string | true | `latitude,longitude` in decimal degrees.
+name | string | false | A friendly name, unique among your air quality records.
+provider | string | false | `open_meteo` (global coverage, the default) or `airnow` (US only, official EPA data).
+
+### Get an Air Quality Record
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/air_quality/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/air_quality/3
+```
+
+Returns the record with `current`, `forecast_today` and `forecast_tomorrow` air quality values, including pollutants such as PM2.5, PM10, ozone and nitrogen dioxide. The values are `null` when no data is available. Responses can be up to 20 minutes old. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the air quality record.
+
+### Delete an Air Quality Record
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/integrations/air_quality/{id}</code></div>
+
+```shell
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/air_quality/3
+```
+
+Permanently deletes the record and returns it. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the air quality record.
+
+## Messages (SMS)
+
+Lets you save data to a feed by texting Adafruit IO. Text a message in the form `feed-key, value` to the Adafruit IO number from your verified phone number. The value is saved to that feed, and you get a text back with an acknowledgement. Texting just a feed key replies with the feed's last value. **Requires IO+**, and each account can have 1 SMS record. Texts are limited to 25 per day per account, and texts over the limit are not saved. Errors are reported to your monitor page.
+
+The phone number must be verified in your account settings first. The record always uses your verified phone number, and the number in responses is masked.
+
+### List Message Records
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/messages</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/messages
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 1,
+    "service_name": "sms",
+    "service_endpoint": "•••••••7777",
+    "last_message_at": "2026-10-13T14:00:00.000Z",
+    "last_message_status": "OK"
+  }
+]
+```
+
+Lists your enabled message records. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Create a Message Record
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/integrations/messages</code></div>
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" -d '{"message": {"service_name": "sms"}}' https://io.adafruit.com/api/v2/{username}/integrations/messages
+```
+
+Creates an SMS record for your verified phone number and returns it. Returns a `422` if you have no verified phone number or are over the record limit. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+
+### Body Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+service_name | string | true | Must be `sms`, sent inside a `message` object.
+
+### Get a Message Record
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/messages/{id}</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/messages/1
+```
+
+Returns one message record. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the message record.
+
+### Delete a Message Record
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/integrations/messages/{id}</code></div>
+
+```shell
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/integrations/messages/1
+```
+
+Permanently deletes the record and returns it. **Requires IO+.** Free accounts get a `403`.
+
+### Path Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+username | string | true | Your Adafruit IO username. Must match the owner of the key.
+id | integer | true | The id of the message record.
+
+## Image Formatter
+
+Downloads an image from a public URL, resizes it, and returns it as a BMP file, which is handy for small displays on microcontrollers. Available on Free and IO+ accounts.
+
+Limits: the source image can be at most 1 MB and must be at a public `http://` or `https://` URL (private and internal addresses are rejected). Free accounts can make 1 request per 60 seconds, and IO+ accounts 1 request per 5 seconds. Extra requests get a `429`.
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/integrations/image-formatter</code></div>
+
+```shell
+$ curl -H "X-AIO-Key: {io_key}" -o image.bmp "https://io.adafruit.com/api/v2/{username}/integrations/image-formatter?url=https://example.com/photo.jpg&width=128&height=64&output=BMP16"
+```
+
+Returns the image (`Content-Type: image/bmp`). A `POST` with the same parameters also works. A bad parameter, an image that can't be loaded or is too large returns a `422` with a message.
+
+### Query Parameters
+
+Parameter | Type | Required | Description
+--------- | ---- | -------- | -----------
+url | string | true | Public URL of the source image.
+width | integer | true | Output width in pixels. Positive integer.
+height | integer | true | Output height in pixels. Positive integer.
+output | string | true | Bit depth: `BMP1`, `BMP8`, `BMP16`, `BMP24` or `BMP32`.

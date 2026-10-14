@@ -125,3 +125,104 @@ $ curl -X POST https://io.adafruit.com/api/v2/webhooks/feed/:token/notify
 Creates a new feed data record with the value "ping", regardless of what was posted.
 
 This path is helpful if you're using a low-memory MQTT client that can't handle the large webhook payloads that a service like GitHub publishes and all you care about is _that_ something happened, not _precisely what_ happened.
+
+
+
+## Manage Webhook Receivers
+
+A webhook receiver is the token (and URLs) that a service uses to post data to one of your feeds, as described in the sections above. These endpoints let the feed owner create, list, change and delete a feed's receivers, using the owner's key. Only the feed owner can use them. A feed is limited to 5 webhook receivers.
+
+Each receiver response includes three ready-made URLs, all built from the receiver's `token`:
+
+Field | Use
+----- | ---
+`hook_url` | JSON or form data with a `value`, see [Send Data via Webhook](#send-data-via-webhook)
+`raw_hook_url` | the raw request body becomes the value, see [Send Arbitrary Data via Webhook](#send-arbitrary-data-via-webhook)
+`notify_hook_url` | records "ping" for any request, see [Send Notification via Webhook](#send-notification-via-webhook)
+
+Choose the raw or JSON behavior by choosing which URL you give to the other service. Anyone with a URL can post data to the feed, so treat it like a secret and delete the receiver if it leaks. An expired or disabled receiver rejects posts with `403`.
+
+> Response Sample (all endpoints below):
+
+```json
+{
+  "id": 5,
+  "feed_id": 1234,
+  "expire_at": null,
+  "token": "5mH3uZ8XqFjKc2tVwYb9RnLd4PaGsTe7",
+  "enabled": true,
+  "active": true,
+  "use_count": 0,
+  "data_rate_limit": null,
+  "feed_key": "temperature",
+  "hook_url": "https://io.adafruit.com/api/v2/webhooks/feed/5mH3uZ8XqFjKc2tVwYb9RnLd4PaGsTe7",
+  "raw_hook_url": "https://io.adafruit.com/api/v2/webhooks/feed/5mH3uZ8XqFjKc2tVwYb9RnLd4PaGsTe7/raw",
+  "notify_hook_url": "https://io.adafruit.com/api/v2/webhooks/feed/5mH3uZ8XqFjKc2tVwYb9RnLd4PaGsTe7/notify"
+}
+```
+
+`active` is true when the receiver is enabled and not expired. `use_count` is the number of posts accepted. List returns an array of these.
+
+### List Webhook Receivers
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/webhooks</code></div>
+
+```shell
+curl -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/webhooks
+```
+
+### Create Webhook Receiver
+
+The token is generated for you. The feed must not be disabled.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/webhooks</code></div>
+
+```shell
+curl -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"webhook": {"data_rate_limit": 10}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/webhooks
+```
+
+### Update Webhook Receiver
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/webhooks/{id}</code></div>
+
+```shell
+curl -X PUT -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"webhook": {"enabled": false}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/webhooks/5
+```
+
+### Delete Webhook Receiver
+
+The URLs stop working immediately. The deleted receiver is returned.
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/webhooks/{id}</code></div>
+
+```shell
+curl -X DELETE -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/webhooks/5
+```
+
+### Path Parameters
+
+Parameter | Type    | Required | Description
+--------- | ------- | -------- | -----------------------
+username  | string  | true     | the feed owner's username
+feed_key  | string  | true     | a valid feed key
+id        | integer | true     | the receiver `id` (update and delete only)
+
+### Body Parameters
+
+Create and update take a `webhook` object. All fields are optional.
+
+Parameter       | Type     | Required | Description
+--------------- | -------- | -------- | -----------------------
+data_rate_limit | integer  | false    | data points per minute allowed through this receiver. Only applies if lower than your account's data rate limit.
+expire_at       | datetime | false    | after this time the receiver rejects posts
+enabled         | boolean  | false    | defaults to `true`; set `false` to pause the receiver

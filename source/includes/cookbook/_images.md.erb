@@ -5,11 +5,11 @@ Using an *Image Block* on an Adafruit IO, you can automatically display a Base64
 
 ## Design Considerations
 
-There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 100KB, or 102400 bytes, of data.
+There are some important things to keep in mind when using this feature. Normal feeds are limited to 1KB of data, or about 1024 bytes, for publishing. Turning off feed history from the feed settings page allows publishing up to 512KB, or 524288 bytes, of data.
 
 When using the drag-and-drop feature of Adafruit IO dashboards or feed pages, image conversion from binary to Base64 happens inside the browser. That means no image pre-compression or optimization and additional size boost due to the conversion from binary to Base64.
 
-You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  [the .png image used for testing](https://io.adafruit.com/blog/images/2016-12-14-power-switch.png)  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is really close to the limit.
+You’ll have to do your own testing to figure out what an appropriate image size and format (png, gif, or bmp) for you are. For example,  [the .png image used for testing](https://io.adafruit.com/blog/images/2016-12-14-power-switch.png)  below has an on disk size of 68089 bytes, but a Base64 value of 90788 bytes, an expansion factor of about 150%, which is well within the limit for feeds with history turned off.
 
 ![base64imagepreview](https://io.adafruit.com/blog/images/2018-08-10-image-upload-size.png)
 
@@ -58,7 +58,7 @@ optim_stream.seek(0)
 # convert image binary data to base64 string
 value = base64.b64encode(optim_stream.read())
 
-if len(value) > 102400:
+if len(value) > 524288:
     print("image file too big!")
     return
 

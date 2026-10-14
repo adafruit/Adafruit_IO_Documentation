@@ -1,6 +1,36 @@
 # Permissions
 
-Each Adafruit IO user contains permissions which can be set and modified.
+Permissions control who can see or change your feeds, groups, and dashboards. By default, everything you create is private. Add a permission to:
+
+* make a record **public**, so anyone can read it without an API key, or
+* share a record with one **specific user**, giving them read or read/write access.
+
+Only the owner of a record can list or manage its permissions. Requests for another user's records return `404`, and permission requests are not allowed from browser (cross-origin) scripts.
+
+For example, to make the `temperature` feed public:
+
+```shell
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"permission": {"scope": "public", "mode": "r"}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl
+```
+
+### Scopes and modes
+
+Scope | Meaning
+----- | -------
+`public` | Anyone can access the record, signed in or not. Public access is always read-only: write access is never granted, even if `w` or `rw` is sent (the response still shows the `mode` you sent)
+`user` | Shares the record with one other user. `scope_value` is that user's numeric ID (as a string or number). A user permission takes priority over the record's public permission for that user
+
+Other scope names (`secret`, `organization`, `device`) are accepted when saving but are not currently enforced, so don't rely on them.
+
+An empty mode (`""`) grants nothing. It is the way to keep a permission record in place without giving access. If `mode` is omitted when creating a permission, no access is granted, so always send `r` for read access.
+
+### Public permissions and related records
+
+Making a **dashboard** public readable also makes every feed on that dashboard that you own public readable (read-only), so the dashboard's blocks can display. Changing or removing the dashboard's permission later does not remove those feed permissions. Feeds on the dashboard that belong to other users are not changed.
+
+Removing a feed's public permission, or making it unreadable, removes that feed from other users' dashboards where the feed was visible only because it was public. Dashboards of users the feed is explicitly shared with are not affected.
 
 ## Get All Permissions
 
@@ -8,46 +38,34 @@ Each Adafruit IO user contains permissions which can be set and modified.
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl
 ```
 
 > Response Sample:
 
 ```json
 [
-  {
-    "id": 0,
-    "user_id": 0,
-    "scope": "string",
-    "scope_value": "string",
-    "model": "string",
-    "object_id": 0,
-    "created_at": "string",
-    "updated_at": "string"
-  }
+{
+  "id": 4821,
+  "scope": "public",
+  "scope_value": null,
+  "mode": "r",
+  "user_id": 1234,
+  "created_at": "2026-10-13T15:02:11Z",
+  "updated_at": "2026-10-13T15:02:11Z"
+}
 ]
 ```
 
-An array of permissions
-
+Returns an array of every permission set on the record. The array is empty if none exist.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-type | string | true |
-type_id | string | true |
-
+username | string | true | your username. Must match the owner of the record
+type | string | true | `feeds`, `groups`, or `dashboards`
+type_id | string | true | the record to manage. For `feeds`, a feed key, a numeric feed ID, or a `group_key.feed_key` pair. For `groups` and `dashboards`, the numeric ID
 
 
 ## Create Permission
@@ -56,51 +74,45 @@ type_id | string | true |
 > <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
+$ curl -X POST -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"permission": {"scope": "user", "scope_value": "5678", "mode": "r"}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl
 ```
 
 > Response Sample:
 
 ```json
 {
-  "id": 0,
-  "user_id": 0,
-  "scope": "string",
-  "scope_value": "string",
-  "model": "string",
-  "object_id": 0,
-  "created_at": "string",
-  "updated_at": "string"
+  "id": 4821,
+  "scope": "user",
+  "scope_value": "5678",
+  "mode": "r",
+  "user_id": 1234,
+  "created_at": "2026-10-13T15:02:11Z",
+  "updated_at": "2026-10-13T15:02:11Z"
 }
 ```
 
-New Permission
-
+Creates a permission on the record. If a permission with the same `scope` and `scope_value` already exists on the record, it is updated with the new `mode` instead of creating a duplicate. Returns `201` with the permission, or `400` if the scope or mode is invalid (or `permission` is missing), and `404` if the record isn't found.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-type | string | true |
-type_id | string | true |
+username | string | true | your username. Must match the owner of the record
+type | string | true | `feeds`, `groups`, or `dashboards`
+type_id | string | true | the record to manage. For `feeds`, a feed key, a numeric feed ID, or a `group_key.feed_key` pair. For `groups` and `dashboards`, the numeric ID
 
 
 ### Body Parameters
 
+Send a JSON object with a single `permission` key containing these fields. Any other fields (including `model` and `object_id`) are ignored, because the record is always the one named in the URL.
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-permission | object | true |
-
+permission[scope] | string | true | `public` or `user`. See the scope notes above
+permission[scope_value] | string | for `user` scope | the numeric ID of the user to share with. Leave empty for `public`
+permission[mode] | string | no | `r` (read), `w` (write), `rw` (read and write), or empty (no access). Public permissions can never be writable
 
 
 ## Returns Permission
@@ -109,45 +121,33 @@ permission | object | true |
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
+$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl/4821
 ```
 
 > Response Sample:
 
 ```json
 {
-  "id": 0,
-  "user_id": 0,
-  "scope": "string",
-  "scope_value": "string",
-  "model": "string",
-  "object_id": 0,
-  "created_at": "string",
-  "updated_at": "string"
+  "id": 4821,
+  "scope": "public",
+  "scope_value": null,
+  "mode": "r",
+  "user_id": 1234,
+  "created_at": "2026-10-13T15:02:11Z",
+  "updated_at": "2026-10-13T15:02:11Z"
 }
 ```
 
-Permission response
-
+Returns one permission. Responds `404` if the permission doesn't belong to the record in the URL.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-type | string | true |
-type_id | string | true |
-id | string | true |
-
+username | string | true | your username. Must match the owner of the record
+type | string | true | `feeds`, `groups`, or `dashboards`
+type_id | string | true | the record to manage. For `feeds`, a feed key, a numeric feed ID, or a `group_key.feed_key` pair. For `groups` and `dashboards`, the numeric ID
+id | integer | true | the permission ID, as returned by the other permission endpoints
 
 
 ## Replace Permission
@@ -155,53 +155,48 @@ id | string | true |
 > HTTP Request
 > <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
 
+> <div class="http"><span class="method-patch">PATCH</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
+
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
+$ curl -X PUT -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"permission": {"mode": ""}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl/4821
 ```
 
 > Response Sample:
 
 ```json
 {
-  "id": 0,
-  "user_id": 0,
-  "scope": "string",
-  "scope_value": "string",
-  "model": "string",
-  "object_id": 0,
-  "created_at": "string",
-  "updated_at": "string"
+  "id": 4821,
+  "scope": "public",
+  "scope_value": null,
+  "mode": "",
+  "user_id": 1234,
+  "created_at": "2026-10-13T15:02:11Z",
+  "updated_at": "2026-10-13T15:02:11Z"
 }
 ```
 
-Updated permission
-
+Updates a permission. `PUT` and `PATCH` behave the same: only the fields you send are changed. Returns `200` with the permission, `400` if the new values are invalid, or `404` if it isn't found.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-type | string | true |
-type_id | string | true |
-id | string | true |
-
+username | string | true | your username. Must match the owner of the record
+type | string | true | `feeds`, `groups`, or `dashboards`
+type_id | string | true | the record to manage. For `feeds`, a feed key, a numeric feed ID, or a `group_key.feed_key` pair. For `groups` and `dashboards`, the numeric ID
+id | integer | true | the permission ID, as returned by the other permission endpoints
 
 ### Body Parameters
 
+Send a JSON object with a single `permission` key containing these fields. Any other fields (including `model` and `object_id`) are ignored, because the record is always the one named in the URL.
+
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-permission | object | true |
-
+permission[scope] | string | true | `public` or `user`. See the scope notes above
+permission[scope_value] | string | for `user` scope | the numeric ID of the user to share with. Leave empty for `public`
+permission[mode] | string | no | `r` (read), `w` (write), `rw` (read and write), or empty (no access). Public permissions can never be writable
 
 
 ## Delete Permission
@@ -210,42 +205,31 @@ permission | object | true |
 > <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/{type}/{type_id}/acl/{id}</code></div>
 
 ```shell
-$ curl -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/{type}/{type_id}/acl{id}
-```
-
-```python
-```
-
-```cpp
-```
-
-```ruby
+$ curl -X DELETE -H "X-AIO-Key: {io_key}" https://io.adafruit.com/api/v2/{username}/feeds/temperature/acl/4821
 ```
 
 > Response Sample:
 
 ```json
-"string"
+{
+  "id": 4821,
+  "scope": "public",
+  "scope_value": null,
+  "mode": "r",
+  "user_id": 1234,
+  "created_at": "2026-10-13T15:02:11Z",
+  "updated_at": "2026-10-13T15:02:11Z"
+}
 ```
 
-Deleted Permission successfully
-
+Deletes the permission and returns it. Any access it granted is removed immediately.
 
 ### Path Parameters
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-username | string | true | a valid username string
-type | string | true |
-type_id | string | true |
-id | string | true |
-
-
-
-
-
-
-
-
-
+username | string | true | your username. Must match the owner of the record
+type | string | true | `feeds`, `groups`, or `dashboards`
+type_id | string | true | the record to manage. For `feeds`, a feed key, a numeric feed ID, or a `group_key.feed_key` pair. For `groups` and `dashboards`, the numeric ID
+id | integer | true | the permission ID, as returned by the other permission endpoints
 

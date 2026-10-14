@@ -42,4 +42,4 @@ _Need to manually set a Client ID for your MQTT client?_ Use a unique value such
 Connecting to Adafruit IO via MQTT and reusing the client ID of an existing connection will result in <strong>immediate disconnection</strong> of the other MQTT client. The MQTT specification requires that "each client connecting to the server has a unique ClientId." <a href="http://docs.oasis-open.org/mqtt/mqtt/v3.1.1/csprd02/mqtt-v3.1.1-csprd02.html#_Toc385349767">link</a>
 </aside>
 
-We do not currently limit the number of clients that can connect to Adafruit IO, but we do limit the rate at which connections may be attempted to 20 per minute. Exceeding the connection attempt rate limit will result in a temporary ban.
+We do not currently limit the number of clients that can connect to Adafruit IO, but we do limit the rate at which connections may be attempted to 20 per minute. Attempts beyond that limit (per username and IP address) are refused until the minute is up.

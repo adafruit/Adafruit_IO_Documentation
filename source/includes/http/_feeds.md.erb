@@ -4,9 +4,11 @@ Feeds are the core of the Adafruit IO system. The feed holds metadata about the 
 
 You will need to create one feed for each unique source of data you send to Adafruit IO.
 
-You can create, read, update, or delete feeds. Every **CREATE**, **UPDATE**, or **DELETE** action on a feed record counts against your rate limit.
+Anywhere a `{feed_key}` is expected you can use the feed's key (for example `temperature`), its numeric feed ID, or `group_key.feed_key` to address the feed within a specific group.
 
-There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see **feeds/{feed_key}/batch** and **groups/{groupname}/data** endpoints.
+You can create, read, update, or delete feeds. Creating, updating, and deleting feeds does not count against your data rate limit; only creating, updating, and deleting data does.
+
+There are also endpoints for submitting multiple data points to a feed, or multiple feed values to a group, see **feeds/{feed_key}/data/batch** and **groups/{groupname}/data** endpoints.
 
 ## All Feeds
 
@@ -109,6 +111,26 @@ Parameter |   Type  |  Required |       Description
 username | string | true | a valid username string
 
 
+
+## Public Feeds
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds?public=true</code></div>
+
+```shell
+# list only the public feeds of a user (no key needed)
+$ curl https://io.adafruit.com/api/v2/{username}/feeds?public=true
+
+# read a public feed and its data
+$ curl https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}
+$ curl https://io.adafruit.com/api/v2/{username}/feeds/{feed_key}/data
+```
+
+Feeds with `visibility` set to `public` can be read by anyone, with or without an `X-AIO-Key`. This covers the feed itself, its details, and reading its data (`data`, `data/{id}`, `data/chart`, `data/last_value`, `data/retain`, `data/last`). Public reads are subject to the same rate limiting as other requests, see Rate Limiting. Creating, updating or deleting always requires the owner's key. `first`, `next` and `previous` need write access, so they are not available on someone else's public feed.
+
+`GET /{username}/feeds` returns the full feed list only when you request your own feeds. If you request another user's feeds, or add `public=true` to your own, the response contains only public feeds and leaves out owner-only fields such as `status`, `status_notify` and `status_timeout`. Private feeds are never listed or readable by other users, and are reported as not found.
+
+Public groups work the same way: `GET /{username}/groups/{group_key}` can be read without a key when the group is public, and `GET /{username}/groups?public=true` (key required) lists only public groups.
 
 ## Create Feed
 
@@ -233,7 +255,7 @@ group_key | string | false |
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true |
+feed | object | true | Feed settings. `name` is required on create and may be at most 128 characters. `license` may be at most 255 characters. `status_timeout` must be one of `10`, `30`, `60`, `1440`, `4320`, or `10080` (minutes).
 
 
 
@@ -463,7 +485,7 @@ feed_key | string | true | a valid feed key
 
 Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
-feed | object | true |
+feed | object | true | Feed settings. `name` is required on create and may be at most 128 characters. `license` may be at most 255 characters. `status_timeout` must be one of `10`, `30`, `60`, `1440`, `4320`, or `10080` (minutes).
 
 
 
@@ -507,7 +529,7 @@ feed_key | string | true | a valid feed key
 
 
 
-## Get Feed
+## Get Feed Details
 
 > HTTP Request
 > <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/details</code></div>
@@ -613,3 +635,168 @@ Parameter |   Type  |  Required |       Description
 --------- | ------- | --------- | -----------------------
 username | string | true | a valid username string
 feed_key | string | true | a valid feed key
+
+
+
+## Feed Sharing
+
+Share a feed with another Adafruit IO user so they can read it (or read and write it) with their own account and key. Sharing is managed by the feed owner, using the owner's `{username}` and key. Shares are per feed.
+
+A share has a `level`:
+
+Level | Effect
+----- | ------
+`readable` | the default. The shared user can read the feed and its data.
+`writable` | the shared user can read the feed and its data, and also write to it.
+
+A share also has a `status`: `pending` (invited, not yet answered), `approved`, `ignored` (declined or blocked by the invitee) or `cancelled`. Access is granted when the invitee approves and revoked if the share is deleted, ignored, or set back to pending.
+
+Once approved, the shared user addresses the feed through the **owner's** username, with their own key. For example, over HTTP they can use `GET /api/v2/{owner_username}/feeds/{feed_key}/data`, and over MQTT they can subscribe to `{owner_username}/feeds/{feed_key}`. Writes need the `writable` level. Data sent to a shared feed counts against the owner's data rate (see Rate Limiting).
+
+Limits and rules:
+
+* An owner can have at most 10 pending shares. Delete some, or wait for them to be answered.
+* A disabled feed cannot be shared.
+* You cannot share a feed with yourself, with a user who has blocked you, or with someone who has already declined it.
+* A feed can be shared with a given user or email address only once.
+* Requests to `/feeds/{feed_key}/shares` (list and create) are limited to 10 per minute. See [Rate Limiting](#rate-limiting).
+
+Dashboard sharing is not available through the API.
+
+### Create Feed Share
+
+Invite a user to share a feed. `user_email` accepts either a username or an email address. If it matches an existing Adafruit IO user they are invited right away; otherwise an invitation is emailed to that address, which must be a valid email address.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares</code></div>
+
+```shell
+curl -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"feed_share": {"user_email": "friend@example.com", "level": "readable"}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/shares
+```
+
+> Response Sample:
+
+```json
+{
+  "id": 17,
+  "level": "readable",
+  "status": "pending",
+  "user_identifier": "friend@example.com",
+  "user": null,
+  "owner": { "username": "{username}" }
+}
+```
+
+For an existing user, `user` is `{"username": "..."}` and `user_identifier` is their username. Errors: `403` (feed disabled, pending limit reached, self-share, duplicate or blocked share), `422` (invalid email address), `404` (unknown feed).
+
+#### Path Parameters
+
+Parameter | Type   | Required | Description
+--------- | ------ | -------- | -----------------------
+username  | string | true     | the feed owner's username (must match the key)
+feed_key  | string | true     | a valid feed key
+
+#### Body Parameters
+
+The body is wrapped in a `feed_share` object.
+
+Parameter  | Type   | Required | Description
+---------- | ------ | -------- | -----------------------
+user_email | string | true     | username or email address of the person to share with
+level      | string | false    | `readable` (default) or `writable`
+
+### List Feed Shares
+
+List the pending and approved shares of a feed, newest first.
+
+> HTTP Request
+> <div class="http"><span class="method-get">GET</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares</code></div>
+
+```shell
+curl -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/shares
+```
+
+> Response Sample:
+
+```json
+[
+  {
+    "id": 17,
+    "level": "readable",
+    "status": "approved",
+    "user_identifier": "friend",
+    "user": { "username": "friend" },
+    "owner": { "username": "{username}" }
+  }
+]
+```
+
+Only the feed owner can list shares. Path parameters are the same as for Create Feed Share.
+
+### Update Feed Share
+
+Change the level of a share. If the share is already approved, the shared user's access changes immediately.
+
+> HTTP Request
+> <div class="http"><span class="method-put">PUT</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares/{id}</code></div>
+
+```shell
+curl -X PUT -H "X-AIO-Key: {io_key}" -H "Content-Type: application/json" \
+  -d '{"feed_share": {"level": "writable"}}' \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/shares/17
+```
+
+The response is the updated share, in the format shown above, plus a `feed` object (`name`, `key`, `last_value`).
+
+#### Path Parameters
+
+Parameter | Type    | Required | Description
+--------- | ------- | -------- | -----------------------
+username  | string  | true     | the feed owner's username
+feed_key  | string  | true     | a valid feed key
+id        | integer | true     | the share `id`
+
+#### Body Parameters
+
+Parameter | Type   | Required | Description
+--------- | ------ | -------- | -----------------------
+level     | string | true     | `readable` or `writable`
+
+### Delete Feed Share
+
+Delete a share and revoke the shared user's access. The shared user can also delete a share to stop receiving the feed. This does not delete the feed or its data.
+
+> HTTP Request
+> <div class="http"><span class="method-delete">DELETE</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares/{id}</code></div>
+
+```shell
+curl -X DELETE -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{username}/feeds/temperature/shares/17
+```
+
+The response is the deleted share. Path parameters are the same as for Update Feed Share.
+
+### Respond to a Feed Share
+
+An invited user responds using the invitation's `token`, which is included in the link in the invitation email. Use the key of the invited user. Only `pending` shares can be approved or ignored. Each call returns the share.
+
+> HTTP Request
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares/{token}/approve</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares/{token}/ignore</code></div>
+> <div class="http"><span class="method-post">POST</span><code class="path">/api/v2/{username}/feeds/{feed_key}/shares/{token}/block</code></div>
+
+```shell
+curl -X POST -H "X-AIO-Key: {io_key}" \
+  https://io.adafruit.com/api/v2/{owner_username}/feeds/temperature/shares/{token}/approve
+```
+
+Action  | Effect
+------- | ------
+approve | accept the share and gain access to the feed
+ignore  | decline the share
+block   | decline the share and block the sender from sharing with you again
+
+Here `{username}` and `{feed_key}` are those of the owner and the feed in the invitation.
