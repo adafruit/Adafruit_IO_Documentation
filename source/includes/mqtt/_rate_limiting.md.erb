@@ -4,7 +4,7 @@ Adafruit IO's MQTT server imposes a rate limit to prevent excessive load on the 
 
 We also limit a few other actions on Adafruit IO's MQTT broker. Your account will be temporarily banned from the MQTT broker if, within a minute, a client has more than 10 _rejected_ MQTT SUBSCRIBE or PUBLISH requests, or if you send 20 or more messages while already over the data rate limit within 5 seconds, or if a client sends subscribe or publish requests faster than Adafruit IO can check them. Any rejected MQTT PUBLISH request disconnects the client immediately. Subscribing to other users' shared feeds is limited to 120 permission checks per minute; you will get a warning on your `{username}/throttle` topic when only 5 remain. Subscriptions to your own topics and the `time` topics are not part of this limit.
 
-If you attempt to connect more than 20 times within a minute from the same IP address with the same username, further connection attempts are refused (the broker answers with a CONNACK "not authorized" return code) until the minute is up. Refused connection attempts do not cause a ban.
+If you attempt to connect more than 20 times within a minute from the same IP address with the same username, further connection attempts are refused until your rate over the last minute drops below 20. The broker answers a refused attempt with CONNACK return code 6, not 5 ("not authorized", which means the key is wrong or could not be checked). Refused attempts count toward the limit too, so a client that keeps retrying stays refused: wait before connecting again. Refused connection attempts do not cause a ban.
 
 Most of the systems connecting to Adafruit IO are simple, automated devices and MQTT client scripts. A runaway ESP8266 sending MQTT SUBSCRIBE packets inside the main `loop()` function of an Arduino sketch can send about 500 packets per minute. It wouldn't take many poorly written clients connecting to our MQTT broker to crash the service for everyone if we didn't add rate limits to every action.
 
@@ -15,14 +15,14 @@ This limit applies to all connections so if you have multiple devices or clients
 
 ## Rate Limit Bans
 
-Temporary MQTT bans start at 30 seconds and scale as a multiple of the number of bans within the last hour up to one hour maximum. For example, going over 10 rejected MQTT SUBSCRIBE requests in a minute will trigger a temporary ban of 30 seconds, that's 1 ban. If it's a device that automatically wakes up, connects to Adafruit IO, and sends a stream of rejected SUBSCRIBE packets, it will be banned again. The second ban results in 60 seconds offline, the third is 90 seconds, and so on.
+Temporary MQTT bans start at 30 seconds and grow by 30 seconds for each ban in the last hour, to about 30 minutes at most. While your account is banned, the broker refuses connection attempts with CONNACK return code 6, and connecting during a ban does not make it longer. For example, going over 10 rejected MQTT SUBSCRIBE requests in a minute will trigger a temporary ban of 30 seconds, that's 1 ban. If it's a device that automatically wakes up, connects to Adafruit IO, and sends a stream of rejected SUBSCRIBE packets, it will be banned again. The second ban results in 60 seconds offline, the third is 90 seconds, and so on.
 
 You can visit your Adafruit IO monitor page any time
 
 
 ## Preventing MQTT Bans
 
-A misbehaving MQTT device--for example, a device configured for a different MQTT broker like Home Assistant--that attempts to publish to invalid Adafruit IO MQTT topics can lock _every_ device and browser session out of your Adafruit IO MQTT account for an hour at a time.
+A misbehaving MQTT device--for example, a device configured for a different MQTT broker like Home Assistant--that attempts to publish to invalid Adafruit IO MQTT topics can lock _every_ device and browser session out of your Adafruit IO MQTT account for up to half an hour at a time.
 
 The easiest way to prevent a temporary or permanent MQTT block being put against your account is to delay how frequently your MQTT client sends messages.
 
